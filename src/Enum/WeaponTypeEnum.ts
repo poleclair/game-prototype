@@ -1,0 +1,46 @@
+/**
+ * Enum representing a weapon type.
+ */
+enum WeaponTypeEnum {
+    // SIMPLE MELEE WEAPON
+    CLUB,
+    DAGGER,
+    GREATCLUB,
+    HANDAXE,
+    JAVELIN,
+    LIGHT_HAMMER,
+    MACE,
+    QUARTERSTAFF,
+    SICKLE,
+    SPEAR,
+    // SIMPLE RANGED WEAPON
+    LIGHT_CROSSBOW,
+    DART,
+    SHORTBOW,
+    SLING,
+    // MARTIAL MELEE WEAPON
+    BATTLEAXE,
+    FLAIL,
+    GLAIVE,
+    GREATAXE,
+    GREATSWORD,
+    HALBERD,
+    LANCE,
+    LONGSWORD,
+    MAUL,
+    MORNINGSTAR,
+    PIKE,
+    RAPIER,
+    SCIMITAR,
+    SHORTSWORD,
+    TRIDENT,
+    WAR_PICK,
+    WARHAMMER,
+    WHIP,
+    // MARTIAL RANGED WEAPON
+    BLOWGUN,
+    HAND_CROSSBOW,
+    HEAVY_CROSSBOW,
+    LONGBOW,
+    NET
+}
