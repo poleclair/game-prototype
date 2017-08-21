@@ -85,7 +85,7 @@ class Converter {
     }
 
     /**
-     * Gets the string value of an damage type id.
+     * Gets the string value of a damage type id.
      * @param {DamageTypeEnum} damageTypeId - The damage type id.
      * @return {number}
      */
@@ -153,7 +153,7 @@ class Converter {
     }
 
     /**
-     * Gets the string value of an race id.
+     * Gets the string value of a race id.
      * @param {RaceEnum} raceId - The race id.
      * @return {number}
      */
@@ -175,6 +175,174 @@ class Converter {
                 return "human";
             default:
                 throw new Error("Parameter 'raceId' must be in the 'RaceEnum' range.");
+        }
+    }
+
+    /**
+     * Gets the string value of a skill id.
+     * @param {SkillEnum} skillId - The skill id.
+     * @return {number}
+     */
+    static SkillEnum(skillId: SkillEnum) {
+        switch (skillId) {
+            case SkillEnum.ACROBATICS:
+                return "acrobatics";
+            case SkillEnum.ANIMAL_HANDLING:
+                return "animal handling";
+            case SkillEnum.ARCANA:
+                return "arcana";
+            case SkillEnum.ATHLETICS:
+                return "athletics";
+            case SkillEnum.DECEPTION:
+                return "deception";
+            case SkillEnum.HISTORY:
+                return "acrobatics";
+            case SkillEnum.INSIGHT:
+                return "insight";
+            case SkillEnum.INTIMIDATION:
+                return "intimidation";
+            case SkillEnum.INVESTIGATION:
+                return "investigation";
+            case SkillEnum.MEDICINE:
+                return "medicine";
+            case SkillEnum.NATURE:
+                return "nature";
+            case SkillEnum.PERCEPTION:
+                return "perception";
+            case SkillEnum.PERFORMANCE:
+                return "performance";
+            case SkillEnum.PERSUASION:
+                return "persuasion";
+            case SkillEnum.RELIGION:
+                return "religion";
+            case SkillEnum.SLEIGHT_OF_HAND:
+                return "sleight of hand";
+            case SkillEnum.STEALTH:
+                return "stealth";
+            case SkillEnum.SURVIVAL:
+                return "survival";
+            default:
+                throw new Error("Parameter 'skillId' must be in the 'SkillEnum' range.");
+        }
+    }
+
+    /**
+     * Gets the string value of a weapon property id.
+     * @param {WeaponPropertyEnum} weaponPropertyId - The weapon property id.
+     * @return {number}
+     */
+    static WeaponPropertyEnum(weaponPropertyId: WeaponPropertyEnum) {
+        switch (weaponPropertyId) {
+            case WeaponPropertyEnum.AMMUNITION:
+                return "ammunition";
+            case WeaponPropertyEnum.FINESSE:
+                return "finesse";
+            case WeaponPropertyEnum.HEAVY:
+                return "heavy";
+            case WeaponPropertyEnum.LIGHT:
+                return "light";
+            case WeaponPropertyEnum.LOADING:
+                return "loading";
+            case WeaponPropertyEnum.RANGE:
+                return "range";
+            case WeaponPropertyEnum.REACH:
+                return "reach";
+            case WeaponPropertyEnum.SPECIAL:
+                return "special";
+            case WeaponPropertyEnum.THROWN:
+                return "thrown";
+            case WeaponPropertyEnum.TWO_HANDED:
+                return "two handed";
+            case WeaponPropertyEnum.VERSATILE:
+                return "versatile";
+            default:
+                throw new Error("Parameter 'weaponPropertyId' must be in the 'WeaponPropertyEnum' range.");
+        }
+    }
+
+    /**
+     * Gets the string value of a weapon type id.
+     * @param {WeaponTypeEnum} weaponTypeId - The weapon type id.
+     * @return {number}
+     */
+    static WeaponTypeEnum(weaponTypeId: WeaponTypeEnum) {
+        switch (weaponTypeId) {
+            case WeaponTypeEnum.CLUB:
+                return "club";
+            case WeaponTypeEnum.DAGGER:
+                return "dagger";
+            case WeaponTypeEnum.GREATCLUB:
+                return "greatclub";
+            case WeaponTypeEnum.HANDAXE:
+                return "handaxe";
+            case WeaponTypeEnum.JAVELIN:
+                return "javelin";
+            case WeaponTypeEnum.LIGHT_HAMMER:
+                return "light hammer";
+            case WeaponTypeEnum.MACE:
+                return "mace";
+            case WeaponTypeEnum.QUARTERSTAFF:
+                return "quarterstaff";
+            case WeaponTypeEnum.SICKLE:
+                return "sickle";
+            case WeaponTypeEnum.SPEAR:
+                return "spear";
+            case WeaponTypeEnum.LIGHT_CROSSBOW:
+                return "light crossbow";
+            case WeaponTypeEnum.DART:
+                return "dart";
+            case WeaponTypeEnum.SHORTBOW:
+                return "shortbow";
+            case WeaponTypeEnum.SLING:
+                return "sling";
+            case WeaponTypeEnum.BATTLEAXE:
+                return "battleaxe";
+            case WeaponTypeEnum.FLAIL:
+                return "flail";
+            case WeaponTypeEnum.GLAIVE:
+                return "glaive";
+            case WeaponTypeEnum.GREATAXE:
+                return "greataxe";
+            case WeaponTypeEnum.GREATSWORD:
+                return "greatsword";
+            case WeaponTypeEnum.HALBERD:
+                return "halberd";
+            case WeaponTypeEnum.LANCE:
+                return "lance";
+            case WeaponTypeEnum.LONGSWORD:
+                return "longsword";
+            case WeaponTypeEnum.MAUL:
+                return "maul";
+            case WeaponTypeEnum.MORNINGSTAR:
+                return "morningstar";
+            case WeaponTypeEnum.PIKE:
+                return "pike";
+            case WeaponTypeEnum.RAPIER:
+                return "rapier";
+            case WeaponTypeEnum.SCIMITAR:
+                return "scimitar";
+            case WeaponTypeEnum.SHORTSWORD:
+                return "shortsword";
+            case WeaponTypeEnum.TRIDENT:
+                return "trident";
+            case WeaponTypeEnum.WAR_PICK:
+                return "war pick";
+            case WeaponTypeEnum.WARHAMMER:
+                return "warhammer";
+            case WeaponTypeEnum.WHIP:
+                return "whip";
+            case WeaponTypeEnum.BLOWGUN:
+                return "blowgun";
+            case WeaponTypeEnum.HAND_CROSSBOW:
+                return "hand crossbow";
+            case WeaponTypeEnum.HEAVY_CROSSBOW:
+                return "heavy crossbow";
+            case WeaponTypeEnum.LONGBOW:
+                return "longbow";
+            case WeaponTypeEnum.NET:
+                return "net";
+            default:
+                throw new Error("Parameter 'weaponTypeId' must be in the 'WeaponTypeEnum' range.");
         }
     }
 }
