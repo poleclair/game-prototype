@@ -2,6 +2,7 @@
 
 /// <reference path="Enum/AbilityEnum.ts"/>
 /// <reference path="Enum/ClassEnum.ts"/>
+/// <reference path="Enum/Converter.ts"/>
 /// <reference path="Enum/RaceEnum.ts"/>
 /// <reference path="Enum/SkillEnum.ts"/>
 
@@ -78,13 +79,13 @@ while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
         damage += acting.getDamageRoll();
         damage += acting.getDamageRoll();
         damage += acting.getDamageModifier();
-        console.log(acting.name + " critical hits for " + damage + " damage [" + d20Roll + "(d20) + " + acting.getAttackModifier() + "(am) >= " + target.getArmorClass() + "(ac)]");
+        console.log(acting.name + " critical hits for " + damage + " " + Converter.DamageTypeEnum(acting.weapon.damageTypeId) + " damage [" + d20Roll + "(d20) + " + acting.getAttackModifier() + "(am) vs " + target.getArmorClass() + "(ac)]");
     } else if ((d20Roll + acting.getAttackModifier()) >= target.getArmorClass()) {
         damage += acting.getDamageRoll();
         damage += acting.getDamageModifier();
-        console.log(acting.name + " hits for " + damage + " damage [" + d20Roll + "(d20) + " + acting.getAttackModifier() + "(am) >= " + target.getArmorClass() + "(ac)]");
+        console.log(acting.name + " hits for " + damage + " " + Converter.DamageTypeEnum(acting.weapon.damageTypeId) + " damage [" + d20Roll + "(d20) + " + acting.getAttackModifier() + "(am) vs " + target.getArmorClass() + "(ac)]");
     } else {
-        console.log(acting.name + " misses for " + damage + " damage [" + d20Roll + "(d20) + " + acting.getAttackModifier() + "(am) >= " + target.getArmorClass() + "(ac)]");
+        console.log(acting.name + " misses [" + d20Roll + "(d20) + " + acting.getAttackModifier() + "(am) >= " + target.getArmorClass() + "(ac)]");
     }
 
     console.log("");
