@@ -74,18 +74,20 @@ while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
 
     let d20Roll = Ruleset.RollD(20);
     let damage = 0;
+    let damage1 = 0;
+    let damage2 = 0;
 
     if (d20Roll === 20) {
-        damage += acting.getDamageRoll();
-        damage += acting.getDamageRoll();
+        damage += damage1 = acting.getDamageRoll();
+        damage += damage2 = acting.getDamageRoll();
         damage += acting.getDamageModifier();
-        console.log(acting.name + " critical hits for " + damage + " " + Converter.DamageTypeEnum(acting.weapon.damageTypeId) + " damage [" + d20Roll + "(d20) + " + acting.getAttackModifier() + "(am) vs " + target.getArmorClass() + "(ac)]");
+        console.log(acting.name + " critical hits [Roll:" + d20Roll + " + Mod:" + acting.getAttackModifier() + " vs AC:" + target.getArmorClass() + "] for " + damage + " [] " + Converter.DamageTypeEnum(acting.weapon.damageTypeId) + " damage");
     } else if ((d20Roll + acting.getAttackModifier()) >= target.getArmorClass()) {
-        damage += acting.getDamageRoll();
+        damage += damage1 = acting.getDamageRoll();
         damage += acting.getDamageModifier();
-        console.log(acting.name + " hits for " + damage + " " + Converter.DamageTypeEnum(acting.weapon.damageTypeId) + " damage [" + d20Roll + "(d20) + " + acting.getAttackModifier() + "(am) vs " + target.getArmorClass() + "(ac)]");
+        console.log(acting.name + " hits [Roll:" + d20Roll + " + Mod:" + acting.getAttackModifier() + " vs AC:" + target.getArmorClass() + "] for " + damage + " [] " + Converter.DamageTypeEnum(acting.weapon.damageTypeId) + " damage");
     } else {
-        console.log(acting.name + " misses [" + d20Roll + "(d20) + " + acting.getAttackModifier() + "(am) >= " + target.getArmorClass() + "(ac)]");
+        console.log(acting.name + " misses [Roll:" + d20Roll + " + Mod:" + acting.getAttackModifier() + " vs AC:" + target.getArmorClass() + "]");
     }
 
     console.log("");
