@@ -45,6 +45,14 @@ class Character {
      * @return {Character}
      */
     constructor(name: string, level: number, raceId: number, classId: number, abilityScores: Array<number>, skillProficiencies: Array<number>) {
+        if (!name) {
+            throw new Error("Parameter 'name' cannot be null or empty.");
+        }
+
+        if (level < 1 || level > 20) {
+            throw new Error("Parameter 'level' must be a number between 1 and 20 inclusively.")
+        }
+
         this._name = name;
         this._level = level;
         this._raceId = raceId;

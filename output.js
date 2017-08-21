@@ -427,6 +427,12 @@ class Character {
      * @return {Character}
      */
     constructor(name, level, raceId, classId, abilityScores, skillProficiencies) {
+        if (!name) {
+            throw new Error("Parameter 'name' cannot be null or empty.");
+        }
+        if (level < 1 || level > 20) {
+            throw new Error("Parameter 'level' must be a number between 1 and 20 inclusively.");
+        }
         this._name = name;
         this._level = level;
         this._raceId = raceId;
@@ -817,7 +823,7 @@ class Ruleset {
             case SkillEnum.PERSUASION:
                 return AbilityEnum.CHARISMA;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'skillId' must be in the SkillEnum range.");
         }
     }
     /**
@@ -867,7 +873,7 @@ class Ruleset {
             case WeaponTypeEnum.NET:
                 return AbilityEnum.DEXTERITY;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'weaponTypeId' must be in the WeaponTypeEnum range.");
         }
     }
     /**
@@ -936,7 +942,7 @@ class Ruleset {
             case RaceEnum.HUMAN:
                 return 1;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'raceId' must be in the RaceEnum range.");
         }
     }
     /**
@@ -958,7 +964,7 @@ class Ruleset {
             case RaceEnum.HUMAN:
                 return 1;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'raceId' must be in the RaceEnum range.");
         }
     }
     /**
@@ -981,7 +987,7 @@ class Ruleset {
             case RaceEnum.HUMAN:
                 return 1;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'raceId' must be in the RaceEnum range.");
         }
     }
     /**
@@ -1004,7 +1010,7 @@ class Ruleset {
             case RaceEnum.HUMAN:
                 return 1;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'raceId' must be in the RaceEnum range.");
         }
     }
     /**
@@ -1028,7 +1034,7 @@ class Ruleset {
             case RaceEnum.HUMAN:
                 return 1;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'raceId' must be in the RaceEnum range.");
         }
     }
     /**
@@ -1051,7 +1057,7 @@ class Ruleset {
             case RaceEnum.HUMAN:
                 return 1;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'raceId' must be in the RaceEnum range.");
         }
     }
     /**
@@ -1074,7 +1080,7 @@ class Ruleset {
             case RaceEnum.HUMAN:
                 return 30;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'raceId' must be in the RaceEnum range.");
         }
     }
     /**
@@ -1100,7 +1106,7 @@ class Ruleset {
                 result += 0;
                 break;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'raceId' must be in the RaceEnum range.");
         }
         switch (classId) {
             case ClassEnum.CLERIC:
@@ -1114,7 +1120,7 @@ class Ruleset {
                 result += level * (6 + this.AbilityModifier(constitutionScore));
                 break;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'classId' must be in the ClassEnum range.");
         }
         return result;
     }
@@ -1134,7 +1140,7 @@ class Ruleset {
             case ClassEnum.WIZARD:
                 return [];
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'classId' must be in the ClassEnum range.");
         }
     }
     /**
@@ -1153,7 +1159,7 @@ class Ruleset {
             case ClassEnum.WIZARD:
                 return [WeaponTypeEnum.DAGGER, WeaponTypeEnum.DART, WeaponTypeEnum.SLING, WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.LIGHT_CROSSBOW];
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'classId' must be in the ClassEnum range.");
         }
     }
     /**
@@ -1172,7 +1178,7 @@ class Ruleset {
             case ClassEnum.WIZARD:
                 return [];
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'classId' must be in the ClassEnum range.");
         }
     }
     /**
@@ -1191,7 +1197,7 @@ class Ruleset {
             case ClassEnum.WIZARD:
                 return [AbilityEnum.INTELLIGENCE, AbilityEnum.WISDOM];
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'classId' must be in the ClassEnum range.");
         }
     }
     /**
@@ -1210,7 +1216,7 @@ class Ruleset {
             case ClassEnum.WIZARD:
                 return [];
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'classId' must be in the ClassEnum range.");
         }
     }
     /**
@@ -1227,7 +1233,7 @@ class Ruleset {
             case ClassEnum.WIZARD:
                 return 160;
             default:
-                throw new RangeError();
+                throw new Error("Parameter 'classId' must be in the ClassEnum range.");
         }
     }
 }
