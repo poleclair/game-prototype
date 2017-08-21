@@ -1,2 +1,2 @@
-# game-prototype
-A d&amp;d based game prototype in typescript.
+# Game Prototype
+A Dungeons &amp; Drangons based game in typescript.
