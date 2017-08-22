@@ -1,5 +1,3 @@
-/// <reference path="Item.ts"/>
-
 /**
  * Class representing a weapon.
  * @extends Item

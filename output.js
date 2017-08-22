@@ -435,7 +435,6 @@ class Armor extends Item {
         return this._armorType;
     }
 }
-/// <reference path="Item.ts"/>
 /**
  * Class representing a weapon.
  * @extends Item
