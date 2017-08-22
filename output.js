@@ -1,4 +1,361 @@
 /**
+ * Class representing a converter.
+ */
+class Converter {
+    /**
+     * Gets the string value of an ability id.
+     * @param {AbilityEnum} abilityId - The ability id.
+     * @return {number}
+     */
+    static AbilityEnum(abilityId) {
+        switch (abilityId) {
+            case AbilityEnum.STRENGTH:
+                return "strength";
+            case AbilityEnum.DEXTERITY:
+                return "dexterity";
+            case AbilityEnum.CONSTITUTION:
+                return "constitution";
+            case AbilityEnum.INTELLIGENCE:
+                return "intelligence";
+            case AbilityEnum.WISDOM:
+                return "wisdom";
+            case AbilityEnum.CHARISMA:
+                return "charisma";
+            default:
+                throw new Error("Parameter 'abilityId' must be in the 'AbilityEnum' range.");
+        }
+    }
+    /**
+     * Gets the string value of an armor type id.
+     * @param {ArmorTypeEnum} armorTypeId - The armor type id.
+     * @return {number}
+     */
+    static ArmorTypeEnum(armorTypeId) {
+        switch (armorTypeId) {
+            case ArmorTypeEnum.PADDED:
+                return "padded";
+            case ArmorTypeEnum.LEATHER:
+                return "leather";
+            case ArmorTypeEnum.STUDDED_LEATHER:
+                return "studded leather";
+            case ArmorTypeEnum.HIDE:
+                return "hide";
+            case ArmorTypeEnum.CHAIN_SHIRT:
+                return "chain shirt";
+            case ArmorTypeEnum.SCALE_MAIL:
+                return "scale mail";
+            case ArmorTypeEnum.BREASTPLATE:
+                return "breastplate";
+            case ArmorTypeEnum.HALF_PLATE:
+                return "half plate";
+            case ArmorTypeEnum.RING_MAIL:
+                return "ring mail";
+            case ArmorTypeEnum.CHAIN_MAIL:
+                return "chain mail";
+            case ArmorTypeEnum.SPLINT:
+                return "splint";
+            case ArmorTypeEnum.PLATE:
+                return "plate";
+            case ArmorTypeEnum.SHIELD:
+                return "shield";
+            default:
+                throw new Error("Parameter 'armorTypeId' must be in the 'ArmorTypeEnum' range.");
+        }
+    }
+    /**
+     * Gets the string value of an attack roll result id.
+     * @param {AttackRollResultEnum} attackRollResultId - The attack roll result id.
+     * @return {number}
+     */
+    static AttackRollResultEnum(attackRollResultId) {
+        switch (attackRollResultId) {
+            case AttackRollResultEnum.CRITICAL:
+                return "critital hits";
+            case AttackRollResultEnum.HIT:
+                return "hits";
+            case AttackRollResultEnum.MISS:
+                return "misses";
+            default:
+                throw new Error("Parameter 'attackRollResultId' must be in the 'AttackRollResultEnum' range.");
+        }
+    }
+    /**
+     * Gets the string value of a class id.
+     * @param {ClassEnum} classId - The class id.
+     * @return {number}
+     */
+    static ClassEnum(classId) {
+        switch (classId) {
+            case ClassEnum.CLERIC:
+                return "cleric";
+            case ClassEnum.FIGHTER:
+                return "fighter";
+            case ClassEnum.ROGUE:
+                return "rogue";
+            case ClassEnum.WIZARD:
+                return "wizard";
+            default:
+                throw new Error("Parameter 'classId' must be in the 'ClassEnum' range.");
+        }
+    }
+    /**
+     * Gets the string value of a damage type id.
+     * @param {DamageTypeEnum} damageTypeId - The damage type id.
+     * @return {number}
+     */
+    static DamageTypeEnum(damageTypeId) {
+        switch (damageTypeId) {
+            case DamageTypeEnum.ACID:
+                return "acid";
+            case DamageTypeEnum.BLUDGEONING:
+                return "bludgeoning";
+            case DamageTypeEnum.COLD:
+                return "cold";
+            case DamageTypeEnum.FIRE:
+                return "fire";
+            case DamageTypeEnum.FORCE:
+                return "force";
+            case DamageTypeEnum.LIGHTNING:
+                return "lightning";
+            case DamageTypeEnum.NECROTIC:
+                return "necrotic";
+            case DamageTypeEnum.PIERCING:
+                return "piercing";
+            case DamageTypeEnum.POISON:
+                return "poison";
+            case DamageTypeEnum.PSYCHIC:
+                return "psychic";
+            case DamageTypeEnum.RADIANT:
+                return "radiant";
+            case DamageTypeEnum.SLASHING:
+                return "slashing";
+            case DamageTypeEnum.THUNDER:
+                return "thunder";
+            default:
+                throw new Error("Parameter 'damageTypeId' must be in the 'DamageTypeEnum' range.");
+        }
+    }
+    /**
+     * Gets the string value of an item type id.
+     * @param {ItemTypeEnum} itemTypeId - The item type id.
+     * @return {number}
+     */
+    static ItemTypeEnum(itemTypeId) {
+        switch (itemTypeId) {
+            case ItemTypeEnum.SIMPLE_MELEE_WEAPON:
+                return "simple melee weapon";
+            case ItemTypeEnum.SIMPLE_RANGE_WEAPON:
+                return "simple range weapon";
+            case ItemTypeEnum.MARTIAL_MELEE_WEAPON:
+                return "martial melee weapon";
+            case ItemTypeEnum.MARTIAL_RANGE_WEAPON:
+                return "martial range weapon";
+            case ItemTypeEnum.LIGHT_ARMOR:
+                return "light armor";
+            case ItemTypeEnum.MEDIUM_ARMOR:
+                return "medium armor";
+            case ItemTypeEnum.HEAVY_ARMOR:
+                return "heavy armor";
+            case ItemTypeEnum.SHIELD:
+                return "shield";
+            case ItemTypeEnum.TOOL:
+                return "tool";
+            default:
+                throw new Error("Parameter 'itemTypeId' must be in the 'ItemTypeEnum' range.");
+        }
+    }
+    /**
+     * Gets the string value of a race id.
+     * @param {RaceEnum} raceId - The race id.
+     * @return {number}
+     */
+    static RaceEnum(raceId) {
+        switch (raceId) {
+            case RaceEnum.DWARF_HILL:
+                return "hill dwarf";
+            case RaceEnum.DWARF_MOUNTAIN:
+                return "mountain dwarf";
+            case RaceEnum.ELF_HIGH:
+                return "high elf";
+            case RaceEnum.ELF_WOOD:
+                return "wood elf";
+            case RaceEnum.HALFLING_LIGHTFOOT:
+                return "lightfoot halfing";
+            case RaceEnum.HALFLING_STOUT:
+                return "stout halfing";
+            case RaceEnum.HUMAN:
+                return "human";
+            default:
+                throw new Error("Parameter 'raceId' must be in the 'RaceEnum' range.");
+        }
+    }
+    /**
+     * Gets the string value of a skill id.
+     * @param {SkillEnum} skillId - The skill id.
+     * @return {number}
+     */
+    static SkillEnum(skillId) {
+        switch (skillId) {
+            case SkillEnum.ACROBATICS:
+                return "acrobatics";
+            case SkillEnum.ANIMAL_HANDLING:
+                return "animal handling";
+            case SkillEnum.ARCANA:
+                return "arcana";
+            case SkillEnum.ATHLETICS:
+                return "athletics";
+            case SkillEnum.DECEPTION:
+                return "deception";
+            case SkillEnum.HISTORY:
+                return "acrobatics";
+            case SkillEnum.INSIGHT:
+                return "insight";
+            case SkillEnum.INTIMIDATION:
+                return "intimidation";
+            case SkillEnum.INVESTIGATION:
+                return "investigation";
+            case SkillEnum.MEDICINE:
+                return "medicine";
+            case SkillEnum.NATURE:
+                return "nature";
+            case SkillEnum.PERCEPTION:
+                return "perception";
+            case SkillEnum.PERFORMANCE:
+                return "performance";
+            case SkillEnum.PERSUASION:
+                return "persuasion";
+            case SkillEnum.RELIGION:
+                return "religion";
+            case SkillEnum.SLEIGHT_OF_HAND:
+                return "sleight of hand";
+            case SkillEnum.STEALTH:
+                return "stealth";
+            case SkillEnum.SURVIVAL:
+                return "survival";
+            default:
+                throw new Error("Parameter 'skillId' must be in the 'SkillEnum' range.");
+        }
+    }
+    /**
+     * Gets the string value of a weapon property id.
+     * @param {WeaponPropertyEnum} weaponPropertyId - The weapon property id.
+     * @return {number}
+     */
+    static WeaponPropertyEnum(weaponPropertyId) {
+        switch (weaponPropertyId) {
+            case WeaponPropertyEnum.AMMUNITION:
+                return "ammunition";
+            case WeaponPropertyEnum.FINESSE:
+                return "finesse";
+            case WeaponPropertyEnum.HEAVY:
+                return "heavy";
+            case WeaponPropertyEnum.LIGHT:
+                return "light";
+            case WeaponPropertyEnum.LOADING:
+                return "loading";
+            case WeaponPropertyEnum.RANGE:
+                return "range";
+            case WeaponPropertyEnum.REACH:
+                return "reach";
+            case WeaponPropertyEnum.SPECIAL:
+                return "special";
+            case WeaponPropertyEnum.THROWN:
+                return "thrown";
+            case WeaponPropertyEnum.TWO_HANDED:
+                return "two handed";
+            case WeaponPropertyEnum.VERSATILE:
+                return "versatile";
+            default:
+                throw new Error("Parameter 'weaponPropertyId' must be in the 'WeaponPropertyEnum' range.");
+        }
+    }
+    /**
+     * Gets the string value of a weapon type id.
+     * @param {WeaponTypeEnum} weaponTypeId - The weapon type id.
+     * @return {number}
+     */
+    static WeaponTypeEnum(weaponTypeId) {
+        switch (weaponTypeId) {
+            case WeaponTypeEnum.CLUB:
+                return "club";
+            case WeaponTypeEnum.DAGGER:
+                return "dagger";
+            case WeaponTypeEnum.GREATCLUB:
+                return "greatclub";
+            case WeaponTypeEnum.HANDAXE:
+                return "handaxe";
+            case WeaponTypeEnum.JAVELIN:
+                return "javelin";
+            case WeaponTypeEnum.LIGHT_HAMMER:
+                return "light hammer";
+            case WeaponTypeEnum.MACE:
+                return "mace";
+            case WeaponTypeEnum.QUARTERSTAFF:
+                return "quarterstaff";
+            case WeaponTypeEnum.SICKLE:
+                return "sickle";
+            case WeaponTypeEnum.SPEAR:
+                return "spear";
+            case WeaponTypeEnum.LIGHT_CROSSBOW:
+                return "light crossbow";
+            case WeaponTypeEnum.DART:
+                return "dart";
+            case WeaponTypeEnum.SHORTBOW:
+                return "shortbow";
+            case WeaponTypeEnum.SLING:
+                return "sling";
+            case WeaponTypeEnum.BATTLEAXE:
+                return "battleaxe";
+            case WeaponTypeEnum.FLAIL:
+                return "flail";
+            case WeaponTypeEnum.GLAIVE:
+                return "glaive";
+            case WeaponTypeEnum.GREATAXE:
+                return "greataxe";
+            case WeaponTypeEnum.GREATSWORD:
+                return "greatsword";
+            case WeaponTypeEnum.HALBERD:
+                return "halberd";
+            case WeaponTypeEnum.LANCE:
+                return "lance";
+            case WeaponTypeEnum.LONGSWORD:
+                return "longsword";
+            case WeaponTypeEnum.MAUL:
+                return "maul";
+            case WeaponTypeEnum.MORNINGSTAR:
+                return "morningstar";
+            case WeaponTypeEnum.PIKE:
+                return "pike";
+            case WeaponTypeEnum.RAPIER:
+                return "rapier";
+            case WeaponTypeEnum.SCIMITAR:
+                return "scimitar";
+            case WeaponTypeEnum.SHORTSWORD:
+                return "shortsword";
+            case WeaponTypeEnum.TRIDENT:
+                return "trident";
+            case WeaponTypeEnum.WAR_PICK:
+                return "war pick";
+            case WeaponTypeEnum.WARHAMMER:
+                return "warhammer";
+            case WeaponTypeEnum.WHIP:
+                return "whip";
+            case WeaponTypeEnum.BLOWGUN:
+                return "blowgun";
+            case WeaponTypeEnum.HAND_CROSSBOW:
+                return "hand crossbow";
+            case WeaponTypeEnum.HEAVY_CROSSBOW:
+                return "heavy crossbow";
+            case WeaponTypeEnum.LONGBOW:
+                return "longbow";
+            case WeaponTypeEnum.NET:
+                return "net";
+            default:
+                throw new Error("Parameter 'weaponTypeId' must be in the 'WeaponTypeEnum' range.");
+        }
+    }
+}
+/**
  * Class representing an item.
  */
 class Item {
@@ -132,7 +489,7 @@ class Weapon extends Item {
     getDamageRoll() {
         let result = 0;
         this._damages.forEach(function (damage) {
-            result += Ruleset.RollD(damage);
+            result += Die.RollD(damage);
         });
         return result;
     }
@@ -325,6 +682,60 @@ let items = {
     WEAPON_LONGBOW: new Weapon("longbow", 5000, 2, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [8], [8], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE, WeaponPropertyEnum.HEAVY, WeaponPropertyEnum.TWO_HANDED], [150, 600], WeaponTypeEnum.LONGBOW),
     WEAPON_NET: new Weapon("net", 100, 3, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [0], [0], DamageTypeEnum.BLUDGEONING, [WeaponPropertyEnum.SPECIAL, WeaponPropertyEnum.THROWN, WeaponPropertyEnum.RANGE], [5, 15], WeaponTypeEnum.NET)
 };
+/**
+ * Class representing a die.
+ */
+class Die {
+    /**
+     * Gets a die roll of the given side count.
+     * @param {number} sideCount - The side count.
+     * @return {number}
+     */
+    static RollD(sideCount) {
+        return Math.floor(Math.random() * sideCount) + 1;
+    }
+    /**
+     * Gets a die roll of the given side count with advantage.
+     * @param {number} sideCount - The side count.
+     * @return {number}
+     */
+    static RollAD(sideCount) {
+        let roll1 = this.RollD(sideCount);
+        let roll2 = this.RollD(sideCount);
+        return roll1 < roll2 ? roll2 : roll1;
+    }
+    /**
+     * Gets a die roll of the given side count with disadvantage.
+     * @param {number} sideCount - The side count.
+     * @return {number}
+     */
+    static RollDD(sideCount) {
+        let roll1 = this.RollD(sideCount);
+        let roll2 = this.RollD(sideCount);
+        return roll1 < roll2 ? roll1 : roll2;
+    }
+    /**
+     * Gets a random ability array roll.
+     * @return {Array<number>}
+     */
+    static RollRAA() {
+        let result = [0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < 6; i++) {
+            let roll = [this.RollD(6), this.RollD(6), this.RollD(6), this.RollD(6)].sort();
+            for (let y = 1; y < roll.length; y++) {
+                result[i] += roll[y];
+            }
+        }
+        return result;
+    }
+    /**
+     * Gets a standard ability array roll.
+     * @return {Array<number>}
+     */
+    static RollSAA() {
+        return [15, 14, 13, 12, 10, 8];
+    }
+}
 /// <reference path="Item.ts"/>
 /**
  * Class representing an inventory.
@@ -709,6 +1120,15 @@ class Character {
     }
 }
 /**
+ * Enum representing an attack roll result.
+ */
+var AttackRollResultEnum;
+(function (AttackRollResultEnum) {
+    AttackRollResultEnum[AttackRollResultEnum["CRITICAL"] = 0] = "CRITICAL";
+    AttackRollResultEnum[AttackRollResultEnum["HIT"] = 1] = "HIT";
+    AttackRollResultEnum[AttackRollResultEnum["MISS"] = 2] = "MISS";
+})(AttackRollResultEnum || (AttackRollResultEnum = {}));
+/**
  * Enum representing a class.
  */
 var ClassEnum;
@@ -718,346 +1138,6 @@ var ClassEnum;
     ClassEnum[ClassEnum["ROGUE"] = 2] = "ROGUE";
     ClassEnum[ClassEnum["WIZARD"] = 3] = "WIZARD";
 })(ClassEnum || (ClassEnum = {}));
-/**
- * Class representing a converter.
- */
-class Converter {
-    /**
-     * Gets the string value of an ability id.
-     * @param {AbilityEnum} abilityId - The ability id.
-     * @return {number}
-     */
-    static AbilityEnum(abilityId) {
-        switch (abilityId) {
-            case AbilityEnum.STRENGTH:
-                return "strength";
-            case AbilityEnum.DEXTERITY:
-                return "dexterity";
-            case AbilityEnum.CONSTITUTION:
-                return "constitution";
-            case AbilityEnum.INTELLIGENCE:
-                return "intelligence";
-            case AbilityEnum.WISDOM:
-                return "wisdom";
-            case AbilityEnum.CHARISMA:
-                return "charisma";
-            default:
-                throw new Error("Parameter 'abilityId' must be in the 'AbilityEnum' range.");
-        }
-    }
-    /**
-     * Gets the string value of an armor type id.
-     * @param {ArmorTypeEnum} armorTypeId - The armor type id.
-     * @return {number}
-     */
-    static ArmorTypeEnum(armorTypeId) {
-        switch (armorTypeId) {
-            case ArmorTypeEnum.PADDED:
-                return "padded";
-            case ArmorTypeEnum.LEATHER:
-                return "leather";
-            case ArmorTypeEnum.STUDDED_LEATHER:
-                return "studded leather";
-            case ArmorTypeEnum.HIDE:
-                return "hide";
-            case ArmorTypeEnum.CHAIN_SHIRT:
-                return "chain shirt";
-            case ArmorTypeEnum.SCALE_MAIL:
-                return "scale mail";
-            case ArmorTypeEnum.BREASTPLATE:
-                return "breastplate";
-            case ArmorTypeEnum.HALF_PLATE:
-                return "half plate";
-            case ArmorTypeEnum.RING_MAIL:
-                return "ring mail";
-            case ArmorTypeEnum.CHAIN_MAIL:
-                return "chain mail";
-            case ArmorTypeEnum.SPLINT:
-                return "splint";
-            case ArmorTypeEnum.PLATE:
-                return "plate";
-            case ArmorTypeEnum.SHIELD:
-                return "shield";
-            default:
-                throw new Error("Parameter 'armorTypeId' must be in the 'ArmorTypeEnum' range.");
-        }
-    }
-    /**
-     * Gets the string value of a class id.
-     * @param {ClassEnum} classId - The class id.
-     * @return {number}
-     */
-    static ClassEnum(classId) {
-        switch (classId) {
-            case ClassEnum.CLERIC:
-                return "cleric";
-            case ClassEnum.FIGHTER:
-                return "fighter";
-            case ClassEnum.ROGUE:
-                return "rogue";
-            case ClassEnum.WIZARD:
-                return "wizard";
-            default:
-                throw new Error("Parameter 'classId' must be in the 'ClassEnum' range.");
-        }
-    }
-    /**
-     * Gets the string value of a damage type id.
-     * @param {DamageTypeEnum} damageTypeId - The damage type id.
-     * @return {number}
-     */
-    static DamageTypeEnum(damageTypeId) {
-        switch (damageTypeId) {
-            case DamageTypeEnum.ACID:
-                return "acid";
-            case DamageTypeEnum.BLUDGEONING:
-                return "bludgeoning";
-            case DamageTypeEnum.COLD:
-                return "cold";
-            case DamageTypeEnum.FIRE:
-                return "fire";
-            case DamageTypeEnum.FORCE:
-                return "force";
-            case DamageTypeEnum.LIGHTNING:
-                return "lightning";
-            case DamageTypeEnum.NECROTIC:
-                return "necrotic";
-            case DamageTypeEnum.PIERCING:
-                return "piercing";
-            case DamageTypeEnum.POISON:
-                return "poison";
-            case DamageTypeEnum.PSYCHIC:
-                return "psychic";
-            case DamageTypeEnum.RADIANT:
-                return "radiant";
-            case DamageTypeEnum.SLASHING:
-                return "slashing";
-            case DamageTypeEnum.THUNDER:
-                return "thunder";
-            default:
-                throw new Error("Parameter 'damageTypeId' must be in the 'DamageTypeEnum' range.");
-        }
-    }
-    /**
-     * Gets the string value of an item type id.
-     * @param {ItemTypeEnum} itemTypeId - The item type id.
-     * @return {number}
-     */
-    static ItemTypeEnum(itemTypeId) {
-        switch (itemTypeId) {
-            case ItemTypeEnum.SIMPLE_MELEE_WEAPON:
-                return "simple melee weapon";
-            case ItemTypeEnum.SIMPLE_RANGE_WEAPON:
-                return "simple range weapon";
-            case ItemTypeEnum.MARTIAL_MELEE_WEAPON:
-                return "martial melee weapon";
-            case ItemTypeEnum.MARTIAL_RANGE_WEAPON:
-                return "martial range weapon";
-            case ItemTypeEnum.LIGHT_ARMOR:
-                return "light armor";
-            case ItemTypeEnum.MEDIUM_ARMOR:
-                return "medium armor";
-            case ItemTypeEnum.HEAVY_ARMOR:
-                return "heavy armor";
-            case ItemTypeEnum.SHIELD:
-                return "shield";
-            case ItemTypeEnum.TOOL:
-                return "tool";
-            default:
-                throw new Error("Parameter 'itemTypeId' must be in the 'ItemTypeEnum' range.");
-        }
-    }
-    /**
-     * Gets the string value of a race id.
-     * @param {RaceEnum} raceId - The race id.
-     * @return {number}
-     */
-    static RaceEnum(raceId) {
-        switch (raceId) {
-            case RaceEnum.DWARF_HILL:
-                return "hill dwarf";
-            case RaceEnum.DWARF_MOUNTAIN:
-                return "mountain dwarf";
-            case RaceEnum.ELF_HIGH:
-                return "high elf";
-            case RaceEnum.ELF_WOOD:
-                return "wood elf";
-            case RaceEnum.HALFLING_LIGHTFOOT:
-                return "lightfoot halfing";
-            case RaceEnum.HALFLING_STOUT:
-                return "stout halfing";
-            case RaceEnum.HUMAN:
-                return "human";
-            default:
-                throw new Error("Parameter 'raceId' must be in the 'RaceEnum' range.");
-        }
-    }
-    /**
-     * Gets the string value of a skill id.
-     * @param {SkillEnum} skillId - The skill id.
-     * @return {number}
-     */
-    static SkillEnum(skillId) {
-        switch (skillId) {
-            case SkillEnum.ACROBATICS:
-                return "acrobatics";
-            case SkillEnum.ANIMAL_HANDLING:
-                return "animal handling";
-            case SkillEnum.ARCANA:
-                return "arcana";
-            case SkillEnum.ATHLETICS:
-                return "athletics";
-            case SkillEnum.DECEPTION:
-                return "deception";
-            case SkillEnum.HISTORY:
-                return "acrobatics";
-            case SkillEnum.INSIGHT:
-                return "insight";
-            case SkillEnum.INTIMIDATION:
-                return "intimidation";
-            case SkillEnum.INVESTIGATION:
-                return "investigation";
-            case SkillEnum.MEDICINE:
-                return "medicine";
-            case SkillEnum.NATURE:
-                return "nature";
-            case SkillEnum.PERCEPTION:
-                return "perception";
-            case SkillEnum.PERFORMANCE:
-                return "performance";
-            case SkillEnum.PERSUASION:
-                return "persuasion";
-            case SkillEnum.RELIGION:
-                return "religion";
-            case SkillEnum.SLEIGHT_OF_HAND:
-                return "sleight of hand";
-            case SkillEnum.STEALTH:
-                return "stealth";
-            case SkillEnum.SURVIVAL:
-                return "survival";
-            default:
-                throw new Error("Parameter 'skillId' must be in the 'SkillEnum' range.");
-        }
-    }
-    /**
-     * Gets the string value of a weapon property id.
-     * @param {WeaponPropertyEnum} weaponPropertyId - The weapon property id.
-     * @return {number}
-     */
-    static WeaponPropertyEnum(weaponPropertyId) {
-        switch (weaponPropertyId) {
-            case WeaponPropertyEnum.AMMUNITION:
-                return "ammunition";
-            case WeaponPropertyEnum.FINESSE:
-                return "finesse";
-            case WeaponPropertyEnum.HEAVY:
-                return "heavy";
-            case WeaponPropertyEnum.LIGHT:
-                return "light";
-            case WeaponPropertyEnum.LOADING:
-                return "loading";
-            case WeaponPropertyEnum.RANGE:
-                return "range";
-            case WeaponPropertyEnum.REACH:
-                return "reach";
-            case WeaponPropertyEnum.SPECIAL:
-                return "special";
-            case WeaponPropertyEnum.THROWN:
-                return "thrown";
-            case WeaponPropertyEnum.TWO_HANDED:
-                return "two handed";
-            case WeaponPropertyEnum.VERSATILE:
-                return "versatile";
-            default:
-                throw new Error("Parameter 'weaponPropertyId' must be in the 'WeaponPropertyEnum' range.");
-        }
-    }
-    /**
-     * Gets the string value of a weapon type id.
-     * @param {WeaponTypeEnum} weaponTypeId - The weapon type id.
-     * @return {number}
-     */
-    static WeaponTypeEnum(weaponTypeId) {
-        switch (weaponTypeId) {
-            case WeaponTypeEnum.CLUB:
-                return "club";
-            case WeaponTypeEnum.DAGGER:
-                return "dagger";
-            case WeaponTypeEnum.GREATCLUB:
-                return "greatclub";
-            case WeaponTypeEnum.HANDAXE:
-                return "handaxe";
-            case WeaponTypeEnum.JAVELIN:
-                return "javelin";
-            case WeaponTypeEnum.LIGHT_HAMMER:
-                return "light hammer";
-            case WeaponTypeEnum.MACE:
-                return "mace";
-            case WeaponTypeEnum.QUARTERSTAFF:
-                return "quarterstaff";
-            case WeaponTypeEnum.SICKLE:
-                return "sickle";
-            case WeaponTypeEnum.SPEAR:
-                return "spear";
-            case WeaponTypeEnum.LIGHT_CROSSBOW:
-                return "light crossbow";
-            case WeaponTypeEnum.DART:
-                return "dart";
-            case WeaponTypeEnum.SHORTBOW:
-                return "shortbow";
-            case WeaponTypeEnum.SLING:
-                return "sling";
-            case WeaponTypeEnum.BATTLEAXE:
-                return "battleaxe";
-            case WeaponTypeEnum.FLAIL:
-                return "flail";
-            case WeaponTypeEnum.GLAIVE:
-                return "glaive";
-            case WeaponTypeEnum.GREATAXE:
-                return "greataxe";
-            case WeaponTypeEnum.GREATSWORD:
-                return "greatsword";
-            case WeaponTypeEnum.HALBERD:
-                return "halberd";
-            case WeaponTypeEnum.LANCE:
-                return "lance";
-            case WeaponTypeEnum.LONGSWORD:
-                return "longsword";
-            case WeaponTypeEnum.MAUL:
-                return "maul";
-            case WeaponTypeEnum.MORNINGSTAR:
-                return "morningstar";
-            case WeaponTypeEnum.PIKE:
-                return "pike";
-            case WeaponTypeEnum.RAPIER:
-                return "rapier";
-            case WeaponTypeEnum.SCIMITAR:
-                return "scimitar";
-            case WeaponTypeEnum.SHORTSWORD:
-                return "shortsword";
-            case WeaponTypeEnum.TRIDENT:
-                return "trident";
-            case WeaponTypeEnum.WAR_PICK:
-                return "war pick";
-            case WeaponTypeEnum.WARHAMMER:
-                return "warhammer";
-            case WeaponTypeEnum.WHIP:
-                return "whip";
-            case WeaponTypeEnum.BLOWGUN:
-                return "blowgun";
-            case WeaponTypeEnum.HAND_CROSSBOW:
-                return "hand crossbow";
-            case WeaponTypeEnum.HEAVY_CROSSBOW:
-                return "heavy crossbow";
-            case WeaponTypeEnum.LONGBOW:
-                return "longbow";
-            case WeaponTypeEnum.NET:
-                return "net";
-            default:
-                throw new Error("Parameter 'weaponTypeId' must be in the 'WeaponTypeEnum' range.");
-        }
-    }
-}
 /**
  * Enum representing a race.
  */
@@ -1072,58 +1152,60 @@ var RaceEnum;
     RaceEnum[RaceEnum["HUMAN"] = 6] = "HUMAN";
 })(RaceEnum || (RaceEnum = {}));
 /**
+ * Class representing a logger.
+ */
+class Logger {
+    /**
+     * Logs an attack and damage roll.
+     * @param {string} actorName - The actor name.
+     * @param {AttackRollResultEnum} attackRollResultId - The attack roll result id.
+     * @param {number} d20Roll - The d20 roll.
+     * @param {number} abilityModifierScore - The ability modifier score.
+     * @param {number} armorClass - The armor class.
+     * @param {Array<number>} damages - The damages.
+     * @param {DamageTypeEnum} damageTypeId - The damage type id.
+     */
+    static AttackDamage(actorName, attackRollResultId, d20Roll, abilityModifierScore, armorClass, damages, damageTypeId) {
+        switch (attackRollResultId) {
+            case AttackRollResultEnum.CRITICAL:
+            case AttackRollResultEnum.HIT:
+                console.log(actorName + " " + Converter.AttackRollResultEnum(attackRollResultId) + " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "] for " + damages.reduce((a, b) => a + b, 0) + " " + this.DamagesToString(damages) + " " + Converter.DamageTypeEnum(damageTypeId) + " damage");
+                break;
+            case AttackRollResultEnum.MISS:
+                console.log(actorName + " " + Converter.AttackRollResultEnum(attackRollResultId) + " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "]");
+                break;
+        }
+    }
+    /**
+     * Logs an attack and damage roll.
+     * @param {string} actorName - The actor name.
+     * @param {number} currentHitPoint - The current hit point.
+     * @param {number} maximumHitPoint - The maximum hit point.
+     */
+    static HitPoints(actorName, currentHitPoint, maximumHitPoint) {
+        console.log(actorName + " Hit Points: " + currentHitPoint + "/" + maximumHitPoint);
+    }
+    /**
+     * Gets the string value of damages.
+     * @param {Array<number>} damages - The damages.
+     */
+    static DamagesToString(damages) {
+        let result = "[";
+        for (let i = 0; i < damages.length; i++) {
+            if (i + 1 < damages.length) {
+                result += "Roll:" + damages[i] + " + ";
+            }
+            else {
+                result += "Mod:" + damages[i];
+            }
+        }
+        return result + "]";
+    }
+}
+/**
  * Class representing a ruleset.
  */
 class Ruleset {
-    /**
-     * Gets a die roll of the given side count.
-     * @param {number} sideCount - The side count.
-     * @return {number}
-     */
-    static RollD(sideCount) {
-        return Math.floor(Math.random() * sideCount) + 1;
-    }
-    /**
-     * Gets a die roll of the given side count with advantage.
-     * @param {number} sideCount - The side count.
-     * @return {number}
-     */
-    static RollAD(sideCount) {
-        let roll1 = this.RollD(sideCount);
-        let roll2 = this.RollD(sideCount);
-        return roll1 < roll2 ? roll2 : roll1;
-    }
-    /**
-     * Gets a die roll of the given side count with disadvantage.
-     * @param {number} sideCount - The side count.
-     * @return {number}
-     */
-    static RollDD(sideCount) {
-        let roll1 = this.RollD(sideCount);
-        let roll2 = this.RollD(sideCount);
-        return roll1 < roll2 ? roll1 : roll2;
-    }
-    /**
-     * Gets a random ability array roll.
-     * @return {Array<number>}
-     */
-    static RollRAA() {
-        let result = [0, 0, 0, 0, 0, 0];
-        for (let i = 0; i < 6; i++) {
-            let roll = [this.RollD(6), this.RollD(6), this.RollD(6), this.RollD(6)].sort();
-            for (let y = 1; y < roll.length; y++) {
-                result[i] += roll[y];
-            }
-        }
-        return result;
-    }
-    /**
-     * Gets a standard ability array roll.
-     * @return {Array<number>}
-     */
-    static RollSAA() {
-        return [15, 14, 13, 12, 10, 8];
-    }
     /**
      * Gets the ability modifier of the given ability score.
      * @param {number} abilityScore - The ability score.
@@ -1576,13 +1658,34 @@ class Ruleset {
                 throw new Error("Parameter 'classId' must be in the 'ClassEnum' range.");
         }
     }
+    /**
+     * Gets the attack roll result.
+     * @param {number} d20Roll - The d20 roll.
+     * @param {number} abilityModifierScore - The ability modifier score.
+     * @param {number} armorClass - The armor class.
+     * @return {AttackRollResultEnum}
+     */
+    static AttackRollResult(d20Roll, abilityModifierScore, armorClass) {
+        if (d20Roll === 20) {
+            return AttackRollResultEnum.CRITICAL;
+        }
+        else if (d20Roll + abilityModifierScore >= armorClass) {
+            return AttackRollResultEnum.HIT;
+        }
+        else {
+            return AttackRollResultEnum.MISS;
+        }
+    }
 }
 /// <reference path="Class/Character.ts"/>
 /// <reference path="Enum/AbilityEnum.ts"/>
+/// <reference path="Enum/AttackRollResultEnum.ts"/>
 /// <reference path="Enum/ClassEnum.ts"/>
-/// <reference path="Enum/Converter.ts"/>
 /// <reference path="Enum/RaceEnum.ts"/>
 /// <reference path="Enum/SkillEnum.ts"/>
+/// <reference path="Converter.ts"/>
+/// <reference path="Die.ts"/>
+/// <reference path="Logger.ts"/>
 /// <reference path="Ruleset.ts"/>
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
@@ -1613,9 +1716,9 @@ orc.addItem(items.WEAPON_CLUB);
 orc.addItem(items.ARMOR_PADDED);
 orc.equipItem(items.WEAPON_CLUB);
 orc.equipItem(items.ARMOR_PADDED);
-let humanInitiativeRoll = Ruleset.RollD(20) + human.initiative;
+let humanInitiativeRoll = Die.RollD(20) + human.initiative;
 console.log("Human Initiative Roll: " + humanInitiativeRoll);
-let orcInitiativeRoll = Ruleset.RollD(20) + orc.initiative;
+let orcInitiativeRoll = Die.RollD(20) + orc.initiative;
 console.log("Orc Initiative Roll: " + orcInitiativeRoll);
 console.log("");
 let roundQueue = Array();
@@ -1639,28 +1742,27 @@ while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
     let acting = roundQueue.shift();
     roundQueue.push(acting);
     let target = roundQueue[0];
-    let d20Roll = Ruleset.RollD(20);
-    let damage = 0;
-    let damage1 = 0;
-    let damage2 = 0;
-    if (d20Roll === 20) {
-        damage += damage1 = acting.getDamageRoll();
-        damage += damage2 = acting.getDamageRoll();
-        damage += acting.getDamageModifier();
-        console.log(acting.name + " critical hits [Roll:" + d20Roll + " + Mod:" + acting.getAttackModifier() + " vs AC:" + target.getArmorClass() + "] for " + damage + " [] " + Converter.DamageTypeEnum(acting.weapon.damageTypeId) + " damage");
+    let d20Roll = Die.RollD(20);
+    let damages = [];
+    let attackRollResult = Ruleset.AttackRollResult(d20Roll, acting.getAttackModifier(), target.getArmorClass());
+    switch (attackRollResult) {
+        case AttackRollResultEnum.CRITICAL:
+            damages.push(acting.getDamageRoll());
+            damages.push(acting.getDamageRoll());
+            damages.push(acting.getDamageModifier());
+            break;
+        case AttackRollResultEnum.HIT:
+            damages.push(acting.getDamageRoll());
+            damages.push(acting.getDamageModifier());
+            break;
+        case AttackRollResultEnum.MISS:
+            break;
     }
-    else if ((d20Roll + acting.getAttackModifier()) >= target.getArmorClass()) {
-        damage += damage1 = acting.getDamageRoll();
-        damage += acting.getDamageModifier();
-        console.log(acting.name + " hits [Roll:" + d20Roll + " + Mod:" + acting.getAttackModifier() + " vs AC:" + target.getArmorClass() + "] for " + damage + " [] " + Converter.DamageTypeEnum(acting.weapon.damageTypeId) + " damage");
-    }
-    else {
-        console.log(acting.name + " misses [Roll:" + d20Roll + " + Mod:" + acting.getAttackModifier() + " vs AC:" + target.getArmorClass() + "]");
-    }
+    Logger.AttackDamage(acting.name, attackRollResult, d20Roll, acting.getAttackModifier(), target.getArmorClass(), damages, acting.weapon.damageTypeId);
     console.log("");
-    target.currentHitPoint -= damage;
-    console.log("Human Hit Point: " + human.currentHitPoint + "/" + human.maximumHitPoint);
-    console.log("Orc Hit Point: " + orc.currentHitPoint + "/" + orc.maximumHitPoint);
+    target.currentHitPoint -= damages.reduce((a, b) => a + b, 0);
+    Logger.HitPoints(human.name, human.currentHitPoint, human.maximumHitPoint);
+    Logger.HitPoints(orc.name, orc.currentHitPoint, orc.maximumHitPoint);
     console.log("");
 }
 /// <reference path="../Enum/ClassEnum.ts"/>

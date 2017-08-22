@@ -65,6 +65,24 @@ class Converter {
     }
 
     /**
+     * Gets the string value of an attack roll result id.
+     * @param {AttackRollResultEnum} attackRollResultId - The attack roll result id.
+     * @return {number}
+     */
+    static AttackRollResultEnum(attackRollResultId: AttackRollResultEnum) {
+        switch (attackRollResultId) {
+            case AttackRollResultEnum.CRITICAL:
+                return "critital hits";
+            case AttackRollResultEnum.HIT:
+                return "hits";
+            case AttackRollResultEnum.MISS:
+                return "misses";
+            default:
+                throw new Error("Parameter 'attackRollResultId' must be in the 'AttackRollResultEnum' range.");
+        }
+    }
+
+    /**
      * Gets the string value of a class id.
      * @param {ClassEnum} classId - The class id.
      * @return {number}

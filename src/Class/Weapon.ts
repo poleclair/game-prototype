@@ -69,7 +69,7 @@ class Weapon extends Item {
         let result = 0;
 
         this._damages.forEach(function (damage) {
-            result += Ruleset.RollD(damage);
+            result += Die.RollD(damage);
         });
 
         return result;
