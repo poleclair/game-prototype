@@ -7,7 +7,7 @@ class Converter {
      * @param {AbilityEnum} abilityId - The ability id.
      * @return {number}
      */
-    static AbilityEnum(abilityId) {
+    static AbilityEnumToString(abilityId) {
         switch (abilityId) {
             case AbilityEnum.STRENGTH:
                 return "strength";
@@ -30,7 +30,7 @@ class Converter {
      * @param {ArmorTypeEnum} armorTypeId - The armor type id.
      * @return {number}
      */
-    static ArmorTypeEnum(armorTypeId) {
+    static ArmorTypeEnumToString(armorTypeId) {
         switch (armorTypeId) {
             case ArmorTypeEnum.PADDED:
                 return "padded";
@@ -67,7 +67,7 @@ class Converter {
      * @param {AttackRollResultEnum} attackRollResultId - The attack roll result id.
      * @return {number}
      */
-    static AttackRollResultEnum(attackRollResultId) {
+    static AttackRollResultEnumToString(attackRollResultId) {
         switch (attackRollResultId) {
             case AttackRollResultEnum.CRITICAL:
                 return "critital hits";
@@ -84,7 +84,7 @@ class Converter {
      * @param {ClassEnum} classId - The class id.
      * @return {number}
      */
-    static ClassEnum(classId) {
+    static ClassEnumToString(classId) {
         switch (classId) {
             case ClassEnum.CLERIC:
                 return "cleric";
@@ -103,7 +103,7 @@ class Converter {
      * @param {DamageTypeEnum} damageTypeId - The damage type id.
      * @return {number}
      */
-    static DamageTypeEnum(damageTypeId) {
+    static DamageTypeEnumToString(damageTypeId) {
         switch (damageTypeId) {
             case DamageTypeEnum.ACID:
                 return "acid";
@@ -140,7 +140,7 @@ class Converter {
      * @param {ItemTypeEnum} itemTypeId - The item type id.
      * @return {number}
      */
-    static ItemTypeEnum(itemTypeId) {
+    static ItemTypeEnumToString(itemTypeId) {
         switch (itemTypeId) {
             case ItemTypeEnum.SIMPLE_MELEE_WEAPON:
                 return "simple melee weapon";
@@ -169,7 +169,7 @@ class Converter {
      * @param {RaceEnum} raceId - The race id.
      * @return {number}
      */
-    static RaceEnum(raceId) {
+    static RaceEnumToString(raceId) {
         switch (raceId) {
             case RaceEnum.DWARF_HILL:
                 return "hill dwarf";
@@ -194,7 +194,7 @@ class Converter {
      * @param {SkillEnum} skillId - The skill id.
      * @return {number}
      */
-    static SkillEnum(skillId) {
+    static SkillEnumToString(skillId) {
         switch (skillId) {
             case SkillEnum.ACROBATICS:
                 return "acrobatics";
@@ -241,7 +241,7 @@ class Converter {
      * @param {WeaponPropertyEnum} weaponPropertyId - The weapon property id.
      * @return {number}
      */
-    static WeaponPropertyEnum(weaponPropertyId) {
+    static WeaponPropertyEnumToString(weaponPropertyId) {
         switch (weaponPropertyId) {
             case WeaponPropertyEnum.AMMUNITION:
                 return "ammunition";
@@ -274,7 +274,7 @@ class Converter {
      * @param {WeaponTypeEnum} weaponTypeId - The weapon type id.
      * @return {number}
      */
-    static WeaponTypeEnum(weaponTypeId) {
+    static WeaponTypeEnumToString(weaponTypeId) {
         switch (weaponTypeId) {
             case WeaponTypeEnum.CLUB:
                 return "club";
@@ -1169,10 +1169,10 @@ class Logger {
         switch (attackRollResultId) {
             case AttackRollResultEnum.CRITICAL:
             case AttackRollResultEnum.HIT:
-                console.log(actorName + " " + Converter.AttackRollResultEnum(attackRollResultId) + " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "] for " + damages.reduce((a, b) => a + b, 0) + " " + this.DamagesToString(damages) + " " + Converter.DamageTypeEnum(damageTypeId) + " damage");
+                console.log(actorName + " " + Converter.AttackRollResultEnumToString(attackRollResultId) + " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "] for " + damages.reduce((a, b) => a + b, 0) + " " + this.DamagesToString(damages) + " " + Converter.DamageTypeEnumToString(damageTypeId) + " damage");
                 break;
             case AttackRollResultEnum.MISS:
-                console.log(actorName + " " + Converter.AttackRollResultEnum(attackRollResultId) + " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "]");
+                console.log(actorName + " " + Converter.AttackRollResultEnumToString(attackRollResultId) + " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "]");
                 break;
         }
     }
