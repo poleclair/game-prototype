@@ -4,8 +4,8 @@
 class Item {
     private _name: string;
     private _cost: number;
-    private _itemType: number;
     private _weight: number;
+    private _itemTypeId: ItemTypeEnum;
 
     /**
      * Create an item.
@@ -13,14 +13,14 @@ class Item {
      * @param {string} name - The name.
      * @param {number} cost - The cost.
      * @param {number} weight - The weight.
-     * @param {number} itemType - The item type.
+     * @param {ItemTypeEnum} itemTypeId - The item type id.
      * @return {Item}
      */
-    constructor(name: string, cost: number, weight: number, itemType: number) {
+    constructor(name: string, cost: number, weight: number, itemTypeId: ItemTypeEnum) {
         this._name = name;
         this._cost = cost;
         this._weight = weight;
-        this._itemType = itemType;
+        this._itemTypeId = itemTypeId;
     }
 
     get name() {
@@ -35,7 +35,7 @@ class Item {
         return this._weight;
     }
 
-    get itemType() {
-        return this._itemType;
+    get itemTypeId() {
+        return this._itemTypeId;
     }
 }

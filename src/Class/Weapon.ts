@@ -5,33 +5,33 @@
 class Weapon extends Item {
     private _damages: Array<number>;
     private _secondaryDamages: Array<number>;
-    private _damageType: number;
-    private _properties: Array<number>;
-    private _ranges: Array<number>;
-    private _weaponType: number;
+    private _damageType: DamageTypeEnum;
+    private _properties: Array<WeaponPropertyEnum>;
+    private _weaponRange: WeaponRange;
+    private _weaponType: WeaponTypeEnum;
 
     /**
      * Create a weapon.
      * @param {string} name - The name.
      * @param {number} cost - The cost.
      * @param {number} weight - The weight.
-     * @param {number} itemType - The item type.
+     * @param {ItemTypeEnum} itemType - The item type.
      * @param {Array<number>} damages - The damage array.
      * @param {Array<number>} secondaryDamages - The secondary damage array.
-     * @param {number} damageType - The damage type.
-     * @param {Array<number>} properties - The property array.
-     * @param {Array<number>} ranges - The range array.
-     * @param {number} weaponType - The weapon type.
+     * @param {DamageTypeEnum} damageType - The damage type.
+     * @param {Array<WeaponPropertyEnum>} properties - The property array.
+     * @param {WeaponRange} weaponRange - The weapon range.
+     * @param {WeaponTypeEnum} weaponType - The weapon type.
      * @return {Weapon}
      */
-    constructor(name: string, cost: number, weight: number, itemType: number, damages: Array<number>, secondaryDamages: Array<number>, damageType: number, properties: Array<number>, ranges: Array<number>, weaponType: number) {
+    constructor(name: string, cost: number, weight: number, itemType: ItemTypeEnum, damages: Array<number>, secondaryDamages: Array<number>, damageType: DamageTypeEnum, properties: Array<WeaponPropertyEnum>, weaponRange: WeaponRange, weaponType: WeaponTypeEnum) {
         super(name, cost, weight, itemType);
 
         this._damages = damages;
         this._secondaryDamages = secondaryDamages;
         this._damageType = damageType;
         this._properties = properties;
-        this._ranges = ranges;
+        this._weaponRange = weaponRange;
         this._weaponType = weaponType;
     }
 
@@ -51,8 +51,8 @@ class Weapon extends Item {
         return this._properties;
     }
 
-    get ranges() {
-        return this._ranges;
+    get weaponRange() {
+        return this._weaponRange;
     }
 
     get weaponType() {
@@ -63,7 +63,7 @@ class Weapon extends Item {
      * Get the damage roll.
      * @return {number}
      */
-    getDamageRoll() {
+    public getDamageRoll() {
         let result = 0;
 
         this._damages.forEach(function (damage) {

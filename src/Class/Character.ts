@@ -324,7 +324,7 @@ class Character {
         if (this._inventory.hasItem(item)) {
             this._inventory.removeItem(item);
 
-            switch (item.itemType) {
+            switch (item.itemTypeId) {
                 case ItemTypeEnum.LIGHT_ARMOR:
                 case ItemTypeEnum.MEDIUM_ARMOR:
                 case ItemTypeEnum.HEAVY_ARMOR:
