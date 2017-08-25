@@ -1051,10 +1051,17 @@ class Character {
         return this.getAbilityModifier(Ruleset.WeaponAbility(this._weapon.weaponType));
     }
     /**
-     * Get the damage roll.
+     * Gets a roll for attack.
      * @return {number}
      */
-    getDamageRoll() {
+    rollAttack() {
+        return this._weapon.getDamageRoll();
+    }
+    /**
+     * Gets a roll for damage.
+     * @return {number}
+     */
+    rollDamage() {
         return this._weapon.getDamageRoll();
     }
     /**
@@ -1769,12 +1776,12 @@ while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
     let attackRollResult = Ruleset.AttackRollResult(d20Roll, acting.getAttackModifier(), target.getArmorClass());
     switch (attackRollResult) {
         case AttackRollResultEnum.CRITICAL:
-            damages.push(acting.getDamageRoll());
-            damages.push(acting.getDamageRoll());
+            damages.push(acting.rollDamage());
+            damages.push(acting.rollDamage());
             damages.push(acting.getDamageModifier());
             break;
         case AttackRollResultEnum.HIT:
-            damages.push(acting.getDamageRoll());
+            damages.push(acting.rollDamage());
             damages.push(acting.getDamageModifier());
             break;
         case AttackRollResultEnum.MISS:

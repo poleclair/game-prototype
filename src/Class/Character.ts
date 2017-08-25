@@ -272,10 +272,18 @@ class Character {
     }
 
     /**
-     * Get the damage roll.
+     * Gets a roll for attack.
      * @return {number}
      */
-    getDamageRoll() {
+    rollAttack() {
+        return this._weapon.getDamageRoll();
+    }
+
+    /**
+     * Gets a roll for damage.
+     * @return {number}
+     */
+    rollDamage() {
         return this._weapon.getDamageRoll();
     }
 

@@ -82,12 +82,12 @@ while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
 
     switch (attackRollResult) {
         case AttackRollResultEnum.CRITICAL:
-            damages.push(acting.getDamageRoll());
-            damages.push(acting.getDamageRoll());
+            damages.push(acting.rollDamage());
+            damages.push(acting.rollDamage());
             damages.push(acting.getDamageModifier());
             break;
         case AttackRollResultEnum.HIT:
-            damages.push(acting.getDamageRoll());
+            damages.push(acting.rollDamage());
             damages.push(acting.getDamageModifier());
             break;
         case AttackRollResultEnum.MISS:
