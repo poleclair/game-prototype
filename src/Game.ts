@@ -1,5 +1,7 @@
 /// <reference path="Class/Character.ts"/>
 
+/// <reference path="Engine/Engine.ts"/>
+
 /// <reference path="Enum/AbilityEnum.ts"/>
 /// <reference path="Enum/AttackRollResultEnum.ts"/>
 /// <reference path="Enum/ClassEnum.ts"/>
@@ -26,6 +28,10 @@
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
+
+let engine = new Engine();
+
+engine.init();
 
 let abilityScores1 = [16, 14, 14, 10, 14, 11];
 let skillProficiencies1 = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];

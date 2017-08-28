@@ -1149,6 +1149,30 @@ class Character {
     }
 }
 /**
+ * Class representing an engine.
+ */
+class Engine {
+    /**
+     * Creates an engine.
+     * @constructor
+     * @return {Engine}
+     */
+    constructor() {
+        this._canvas = document.createElement("canvas");
+        this._canvas.width = 640;
+        this._canvas.height = 480;
+        this._context = this._canvas.getContext("2d");
+    }
+    /**
+     * Initializes the engine.
+     */
+    init() {
+        window.onload = function () {
+            document.body.appendChild(this._canvas);
+        }.bind(this);
+    }
+}
+/**
  * Enum representing an attack roll result.
  */
 var AttackRollResultEnum;
@@ -1707,6 +1731,7 @@ class Ruleset {
     }
 }
 /// <reference path="Class/Character.ts"/>
+/// <reference path="Engine/Engine.ts"/>
 /// <reference path="Enum/AbilityEnum.ts"/>
 /// <reference path="Enum/AttackRollResultEnum.ts"/>
 /// <reference path="Enum/ClassEnum.ts"/>
@@ -1731,6 +1756,8 @@ class Ruleset {
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
+let engine = new Engine();
+engine.init();
 let abilityScores1 = [16, 14, 14, 10, 14, 11];
 let skillProficiencies1 = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
 let human = new Character("Human", 1, RaceEnum.HUMAN, ClassEnum.FIGHTER, abilityScores1, skillProficiencies1);
