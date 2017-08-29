@@ -29,9 +29,10 @@
 -- BASE DAMAGE => 1d4 [20, 40]
 */
 
-let engine = new Engine();
+let engine = new Engine(40, 30);
 
 engine.init();
+engine.start();
 
 let abilityScores1 = [16, 14, 14, 10, 14, 11];
 let skillProficiencies1 = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];

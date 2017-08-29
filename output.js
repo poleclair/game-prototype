@@ -1149,19 +1149,105 @@ class Character {
     }
 }
 /**
+ * Class representing a grid.
+ */
+class Grid {
+    /**
+     * Creates a grid.
+     * @param  {number} width - The width.
+     * @param  {number} height - The height.
+     * @return {Grid}
+     */
+    constructor(width, height) {
+        this._width = width;
+        this._height = height;
+        this._tiles = [];
+        for (let x = 0; x < width; x++) {
+            this._tiles[x] = [];
+            for (let y = 0; y < height; y++) {
+                this._tiles[x][y] = new Tile("", "", 250, 0);
+            }
+        }
+    }
+    get width() {
+        return this._width;
+    }
+    get height() {
+        return this._height;
+    }
+    get tiles() {
+        return this._tiles;
+    }
+}
+/**
+ * Class representing a tile.
+ */
+class Tile {
+    /**
+     * Creates a tile.
+     * @param  {string} backgroundColor - The background color.
+     * @param  {string} foregroundColor - The foreground color.
+     * @param  {number} char - The character.
+     * @param  {number} z - The z.
+     * @return {Tile}
+     */
+    constructor(backgroundColor, foregroundColor, char, z) {
+        this._backgroundColor = backgroundColor;
+        this._foregroundColor = foregroundColor;
+        this._char = char;
+        this._z = z;
+    }
+    get background_color() {
+        return this._backgroundColor;
+    }
+    set background_color(value) {
+        this._backgroundColor = value;
+    }
+    get foreground_color() {
+        return this._foregroundColor;
+    }
+    set foreground_color(value) {
+        this._foregroundColor = value;
+    }
+    get character() {
+        return this._char;
+    }
+    set character(value) {
+        this._char = value;
+    }
+    get z() {
+        return this._z;
+    }
+    set z(value) {
+        this._z = value;
+    }
+}
+/// <reference path="Grid.ts"/>
+/// <reference path="Tile.ts"/>
+/**
  * Class representing an engine.
  */
 class Engine {
     /**
      * Creates an engine.
      * @constructor
+     * @param {number} width - The width in tile.
+     * @param {number} height - The level.
      * @return {Engine}
      */
-    constructor() {
-        this._canvas = document.createElement("canvas");
-        this._canvas.width = 640;
-        this._canvas.height = 480;
-        this._context = this._canvas.getContext("2d");
+    constructor(width, height) {
+        this.TileWidthInPixel = 16;
+        this.TileHeightInPixel = 16;
+        this.TilesetWidthInTile = 16;
+        this.TilesetHeightInTile = 16;
+        this._canvas = document.createElement('canvas');
+        this._canvas.id = 'canvas';
+        this._canvas.width = width * this.TileWidthInPixel;
+        this._canvas.height = height * this.TileHeightInPixel;
+        this._image = new Image();
+        this._image.src = './src/Engine/img/cp437_16x16.png';
+        this._context = this._canvas.getContext('2d');
+        this._grid = new Grid(width, height);
     }
     /**
      * Initializes the engine.
@@ -1169,7 +1255,72 @@ class Engine {
     init() {
         window.onload = function () {
             document.body.appendChild(this._canvas);
+            document.getElementById('canvas').appendChild(this._image);
         }.bind(this);
+    }
+    /**
+     * Starts the engine.
+     */
+    start() {
+        this._pid = setInterval(function () {
+            this.clear();
+            this.draw();
+        }.bind(this), 500);
+    }
+    /**
+     * Stops the engine.
+     */
+    stop() {
+        clearInterval(this._pid);
+    }
+    /**
+     * Clears the engine.
+     */
+    clear() {
+        this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+    }
+    /**
+     * Draws the engine.
+     */
+    draw() {
+        for (let x = 0; x < this._grid.width; x++) {
+            for (let y = 0; y < this._grid.height; y++) {
+                let sx = (this._grid.tiles[x][y].character % Tileset.TilesetWidthInTile) * Tileset.TileWidthInPixel;
+                let sy = Math.floor(this._grid.tiles[x][y].character / Tileset.TilesetHeightInTile) * Tileset.TileHeightInPixel;
+                let sWidth = Tileset.TileWidthInPixel;
+                let sHeight = Tileset.TileHeightInPixel;
+                let dx = x * 16;
+                let dy = y * 16;
+                let dWidth = Tileset.TileWidthInPixel;
+                let dHeight = Tileset.TileHeightInPixel;
+                this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                /*
+                this._ctx.drawImage(
+                    this._tileset.image[this._grid.getTile(x, y).background_color],
+                    (Tileset.CHAR_FILL % this._tileset.tileset_width_in_tile) * this._tileset.tile_width_in_pixel,
+                    Math.floor(Tileset.CHAR_FILL / this._tileset.tileset_height_in_tile) * this._tileset.tile_height_in_pixel,
+                    this._tileset.tile_width_in_pixel,
+                    this._tileset.tile_height_in_pixel,
+                    xx,
+                    yy,
+                    this._tileset.tile_width_in_pixel,
+                    this._tileset.tile_height_in_pixel
+                );
+
+                this._ctx.drawImage(
+                    this._tileset.image[this._grid.getTile(x, y).foreground_color],
+                    (this._grid.getTile(x, y).character % this._tileset.tileset_width_in_tile) * this._tileset.tile_width_in_pixel,
+                    Math.floor(this._grid.getTile(x, y).character / this._tileset.tileset_height_in_tile) * this._tileset.tile_height_in_pixel,
+                    this._tileset.tile_width_in_pixel,
+                    this._tileset.tile_height_in_pixel,
+                    xx,
+                    yy,
+                    this._tileset.tile_width_in_pixel,
+                    this._tileset.tile_height_in_pixel
+                );
+                */
+            }
+        }
     }
 }
 /**
@@ -1756,8 +1907,9 @@ class Ruleset {
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
-let engine = new Engine();
+let engine = new Engine(40, 30);
 engine.init();
+engine.start();
 let abilityScores1 = [16, 14, 14, 10, 14, 11];
 let skillProficiencies1 = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
 let human = new Character("Human", 1, RaceEnum.HUMAN, ClassEnum.FIGHTER, abilityScores1, skillProficiencies1);
@@ -1820,6 +1972,50 @@ while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
     Logger.HitPoints(human.name, human.currentHitPoint, human.maximumHitPoint);
     Logger.HitPoints(orc.name, orc.currentHitPoint, orc.maximumHitPoint);
     console.log("");
+}
+/**
+ * Class representing a tileset.
+ */
+class Tileset {
+    static get TileWidthInPixel() {
+        return 16;
+    }
+    static get TileHeightInPixel() {
+        return 16;
+    }
+    static get TilesetWidthInTile() {
+        return 16;
+    }
+    static get TilesetHeightInTile() {
+        return 16;
+    }
+    /**
+     * Gets the characters.
+     */
+    static get CharTransparent() { return 0; }
+    static get CharFill() { return 219; }
+    static get CharSmallDot() { return 250; }
+    static get CharBigDot() { return 249; }
+    static get CharSimpleBorderTopLeft() { return 218; }
+    static get CharSimpleBorder_TOP_RIGHT() { return 191; }
+    static get CharSimpleBorder_BOTTOM_LEFT() { return 192; }
+    static get CharSimpleBorder_BOTTOM_RIGHT() { return 217; }
+    static get CharSimpleBorder_HORIZONTAL() { return 196; }
+    static get CharSimpleBorder_VERTICAL() { return 179; }
+    static get CHAR_DOUBLE_BORDER_TOP_LEFT() { return 201; }
+    static get CHAR_DOUBLE_BORDER_TOP_RIGHT() { return 187; }
+    static get CHAR_DOUBLE_BORDER_BOTTOM_LEFT() { return 200; }
+    static get CHAR_DOUBLE_BORDER_BOTTOM_RIGHT() { return 188; }
+    static get CHAR_DOUBLE_BORDER_HORIZONTAL() { return 205; }
+    static get CHAR_DOUBLE_BORDER_VERTICAL() { return 186; }
+    /**
+     * Gets the colors.
+     */
+    static get COLOR_BLACK() { return "black"; }
+    static get COLOR_WHITE() { return "white"; }
+    static get COLOR_RED() { return "red"; }
+    static get COLOR_GREEN() { return "green"; }
+    static get COLOR_BLUE() { return "blue"; }
 }
 /// <reference path="../Enum/ClassEnum.ts"/>
 /// <reference path="../Enum/RaceEnum.ts"/>
