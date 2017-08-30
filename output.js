@@ -1149,6 +1149,74 @@ class Character {
     }
 }
 /**
+ * Class representing an animation.
+ */
+class Animation {
+    /**
+     * Creates an animation.
+     * @param {number} x - The x.
+     * @param {number} y - The y.
+     * @param {Array<Frame>} frames - The frames.
+     * @return {Animation}
+     */
+    constructor(x, y, frames) {
+        this._x = x;
+        this._y = y;
+        this._frames = frames;
+    }
+    get x() {
+        return this._x;
+    }
+    get y() {
+        return this._y;
+    }
+    get frames() {
+        return this._frames;
+    }
+}
+/**
+ * Class representing a frame.
+ */
+class Frame {
+    /**
+     * Creates a frame.
+     * @param {Array<Target>} targets - The targets
+     * @return {Frame}
+     */
+    constructor(targets) {
+        this._targets = targets;
+    }
+    get targets() {
+        return this._targets;
+    }
+}
+/**
+ * Class representing a target.
+ */
+class Target {
+    /**
+     * Creates a target.
+     * @param  {number} xOffset - The x offset.
+     * @param  {number} yOffset - The y offset.
+     * @param  {Tile} tile - The tile.
+     * @return {Target}
+     */
+    constructor(xOffset, yOffset, tile) {
+        this._xOffset = xOffset;
+        this._yOffset = yOffset;
+        this._tile = tile;
+    }
+    get xOffset() {
+        return this._xOffset;
+    }
+    get yOffset() {
+        return this._yOffset;
+    }
+    get tile() {
+        return this._tile;
+    }
+}
+/**
  * Class representing a grid.
  */
 class Grid {
@@ -1196,7 +1264,7 @@ class Control {
         this._yUp = 0;
         this._xContextMenu = 0;
         this._yContextMenu = 0;
-        this._key = 0;
+        this._kKeyDown = 0;
     }
     get x() {
         return this._x;
@@ -1222,8 +1290,8 @@ class Control {
     get yContextMenu() {
         return this._yUp;
     }
-    get key() {
-        return this._key;
+    get kKeyDown() {
+        return this._kKeyDown;
     }
     /**
      * Triggers mouse down.
@@ -1261,8 +1329,7 @@ class Control {
      * Triggers key down.
      */
     keyDown(event) {
-        this._key = event.keyCode;
-        console.log(this._key);
+        this._kKeyDown = event.keyCode;
     }
 }
 /**
@@ -1387,6 +1454,9 @@ class Tileset {
         return "blue";
     }
 }
+/// <reference path="Animation/Animation.ts"/>
+/// <reference path="Animation/Frame.ts"/>
+/// <reference path="Animation/Target.ts"/>
 /// <reference path="Grid.ts"/>
 /// <reference path="Control.ts"/>
 /// <reference path="Tile.ts"/>
@@ -1412,7 +1482,23 @@ class Engine {
         this._image.src = Tileset.TilesetSourceImage;
         this._context = this._canvas.getContext('2d');
         this._control = new Control();
-        this._layer0 = new Grid(width, height);
+        this._grid = new Grid(width, height);
+        this._animations = [];
+        // test animation
+        this._animations = [
+            new Animation(0, 0, [
+                new Frame([new Target(0, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(1, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(2, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(3, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(4, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(5, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(6, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(7, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(8, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(9, 0, new Tile(Tileset.CharBigDot, 0))])
+            ])
+        ];
     }
     /**
      * Initializes the engine.
@@ -1461,17 +1547,37 @@ class Engine {
         let dy = 0;
         let dWidth = Tileset.TileWidthInPixel;
         let dHeight = Tileset.TileHeightInPixel;
-        // layer 0
-        for (let x = 0; x < this._layer0.width; x++) {
-            for (let y = 0; y < this._layer0.height; y++) {
-                sx = Tileset.TileWidthInPixel * (this._layer0.tiles[x][y].character % Tileset.TilesetWidthInTile);
-                sy = Tileset.TileHeightInPixel * Math.floor(this._layer0.tiles[x][y].character / Tileset.TilesetHeightInTile);
+        // grid layer
+        for (let x = 0; x < this._grid.width; x++) {
+            for (let y = 0; y < this._grid.height; y++) {
+                sx = Tileset.TileWidthInPixel * (this._grid.tiles[x][y].character % Tileset.TilesetWidthInTile);
+                sy = Tileset.TileHeightInPixel * Math.floor(this._grid.tiles[x][y].character / Tileset.TilesetHeightInTile);
                 dx = Tileset.TileWidthInPixel * x;
                 dy = Tileset.TileHeightInPixel * y;
                 this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
             }
         }
-        // layer mouse
+        // animation layer
+        let animations = new Array();
+        for (let i = 0; i < this._animations.length; i++) {
+            animations.push(this._animations[i]);
+        }
+        let frames = new Array();
+        for (let i = 0; i < this._animations.length; i++) {
+            frames.push(this._animations[i].frames.pop());
+        }
+        let targets = new Array();
+        for (let i = 0; i < frames.length; i++) {
+            targets.push(frames[i].targets.pop());
+        }
+        for (let i = 0; i < targets.length; i++) {
+            sx = Tileset.TileWidthInPixel * (targets[i].tile.character % Tileset.TilesetWidthInTile);
+            sy = Tileset.TileHeightInPixel * Math.floor(targets[i].tile.character / Tileset.TilesetHeightInTile);
+            dx = Tileset.TileWidthInPixel * (this._animations[i].x + this._animations[i].frames[j].targets[k].xOffset);
+            dy = Tileset.TileHeightInPixel * (this._animations[i].y + this._animations[i].frames[j].targets[k].yOffset);
+            this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        }
+        // mouse layer
         sx = Tileset.TileWidthInPixel * (Tileset.CharFill % Tileset.TilesetWidthInTile);
         sy = Tileset.TileHeightInPixel * Math.floor(Tileset.CharFill / Tileset.TilesetHeightInTile);
         dx = Tileset.TileWidthInPixel * this._control.x;

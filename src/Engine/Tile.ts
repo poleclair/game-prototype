@@ -11,7 +11,7 @@ class Tile {
      * @param  {number} z - The z.
      * @return {Tile}
      */
-    public constructor(char, z) {
+    public constructor(char: number, z: number) {
         this._char = char;
         this._z = z;
     }
@@ -20,7 +20,7 @@ class Tile {
         return this._char;
     }
 
-    public set character(value) {
+    public set character(value: number) {
         this._char = value;
     }
 
@@ -28,7 +28,7 @@ class Tile {
         return this._z;
     }
 
-    public set z(value) {
+    public set z(value: number) {
         this._z = value;
     }
 }

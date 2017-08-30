@@ -12,7 +12,7 @@ class Grid {
      * @param  {number} height - The height.
      * @return {Grid}
      */
-    public constructor(width, height) {
+    public constructor(width: number, height: number) {
         this._width = width;
         this._height = height;
         this._tiles = [];
@@ -51,7 +51,7 @@ class Grid {
      * @return {Object}
      */
     /*
-    public updateLine(c0, c1) {
+    public updateLine(c0: number, c1: number) {
         var dx = c1.x - c0.x, dy = c1.y - c0.y;
         var nx = Math.abs(dx), ny = Math.abs(dy);
         var sign_x = dx > 0 ? 1 : -1, sign_y = dy > 0 ? 1 : -1;

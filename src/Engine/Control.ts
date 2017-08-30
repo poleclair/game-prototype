@@ -10,7 +10,7 @@ class Control {
     private _yUp: number;
     private _xContextMenu: number;
     private _yContextMenu: number;
-    private _key: number;
+    private _kKeyDown: number;
 
     /**
      * Creates a control.
@@ -25,7 +25,7 @@ class Control {
         this._yUp = 0;
         this._xContextMenu = 0;
         this._yContextMenu = 0;
-        this._key = 0;
+        this._kKeyDown = 0;
     }
 
     public get x() {
@@ -60,14 +60,14 @@ class Control {
         return this._yUp;
     }
 
-    public get key() {
-        return this._key;
+    public get kKeyDown() {
+        return this._kKeyDown;
     }
 
     /**
      * Triggers mouse down.
      */
-    public mouseDown(event) {
+    public mouseDown(event: MouseEvent) {
         event.preventDefault();
 
         this._xDown = Math.floor(event.layerX / Tileset.TileWidthInPixel);
@@ -77,7 +77,7 @@ class Control {
     /**
      * Triggers mouse up.
      */
-    public mouseUp(event) {
+    public mouseUp(event: MouseEvent) {
         event.preventDefault();
 
         this._xUp = Math.floor(event.layerX / Tileset.TileWidthInPixel);
@@ -87,7 +87,7 @@ class Control {
     /**
      * Triggers mouse move.
      */
-    public mouseMove(event) {
+    public mouseMove(event: MouseEvent) {
         event.preventDefault();
 
         this._x = Math.floor(event.layerX / Tileset.TileWidthInPixel);
@@ -97,7 +97,7 @@ class Control {
     /**
      * Triggers context menu.
      */
-    public contextMenu(event) {
+    public contextMenu(event: MouseEvent) {
         event.preventDefault();
 
         this._xContextMenu = Math.floor(event.layerX / Tileset.TileWidthInPixel);
@@ -107,8 +107,7 @@ class Control {
     /**
      * Triggers key down.
      */
-    public keyDown(event) {
-        this._key = event.keyCode;
-        console.log(this._key);
+    public keyDown(event: KeyboardEvent) {
+        this._kKeyDown = event.keyCode;
     }
 }
