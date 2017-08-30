@@ -1180,12 +1180,12 @@ class Grid {
     }
 }
 /**
- * Class representing a mouse.
+ * Class representing a control.
  */
-class Mouse {
+class Control {
     /**
-     * Creates a mouse.
-     * @return {Mouse}
+     * Creates a control.
+     * @return {Control}
      */
     constructor() {
         this._x = 0;
@@ -1196,86 +1196,73 @@ class Mouse {
         this._yUp = 0;
         this._xContextMenu = 0;
         this._yContextMenu = 0;
+        this._key = 0;
     }
     get x() {
         return this._x;
     }
-    set x(value) {
-        this._x = value;
-    }
     get y() {
         return this._y;
-    }
-    set y(value) {
-        this._y = value;
     }
     get xDown() {
         return this._xDown;
     }
-    set xDown(value) {
-        this._xDown = value;
-    }
     get yDown() {
         return this._yDown;
-    }
-    set yDown(value) {
-        this._yDown = value;
     }
     get xUp() {
         return this._xUp;
     }
-    set xUp(value) {
-        this._xUp = value;
-    }
     get yUp() {
         return this._yUp;
-    }
-    set yUp(value) {
-        this._yUp = value;
     }
     get xContextMenu() {
         return this._xUp;
     }
-    set xContextMenu(value) {
-        this._xUp = value;
-    }
     get yContextMenu() {
         return this._yUp;
     }
-    set yContextMenu(value) {
-        this._yUp = value;
+    get key() {
+        return this._key;
     }
     /**
      * Triggers mouse down.
      */
     mouseDown(event) {
         event.preventDefault();
-        this.xDown = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this.yDown = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this._xDown = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this._yDown = Math.floor(event.layerY / Tileset.TileHeightInPixel);
     }
     /**
      * Triggers mouse up.
      */
     mouseUp(event) {
         event.preventDefault();
-        this.xUp = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this.yUp = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this._xUp = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this._yUp = Math.floor(event.layerY / Tileset.TileHeightInPixel);
     }
     /**
      * Triggers mouse move.
      */
     mouseMove(event) {
         event.preventDefault();
-        this.x = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this.y = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this._x = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this._y = Math.floor(event.layerY / Tileset.TileHeightInPixel);
     }
     /**
      * Triggers context menu.
      */
     contextMenu(event) {
         event.preventDefault();
-        this.xContextMenu = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this.yContextMenu = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this._xContextMenu = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this._yContextMenu = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+    }
+    /**
+     * Triggers key down.
+     */
+    keyDown(event) {
+        this._key = event.keyCode;
+        console.log(this._key);
     }
 }
 /**
@@ -1401,7 +1388,7 @@ class Tileset {
     }
 }
 /// <reference path="Grid.ts"/>
-/// <reference path="Mouse.ts"/>
+/// <reference path="Control.ts"/>
 /// <reference path="Tile.ts"/>
 /// <reference path="Tileset.ts"/>
 /**
@@ -1424,8 +1411,7 @@ class Engine {
         this._image = new Image();
         this._image.src = Tileset.TilesetSourceImage;
         this._context = this._canvas.getContext('2d');
-        this._keyboard = new Keyboard();
-        this._mouse = new Mouse();
+        this._control = new Control();
         this._layer0 = new Grid(width, height);
     }
     /**
@@ -1488,8 +1474,8 @@ class Engine {
         // layer mouse
         sx = Tileset.TileWidthInPixel * (Tileset.CharFill % Tileset.TilesetWidthInTile);
         sy = Tileset.TileHeightInPixel * Math.floor(Tileset.CharFill / Tileset.TilesetHeightInTile);
-        dx = Tileset.TileWidthInPixel * this._mouse.x;
-        dy = Tileset.TileHeightInPixel * this._mouse.y;
+        dx = Tileset.TileWidthInPixel * this._control.x;
+        dy = Tileset.TileHeightInPixel * this._control.y;
         this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     }
     /**
@@ -1497,34 +1483,34 @@ class Engine {
      */
     propagateMouseDown(event) {
         event.preventDefault();
-        this._mouse.mouseDown(event);
+        this._control.mouseDown(event);
     }
     /**
      * Propagates mouse up event.
      */
     propagateMouseUp(event) {
         event.preventDefault();
-        this._mouse.mouseUp(event);
+        this._control.mouseUp(event);
     }
     /**
      * Propagates context menu event.
      */
     propagateContextMenu(event) {
         event.preventDefault();
-        this._mouse.contextMenu(event);
+        this._control.contextMenu(event);
     }
     /**
      * Propagates mouse move event.
      */
     propagateMouseMove(event) {
         event.preventDefault();
-        this._mouse.mouseMove(event);
+        this._control.mouseMove(event);
     }
     /**
      * Propagates key down event.
      */
     propagateKeyDown(event) {
-        this._keyboard.keyDown(event);
+        this._control.keyDown(event);
     }
 }
 /**
@@ -2176,30 +2162,6 @@ while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
     Logger.HitPoints(human.name, human.currentHitPoint, human.maximumHitPoint);
     Logger.HitPoints(orc.name, orc.currentHitPoint, orc.maximumHitPoint);
     console.log("");
-}
-/**
- * Class representing a keyboard.
- */
-class Keyboard {
-    /**
-     * Creates a keyboard.
-     * @return {Keyboard}
-     */
-    constructor() {
-        this._key = 0;
-    }
-    get key() {
-        return this._key;
-    }
-    set key(value) {
-        this._key = value;
-    }
-    /**
-     * Triggers key down.
-     */
-    keyDown(event) {
-        this.key = event.keyCode;
-    }
 }
 /// <reference path="../Enum/ClassEnum.ts"/>
 /// <reference path="../Enum/RaceEnum.ts"/>

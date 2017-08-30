@@ -1,5 +1,5 @@
 /// <reference path="Grid.ts"/>
-/// <reference path="Mouse.ts"/>
+/// <reference path="Control.ts"/>
 /// <reference path="Tile.ts"/>
 /// <reference path="Tileset.ts"/>
 
@@ -12,8 +12,7 @@ class Engine {
     private _canvas: HTMLCanvasElement;
     private _context: CanvasRenderingContext2D;
     private _image: HTMLImageElement;
-    private _keyboard: Keyboard;
-    private _mouse: Mouse;
+    private _control: Control;
     private _layer0: Grid;
     private _pid: number;
 
@@ -35,8 +34,7 @@ class Engine {
 
         this._context = this._canvas.getContext('2d');
 
-        this._keyboard = new Keyboard();
-        this._mouse = new Mouse();
+        this._control = new Control();
 
         this._layer0 = new Grid(width, height);
     }
@@ -110,8 +108,8 @@ class Engine {
         // layer mouse
         sx = Tileset.TileWidthInPixel * (Tileset.CharFill % Tileset.TilesetWidthInTile);
         sy = Tileset.TileHeightInPixel * Math.floor(Tileset.CharFill / Tileset.TilesetHeightInTile);
-        dx = Tileset.TileWidthInPixel * this._mouse.x;
-        dy = Tileset.TileHeightInPixel * this._mouse.y;
+        dx = Tileset.TileWidthInPixel * this._control.x;
+        dy = Tileset.TileHeightInPixel * this._control.y;
 
         this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     }
@@ -122,7 +120,7 @@ class Engine {
     private propagateMouseDown(event) {
         event.preventDefault();
 
-        this._mouse.mouseDown(event);
+        this._control.mouseDown(event);
     }
 
     /**
@@ -131,7 +129,7 @@ class Engine {
     private propagateMouseUp(event) {
         event.preventDefault();
 
-        this._mouse.mouseUp(event);
+        this._control.mouseUp(event);
     }
 
     /**
@@ -140,7 +138,7 @@ class Engine {
     private propagateContextMenu(event) {
         event.preventDefault();
 
-        this._mouse.contextMenu(event);
+        this._control.contextMenu(event);
     }
 
     /**
@@ -149,13 +147,13 @@ class Engine {
     private propagateMouseMove(event) {
         event.preventDefault();
 
-        this._mouse.mouseMove(event);
+        this._control.mouseMove(event);
     }
 
     /**
      * Propagates key down event.
      */
     private propagateKeyDown(event) {
-        this._keyboard.keyDown(event);
+        this._control.keyDown(event);
     }
 }

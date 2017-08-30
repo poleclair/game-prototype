@@ -1,7 +1,7 @@
 /**
- * Class representing a mouse.
+ * Class representing a control.
  */
-class Mouse {
+class Control {
     private _x: number;
     private _y: number;
     private _xDown: number;
@@ -10,10 +10,11 @@ class Mouse {
     private _yUp: number;
     private _xContextMenu: number;
     private _yContextMenu: number;
+    private _key: number;
 
     /**
-     * Creates a mouse.
-     * @return {Mouse}
+     * Creates a control.
+     * @return {Control}
      */
     public constructor() {
         this._x = 0;
@@ -24,70 +25,43 @@ class Mouse {
         this._yUp = 0;
         this._xContextMenu = 0;
         this._yContextMenu = 0;
+        this._key = 0;
     }
 
     public get x() {
         return this._x;
     }
 
-    public set x(value) {
-        this._x = value;
-    }
-
     public get y() {
         return this._y;
-    }
-
-    public set y(value) {
-        this._y = value;
     }
 
     public get xDown() {
         return this._xDown;
     }
 
-    public set xDown(value) {
-        this._xDown = value;
-    }
-
     public get yDown() {
         return this._yDown;
-    }
-
-    public set yDown(value) {
-        this._yDown = value;
     }
 
     public get xUp() {
         return this._xUp;
     }
 
-    public set xUp(value) {
-        this._xUp = value;
-    }
-
     public get yUp() {
         return this._yUp;
-    }
-
-    public set yUp(value) {
-        this._yUp = value;
     }
 
     public get xContextMenu() {
         return this._xUp;
     }
 
-    public set xContextMenu(value) {
-        this._xUp = value;
-    }
-
     public get yContextMenu() {
         return this._yUp;
     }
 
-    public set yContextMenu(value) {
-        this._yUp = value;
+    public get key() {
+        return this._key;
     }
 
     /**
@@ -96,8 +70,8 @@ class Mouse {
     public mouseDown(event) {
         event.preventDefault();
 
-        this.xDown = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this.yDown = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this._xDown = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this._yDown = Math.floor(event.layerY / Tileset.TileHeightInPixel);
     }
 
     /**
@@ -106,8 +80,8 @@ class Mouse {
     public mouseUp(event) {
         event.preventDefault();
 
-        this.xUp = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this.yUp = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this._xUp = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this._yUp = Math.floor(event.layerY / Tileset.TileHeightInPixel);
     }
 
     /**
@@ -116,8 +90,8 @@ class Mouse {
     public mouseMove(event) {
         event.preventDefault();
 
-        this.x = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this.y = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this._x = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this._y = Math.floor(event.layerY / Tileset.TileHeightInPixel);
     }
 
     /**
@@ -126,7 +100,15 @@ class Mouse {
     public contextMenu(event) {
         event.preventDefault();
 
-        this.xContextMenu = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this.yContextMenu = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this._xContextMenu = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this._yContextMenu = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+    }
+
+    /**
+     * Triggers key down.
+     */
+    public keyDown(event) {
+        this._key = event.keyCode;
+        console.log(this._key);
     }
 }
