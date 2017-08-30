@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
-        "outFile": "output.js",
+        "outFile": "./output.js",
         "rootDir": "./src",
         "target": "ES6"
     },
     "include": [
-        "src/**/*"
+        "./src/**/*"
     ]
 }
