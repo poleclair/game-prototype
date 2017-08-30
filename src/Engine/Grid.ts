@@ -21,20 +21,20 @@ class Grid {
             this._tiles[x] = [];
 
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile("", "", 250, 0);
+                this._tiles[x][y] = new Tile(Tileset.CharTransparent, 0);
             }
         }
     }
 
-    get width() {
+    public get width() {
         return this._width;
     }
 
-    get height() {
+    public get height() {
         return this._height;
     }
 
-    get tiles() {
+    public get tiles() {
         return this._tiles;
     }
 
@@ -51,7 +51,7 @@ class Grid {
      * @return {Object}
      */
     /*
-    updateLine(c0, c1) {
+    public updateLine(c0, c1) {
         var dx = c1.x - c0.x, dy = c1.y - c0.y;
         var nx = Math.abs(dx), ny = Math.abs(dy);
         var sign_x = dx > 0 ? 1 : -1, sign_y = dy > 0 ? 1 : -1;

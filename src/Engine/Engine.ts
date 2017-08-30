@@ -1,40 +1,44 @@
 /// <reference path="Grid.ts"/>
+/// <reference path="Mouse.ts"/>
 /// <reference path="Tile.ts"/>
+/// <reference path="Tileset.ts"/>
 
 /**
  * Class representing an engine.
  */
 class Engine {
-    private readonly TileWidthInPixel: number = 16;
-    private readonly TileHeightInPixel: number = 16;
-    private readonly TilesetWidthInTile: number = 16;
-    private readonly TilesetHeightInTile: number = 16;
+    private readonly _fps: number = 1000 / 60;
 
     private _canvas: HTMLCanvasElement;
     private _context: CanvasRenderingContext2D;
-    private _pid: number;
-    private _grid: Grid;
     private _image: HTMLImageElement;
+    private _keyboard: Keyboard;
+    private _mouse: Mouse;
+    private _layer0: Grid;
+    private _pid: number;
 
     /**
      * Creates an engine.
      * @constructor
      * @param {number} width - The width in tile.
-     * @param {number} height - The level.
+     * @param {number} height - The width in tile.
      * @return {Engine}
      */
     public constructor(width: number, height: number) {
         this._canvas = document.createElement('canvas');
         this._canvas.id = 'canvas';
-        this._canvas.width = width * this.TileWidthInPixel;
-        this._canvas.height = height * this.TileHeightInPixel;
+        this._canvas.width = width * Tileset.TileWidthInPixel;
+        this._canvas.height = height * Tileset.TileHeightInPixel;
 
         this._image = new Image();
-        this._image.src = './src/Engine/img/cp437_16x16.png';
+        this._image.src = Tileset.TilesetSourceImage;
 
         this._context = this._canvas.getContext('2d');
 
-        this._grid = new Grid(width, height);
+        this._keyboard = new Keyboard();
+        this._mouse = new Mouse();
+
+        this._layer0 = new Grid(width, height);
     }
 
     /**
@@ -44,6 +48,13 @@ class Engine {
         window.onload = function () {
             document.body.appendChild(this._canvas);
             document.getElementById('canvas').appendChild(this._image);
+
+            document.addEventListener('keydown', this.propagateKeyDown.bind(this));
+
+            this._canvas.addEventListener('mousedown', this.propagateMouseDown.bind(this));
+            this._canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
+            this._canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
+            this._canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
         }.bind(this);
     }
 
@@ -54,7 +65,7 @@ class Engine {
         this._pid = setInterval(function () {
             this.clear();
             this.draw();
-        }.bind(this), 500);
+        }.bind(this), this._fps);
     }
 
     /**
@@ -75,45 +86,76 @@ class Engine {
      * Draws the engine.
      */
     public draw() {
-        for (let x = 0; x < this._grid.width; x++) {
-            for (let y = 0; y < this._grid.height; y++) {
-                let sx = (this._grid.tiles[x][y].character % Tileset.TilesetWidthInTile) * Tileset.TileWidthInPixel;
-                let sy = Math.floor(this._grid.tiles[x][y].character / Tileset.TilesetHeightInTile) * Tileset.TileHeightInPixel;
-                let sWidth = Tileset.TileWidthInPixel;
-                let sHeight = Tileset.TileHeightInPixel;
-                let dx = x * 16;
-                let dy = y * 16;
-                let dWidth = Tileset.TileWidthInPixel;
-                let dHeight = Tileset.TileHeightInPixel;
+        let sx = 0;
+        let sy = 0;
+        let sWidth = Tileset.TileWidthInPixel;
+        let sHeight = Tileset.TileHeightInPixel;
+        let dx = 0;
+        let dy = 0;
+        let dWidth = Tileset.TileWidthInPixel;
+        let dHeight = Tileset.TileHeightInPixel;
+
+        // layer 0
+        for (let x = 0; x < this._layer0.width; x++) {
+            for (let y = 0; y < this._layer0.height; y++) {
+                sx = Tileset.TileWidthInPixel * (this._layer0.tiles[x][y].character % Tileset.TilesetWidthInTile);
+                sy = Tileset.TileHeightInPixel * Math.floor(this._layer0.tiles[x][y].character / Tileset.TilesetHeightInTile);
+                dx = Tileset.TileWidthInPixel * x;
+                dy = Tileset.TileHeightInPixel * y;
 
                 this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-
-                /*
-                this._ctx.drawImage(
-                    this._tileset.image[this._grid.getTile(x, y).background_color],
-                    (Tileset.CHAR_FILL % this._tileset.tileset_width_in_tile) * this._tileset.tile_width_in_pixel,
-                    Math.floor(Tileset.CHAR_FILL / this._tileset.tileset_height_in_tile) * this._tileset.tile_height_in_pixel,
-                    this._tileset.tile_width_in_pixel,
-                    this._tileset.tile_height_in_pixel,
-                    xx,
-                    yy,
-                    this._tileset.tile_width_in_pixel,
-                    this._tileset.tile_height_in_pixel
-                );
-
-                this._ctx.drawImage(
-                    this._tileset.image[this._grid.getTile(x, y).foreground_color],
-                    (this._grid.getTile(x, y).character % this._tileset.tileset_width_in_tile) * this._tileset.tile_width_in_pixel,
-                    Math.floor(this._grid.getTile(x, y).character / this._tileset.tileset_height_in_tile) * this._tileset.tile_height_in_pixel,
-                    this._tileset.tile_width_in_pixel,
-                    this._tileset.tile_height_in_pixel,
-                    xx,
-                    yy,
-                    this._tileset.tile_width_in_pixel,
-                    this._tileset.tile_height_in_pixel
-                );
-                */
             }
         }
+
+        // layer mouse
+        sx = Tileset.TileWidthInPixel * (Tileset.CharFill % Tileset.TilesetWidthInTile);
+        sy = Tileset.TileHeightInPixel * Math.floor(Tileset.CharFill / Tileset.TilesetHeightInTile);
+        dx = Tileset.TileWidthInPixel * this._mouse.x;
+        dy = Tileset.TileHeightInPixel * this._mouse.y;
+
+        this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+    }
+
+    /**
+     * Propagates mouse down event.
+     */
+    private propagateMouseDown(event) {
+        event.preventDefault();
+
+        this._mouse.mouseDown(event);
+    }
+
+    /**
+     * Propagates mouse up event.
+     */
+    private propagateMouseUp(event) {
+        event.preventDefault();
+
+        this._mouse.mouseUp(event);
+    }
+
+    /**
+     * Propagates context menu event.
+     */
+    private propagateContextMenu(event) {
+        event.preventDefault();
+
+        this._mouse.contextMenu(event);
+    }
+
+    /**
+     * Propagates mouse move event.
+     */
+    private propagateMouseMove(event) {
+        event.preventDefault();
+
+        this._mouse.mouseMove(event);
+    }
+
+    /**
+     * Propagates key down event.
+     */
+    private propagateKeyDown(event) {
+        this._keyboard.keyDown(event);
     }
 }

@@ -1165,7 +1165,7 @@ class Grid {
         for (let x = 0; x < width; x++) {
             this._tiles[x] = [];
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile("", "", 250, 0);
+                this._tiles[x][y] = new Tile(Tileset.CharTransparent, 0);
             }
         }
     }
@@ -1180,34 +1180,117 @@ class Grid {
     }
 }
 /**
+ * Class representing a mouse.
+ */
+class Mouse {
+    /**
+     * Creates a mouse.
+     * @return {Mouse}
+     */
+    constructor() {
+        this._x = 0;
+        this._y = 0;
+        this._xDown = 0;
+        this._yDown = 0;
+        this._xUp = 0;
+        this._yUp = 0;
+        this._xContextMenu = 0;
+        this._yContextMenu = 0;
+    }
+    get x() {
+        return this._x;
+    }
+    set x(value) {
+        this._x = value;
+    }
+    get y() {
+        return this._y;
+    }
+    set y(value) {
+        this._y = value;
+    }
+    get xDown() {
+        return this._xDown;
+    }
+    set xDown(value) {
+        this._xDown = value;
+    }
+    get yDown() {
+        return this._yDown;
+    }
+    set yDown(value) {
+        this._yDown = value;
+    }
+    get xUp() {
+        return this._xUp;
+    }
+    set xUp(value) {
+        this._xUp = value;
+    }
+    get yUp() {
+        return this._yUp;
+    }
+    set yUp(value) {
+        this._yUp = value;
+    }
+    get xContextMenu() {
+        return this._xUp;
+    }
+    set xContextMenu(value) {
+        this._xUp = value;
+    }
+    get yContextMenu() {
+        return this._yUp;
+    }
+    set yContextMenu(value) {
+        this._yUp = value;
+    }
+    /**
+     * Triggers mouse down.
+     */
+    mouseDown(event) {
+        event.preventDefault();
+        this.xDown = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this.yDown = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+    }
+    /**
+     * Triggers mouse up.
+     */
+    mouseUp(event) {
+        event.preventDefault();
+        this.xUp = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this.yUp = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+    }
+    /**
+     * Triggers mouse move.
+     */
+    mouseMove(event) {
+        event.preventDefault();
+        this.x = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this.y = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+    }
+    /**
+     * Triggers context menu.
+     */
+    contextMenu(event) {
+        event.preventDefault();
+        this.xContextMenu = Math.floor(event.layerX / Tileset.TileWidthInPixel);
+        this.yContextMenu = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+    }
+}
+/**
  * Class representing a tile.
  */
 class Tile {
     /**
      * Creates a tile.
-     * @param  {string} backgroundColor - The background color.
-     * @param  {string} foregroundColor - The foreground color.
      * @param  {number} char - The character.
      * @param  {number} z - The z.
      * @return {Tile}
      */
-    constructor(backgroundColor, foregroundColor, char, z) {
-        this._backgroundColor = backgroundColor;
-        this._foregroundColor = foregroundColor;
+    constructor(char, z) {
         this._char = char;
         this._z = z;
-    }
-    get background_color() {
-        return this._backgroundColor;
-    }
-    set background_color(value) {
-        this._backgroundColor = value;
-    }
-    get foreground_color() {
-        return this._foregroundColor;
-    }
-    set foreground_color(value) {
-        this._foregroundColor = value;
     }
     get character() {
         return this._char;
@@ -1222,8 +1305,105 @@ class Tile {
         this._z = value;
     }
 }
+/**
+ * Class representing a tileset.
+ */
+class Tileset {
+    /**
+     * Gets the tileset info.
+     */
+    static get TilesetSourceImage() {
+        return './src/Engine/img/cp437_16x16.png';
+    }
+    static get TilesetWidthInTile() {
+        return 16;
+    }
+    static get TilesetHeightInTile() {
+        return 16;
+    }
+    /**
+     * Gets the tile info.
+     */
+    static get TileWidthInPixel() {
+        return 16;
+    }
+    static get TileHeightInPixel() {
+        return 16;
+    }
+    /**
+     * Gets the characters info.
+     */
+    static get CharTransparent() {
+        return 0;
+    }
+    static get CharFill() {
+        return 219;
+    }
+    static get CharSmallDot() {
+        return 250;
+    }
+    static get CharBigDot() {
+        return 249;
+    }
+    static get CharSimpleBorderTopLeft() {
+        return 218;
+    }
+    static get CharSimpleBorderTopRight() {
+        return 191;
+    }
+    static get CharSimpleBorderBottomLeft() {
+        return 192;
+    }
+    static get CharSimpleBorderBottomRight() {
+        return 217;
+    }
+    static get CharSimpleBorderHorizontal() {
+        return 196;
+    }
+    static get CharSimpleBorderVertical() {
+        return 179;
+    }
+    static get CharDoubleBorderTopLeft() {
+        return 201;
+    }
+    static get CharDoubleBorderTopRight() {
+        return 187;
+    }
+    static get CharDoubleBorderBottomLeft() {
+        return 200;
+    }
+    static get CharDoubleBorderBottomRight() {
+        return 188;
+    }
+    static get CharDoubleBorderHorizontal() {
+        return 205;
+    }
+    static get CharDoubleBorderVertical() {
+        return 186;
+    }
+    /**
+     * Gets the colors info.
+     */
+    static get COLOR_BLACK() {
+        return "black";
+    }
+    static get COLOR_WHITE() {
+        return "white";
+    }
+    static get COLOR_RED() {
+        return "red";
+    }
+    static get COLOR_GREEN() {
+        return "green";
+    }
+    static get COLOR_BLUE() {
+        return "blue";
+    }
+}
 /// <reference path="Grid.ts"/>
+/// <reference path="Mouse.ts"/>
 /// <reference path="Tile.ts"/>
+/// <reference path="Tileset.ts"/>
 /**
  * Class representing an engine.
  */
@@ -1232,22 +1412,21 @@ class Engine {
      * Creates an engine.
      * @constructor
      * @param {number} width - The width in tile.
-     * @param {number} height - The level.
+     * @param {number} height - The width in tile.
      * @return {Engine}
      */
     constructor(width, height) {
-        this.TileWidthInPixel = 16;
-        this.TileHeightInPixel = 16;
-        this.TilesetWidthInTile = 16;
-        this.TilesetHeightInTile = 16;
+        this._fps = 1000 / 60;
         this._canvas = document.createElement('canvas');
         this._canvas.id = 'canvas';
-        this._canvas.width = width * this.TileWidthInPixel;
-        this._canvas.height = height * this.TileHeightInPixel;
+        this._canvas.width = width * Tileset.TileWidthInPixel;
+        this._canvas.height = height * Tileset.TileHeightInPixel;
         this._image = new Image();
-        this._image.src = './src/Engine/img/cp437_16x16.png';
+        this._image.src = Tileset.TilesetSourceImage;
         this._context = this._canvas.getContext('2d');
-        this._grid = new Grid(width, height);
+        this._keyboard = new Keyboard();
+        this._mouse = new Mouse();
+        this._layer0 = new Grid(width, height);
     }
     /**
      * Initializes the engine.
@@ -1256,6 +1435,11 @@ class Engine {
         window.onload = function () {
             document.body.appendChild(this._canvas);
             document.getElementById('canvas').appendChild(this._image);
+            document.addEventListener('keydown', this.propagateKeyDown.bind(this));
+            this._canvas.addEventListener('mousedown', this.propagateMouseDown.bind(this));
+            this._canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
+            this._canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
+            this._canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
         }.bind(this);
     }
     /**
@@ -1265,7 +1449,7 @@ class Engine {
         this._pid = setInterval(function () {
             this.clear();
             this.draw();
-        }.bind(this), 500);
+        }.bind(this), this._fps);
     }
     /**
      * Stops the engine.
@@ -1283,44 +1467,64 @@ class Engine {
      * Draws the engine.
      */
     draw() {
-        for (let x = 0; x < this._grid.width; x++) {
-            for (let y = 0; y < this._grid.height; y++) {
-                let sx = (this._grid.tiles[x][y].character % Tileset.TilesetWidthInTile) * Tileset.TileWidthInPixel;
-                let sy = Math.floor(this._grid.tiles[x][y].character / Tileset.TilesetHeightInTile) * Tileset.TileHeightInPixel;
-                let sWidth = Tileset.TileWidthInPixel;
-                let sHeight = Tileset.TileHeightInPixel;
-                let dx = x * 16;
-                let dy = y * 16;
-                let dWidth = Tileset.TileWidthInPixel;
-                let dHeight = Tileset.TileHeightInPixel;
+        let sx = 0;
+        let sy = 0;
+        let sWidth = Tileset.TileWidthInPixel;
+        let sHeight = Tileset.TileHeightInPixel;
+        let dx = 0;
+        let dy = 0;
+        let dWidth = Tileset.TileWidthInPixel;
+        let dHeight = Tileset.TileHeightInPixel;
+        // layer 0
+        for (let x = 0; x < this._layer0.width; x++) {
+            for (let y = 0; y < this._layer0.height; y++) {
+                sx = Tileset.TileWidthInPixel * (this._layer0.tiles[x][y].character % Tileset.TilesetWidthInTile);
+                sy = Tileset.TileHeightInPixel * Math.floor(this._layer0.tiles[x][y].character / Tileset.TilesetHeightInTile);
+                dx = Tileset.TileWidthInPixel * x;
+                dy = Tileset.TileHeightInPixel * y;
                 this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-                /*
-                this._ctx.drawImage(
-                    this._tileset.image[this._grid.getTile(x, y).background_color],
-                    (Tileset.CHAR_FILL % this._tileset.tileset_width_in_tile) * this._tileset.tile_width_in_pixel,
-                    Math.floor(Tileset.CHAR_FILL / this._tileset.tileset_height_in_tile) * this._tileset.tile_height_in_pixel,
-                    this._tileset.tile_width_in_pixel,
-                    this._tileset.tile_height_in_pixel,
-                    xx,
-                    yy,
-                    this._tileset.tile_width_in_pixel,
-                    this._tileset.tile_height_in_pixel
-                );
-
-                this._ctx.drawImage(
-                    this._tileset.image[this._grid.getTile(x, y).foreground_color],
-                    (this._grid.getTile(x, y).character % this._tileset.tileset_width_in_tile) * this._tileset.tile_width_in_pixel,
-                    Math.floor(this._grid.getTile(x, y).character / this._tileset.tileset_height_in_tile) * this._tileset.tile_height_in_pixel,
-                    this._tileset.tile_width_in_pixel,
-                    this._tileset.tile_height_in_pixel,
-                    xx,
-                    yy,
-                    this._tileset.tile_width_in_pixel,
-                    this._tileset.tile_height_in_pixel
-                );
-                */
             }
         }
+        // layer mouse
+        sx = Tileset.TileWidthInPixel * (Tileset.CharFill % Tileset.TilesetWidthInTile);
+        sy = Tileset.TileHeightInPixel * Math.floor(Tileset.CharFill / Tileset.TilesetHeightInTile);
+        dx = Tileset.TileWidthInPixel * this._mouse.x;
+        dy = Tileset.TileHeightInPixel * this._mouse.y;
+        this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+    }
+    /**
+     * Propagates mouse down event.
+     */
+    propagateMouseDown(event) {
+        event.preventDefault();
+        this._mouse.mouseDown(event);
+    }
+    /**
+     * Propagates mouse up event.
+     */
+    propagateMouseUp(event) {
+        event.preventDefault();
+        this._mouse.mouseUp(event);
+    }
+    /**
+     * Propagates context menu event.
+     */
+    propagateContextMenu(event) {
+        event.preventDefault();
+        this._mouse.contextMenu(event);
+    }
+    /**
+     * Propagates mouse move event.
+     */
+    propagateMouseMove(event) {
+        event.preventDefault();
+        this._mouse.mouseMove(event);
+    }
+    /**
+     * Propagates key down event.
+     */
+    propagateKeyDown(event) {
+        this._keyboard.keyDown(event);
     }
 }
 /**
@@ -1974,48 +2178,28 @@ while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
     console.log("");
 }
 /**
- * Class representing a tileset.
+ * Class representing a keyboard.
  */
-class Tileset {
-    static get TileWidthInPixel() {
-        return 16;
+class Keyboard {
+    /**
+     * Creates a keyboard.
+     * @return {Keyboard}
+     */
+    constructor() {
+        this._key = 0;
     }
-    static get TileHeightInPixel() {
-        return 16;
+    get key() {
+        return this._key;
     }
-    static get TilesetWidthInTile() {
-        return 16;
-    }
-    static get TilesetHeightInTile() {
-        return 16;
+    set key(value) {
+        this._key = value;
     }
     /**
-     * Gets the characters.
+     * Triggers key down.
      */
-    static get CharTransparent() { return 0; }
-    static get CharFill() { return 219; }
-    static get CharSmallDot() { return 250; }
-    static get CharBigDot() { return 249; }
-    static get CharSimpleBorderTopLeft() { return 218; }
-    static get CharSimpleBorder_TOP_RIGHT() { return 191; }
-    static get CharSimpleBorder_BOTTOM_LEFT() { return 192; }
-    static get CharSimpleBorder_BOTTOM_RIGHT() { return 217; }
-    static get CharSimpleBorder_HORIZONTAL() { return 196; }
-    static get CharSimpleBorder_VERTICAL() { return 179; }
-    static get CHAR_DOUBLE_BORDER_TOP_LEFT() { return 201; }
-    static get CHAR_DOUBLE_BORDER_TOP_RIGHT() { return 187; }
-    static get CHAR_DOUBLE_BORDER_BOTTOM_LEFT() { return 200; }
-    static get CHAR_DOUBLE_BORDER_BOTTOM_RIGHT() { return 188; }
-    static get CHAR_DOUBLE_BORDER_HORIZONTAL() { return 205; }
-    static get CHAR_DOUBLE_BORDER_VERTICAL() { return 186; }
-    /**
-     * Gets the colors.
-     */
-    static get COLOR_BLACK() { return "black"; }
-    static get COLOR_WHITE() { return "white"; }
-    static get COLOR_RED() { return "red"; }
-    static get COLOR_GREEN() { return "green"; }
-    static get COLOR_BLUE() { return "blue"; }
+    keyDown(event) {
+        this.key = event.keyCode;
+    }
 }
 /// <reference path="../Enum/ClassEnum.ts"/>
 /// <reference path="../Enum/RaceEnum.ts"/>

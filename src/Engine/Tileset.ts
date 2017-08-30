@@ -2,67 +2,119 @@
  * Class representing a tileset.
  */
 class Tileset {
-    static get TileWidthInPixel() {
+    /**
+     * Gets the tileset info.
+     */
+    public static get TilesetSourceImage() {
+        return './src/Engine/img/cp437_16x16.png';
+    }
+
+    public static get TilesetWidthInTile() {
         return 16;
     }
 
-    static get TileHeightInPixel() {
-        return 16;
-    }
-
-    static get TilesetWidthInTile() {
-        return 16;
-    }
-
-    static get TilesetHeightInTile() {
+    public static get TilesetHeightInTile() {
         return 16;
     }
 
     /**
-     * Gets the characters.
+     * Gets the tile info.
      */
-    static get CharTransparent() { return 0; }
+    public static get TileWidthInPixel() {
+        return 16;
+    }
 
-    static get CharFill() { return 219; }
-
-    static get CharSmallDot() { return 250; }
-
-    static get CharBigDot() { return 249; }
-
-    static get CharSimpleBorderTopLeft() { return 218; }
-
-    static get CharSimpleBorder_TOP_RIGHT() { return 191; }
-
-    static get CharSimpleBorder_BOTTOM_LEFT() { return 192; }
-
-    static get CharSimpleBorder_BOTTOM_RIGHT() { return 217; }
-
-    static get CharSimpleBorder_HORIZONTAL() { return 196; }
-
-    static get CharSimpleBorder_VERTICAL() { return 179; }
-
-    static get CHAR_DOUBLE_BORDER_TOP_LEFT() { return 201; }
-
-    static get CHAR_DOUBLE_BORDER_TOP_RIGHT() { return 187; }
-
-    static get CHAR_DOUBLE_BORDER_BOTTOM_LEFT() { return 200; }
-
-    static get CHAR_DOUBLE_BORDER_BOTTOM_RIGHT() { return 188; }
-
-    static get CHAR_DOUBLE_BORDER_HORIZONTAL() { return 205; }
-
-    static get CHAR_DOUBLE_BORDER_VERTICAL() { return 186; }
+    public static get TileHeightInPixel() {
+        return 16;
+    }
 
     /**
-     * Gets the colors.
+     * Gets the characters info.
      */
-    static get COLOR_BLACK() { return "black"; }
+    public static get CharTransparent() {
+        return 0;
+    }
 
-    static get COLOR_WHITE() { return "white"; }
+    public static get CharFill() {
+        return 219;
+    }
 
-    static get COLOR_RED() { return "red"; }
+    public static get CharSmallDot() {
+        return 250;
+    }
 
-    static get COLOR_GREEN() { return "green"; }
+    public static get CharBigDot() {
+        return 249;
+    }
 
-    static get COLOR_BLUE() { return "blue"; }
+    public static get CharSimpleBorderTopLeft() {
+        return 218;
+    }
+
+    public static get CharSimpleBorderTopRight() {
+        return 191;
+    }
+
+    public static get CharSimpleBorderBottomLeft() {
+        return 192;
+    }
+
+    public static get CharSimpleBorderBottomRight() {
+        return 217;
+    }
+
+    public static get CharSimpleBorderHorizontal() {
+        return 196;
+    }
+
+    public static get CharSimpleBorderVertical() {
+        return 179;
+    }
+
+    public static get CharDoubleBorderTopLeft() {
+        return 201;
+    }
+
+    public static get CharDoubleBorderTopRight() {
+        return 187;
+    }
+
+    public static get CharDoubleBorderBottomLeft() {
+        return 200;
+    }
+
+    public static get CharDoubleBorderBottomRight() {
+        return 188;
+    }
+
+    public static get CharDoubleBorderHorizontal() {
+        return 205;
+    }
+
+    public static get CharDoubleBorderVertical() {
+        return 186;
+    }
+
+    /**
+     * Gets the colors info.
+     */
+    public static get COLOR_BLACK() {
+        return "black";
+    }
+
+    public static get COLOR_WHITE() {
+        return "white";
+    }
+
+    public static get COLOR_RED() {
+        return "red";
+    }
+
+    public static get COLOR_GREEN() {
+        return "green";
+    }
+
+    public static get COLOR_BLUE() {
+        return "blue";
+    }
 }
