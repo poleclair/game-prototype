@@ -47,6 +47,10 @@ class Tileset {
         return 249;
     }
 
+    public static get CharMultiply() {
+        return 42;
+    }
+
     public static get CharSimpleBorderTopLeft() {
         return 218;
     }

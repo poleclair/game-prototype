@@ -18,7 +18,7 @@ class Engine {
     private _image: HTMLImageElement;
     private _control: Control;
     private _grid: Grid;
-    private _animations: Array<Animation>;
+    private _animator: Animator;
     private _pid: number;
 
     /**
@@ -41,7 +41,11 @@ class Engine {
 
         this._control = new Control();
         this._grid = new Grid(width, height);
-        this._animations = [];
+        this._animator = new Animator();
+    }
+
+    public get animator() {
+        return this._animator;
     }
 
     /**
@@ -86,14 +90,6 @@ class Engine {
     }
 
     /**
-     * Adds an animation to the queue.
-     * @param animation 
-     */
-    public addAnimation(animation: Animation) {
-        this._animations.push(animation);
-    }
-
-    /**
      * Draws the engine.
      */
     public draw() {
@@ -120,23 +116,23 @@ class Engine {
         }
 
         // animation layer
-        for (let i = 0; i < this._animations.length; i++) {
-            if (this._animations[i].frames.length > 0) {
-                let frame = this._animations[i].frames.shift();
+        for (let i = 0; i < this._animator.animations.length; i++) {
+            if (this._animator.animations[i].frames.length > 0) {
+                let frame = this._animator.animations[i].frames.shift();
 
                 for (let j = 0; j < frame.targets.length; j++) {
                     let target = frame.targets.shift();
 
                     sx = Tileset.TileWidthInPixel * (target.tile.character % Tileset.TilesetWidthInTile);
                     sy = Tileset.TileHeightInPixel * Math.floor(target.tile.character / Tileset.TilesetHeightInTile);
-                    dx = Tileset.TileWidthInPixel * (this._animations[i].x + target.xOffset);
-                    dy = Tileset.TileHeightInPixel * (this._animations[i].y + target.yOffset);
+                    dx = Tileset.TileWidthInPixel * (this._animator.animations[i].x + target.xOffset);
+                    dy = Tileset.TileHeightInPixel * (this._animator.animations[i].y + target.yOffset);
 
                     this._context.globalAlpha = target.tile.opacity;
                     this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
                 }
             } else {
-                this._animations.splice(i, 1);
+                this._animator.animations.splice(i, 1);
                 i--;
             }
         }
@@ -147,6 +143,7 @@ class Engine {
         dx = Tileset.TileWidthInPixel * this._control.x;
         dy = Tileset.TileHeightInPixel * this._control.y;
 
+        this._context.globalAlpha = 1;
         this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     }
 
