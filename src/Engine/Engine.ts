@@ -56,6 +56,18 @@ class Engine {
                 new Frame([new Target(7, 0, new Tile(Tileset.CharBigDot, 0))]),
                 new Frame([new Target(8, 0, new Tile(Tileset.CharBigDot, 0))]),
                 new Frame([new Target(9, 0, new Tile(Tileset.CharBigDot, 0))])
+            ]),
+            new Animation(0, 1, [
+                new Frame([new Target(0, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(1, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(2, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(3, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(4, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(5, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(6, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(7, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(8, 0, new Tile(Tileset.CharBigDot, 0))]),
+                new Frame([new Target(9, 0, new Tile(Tileset.CharBigDot, 0))])
             ])
         ];
     }
@@ -127,28 +139,24 @@ class Engine {
         }
 
         // animation layer
-        let animations = new Array<Animation>();
         for (let i = 0; i < this._animations.length; i++) {
-            animations.push(this._animations[i]);
-        }
+            if (this._animations[i].frames.length > 0) {
+                let frame = this._animations[i].frames.shift();
 
-        let frames = new Array<Frame>();
-        for (let i = 0; i < this._animations.length; i++) {
-            frames.push(this._animations[i].frames.pop());
-        }
+                for (let j = 0; j < frame.targets.length; j++) {
+                    let target = frame.targets.shift();
 
-        let targets = new Array<Target>();
-        for (let i = 0; i < frames.length; i++) {
-            targets.push(frames[i].targets.pop());
-        }
+                    sx = Tileset.TileWidthInPixel * (target.tile.character % Tileset.TilesetWidthInTile);
+                    sy = Tileset.TileHeightInPixel * Math.floor(target.tile.character / Tileset.TilesetHeightInTile);
+                    dx = Tileset.TileWidthInPixel * (this._animations[i].x + target.xOffset);
+                    dy = Tileset.TileHeightInPixel * (this._animations[i].y + target.yOffset);
 
-        for (let i = 0; i < targets.length; i++) {
-            sx = Tileset.TileWidthInPixel * (targets[i].tile.character % Tileset.TilesetWidthInTile);
-            sy = Tileset.TileHeightInPixel * Math.floor(targets[i].tile.character / Tileset.TilesetHeightInTile);
-            dx = Tileset.TileWidthInPixel * (this._animations[i].x + this._animations[i].frames[j].targets[k].xOffset);
-            dy = Tileset.TileHeightInPixel * (this._animations[i].y + this._animations[i].frames[j].targets[k].yOffset);
-
-            this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                    this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                }
+            } else {
+                this._animations.splice(i, 1);
+                i--;
+            }
         }
 
         // mouse layer
