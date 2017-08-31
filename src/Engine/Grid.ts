@@ -21,7 +21,7 @@ class Grid {
             this._tiles[x] = [];
 
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile(Tileset.CharTransparent, 0);
+                this._tiles[x][y] = new Tile(Tileset.CharTransparent, 0, 1);
             }
         }
     }

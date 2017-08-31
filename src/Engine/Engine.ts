@@ -11,7 +11,7 @@
  * Class representing an engine.
  */
 class Engine {
-    private readonly _fps: number = 1000 / 60;
+    private readonly _fps: number = 1000 / 30;
 
     private _canvas: HTMLCanvasElement;
     private _context: CanvasRenderingContext2D;
@@ -42,34 +42,6 @@ class Engine {
         this._control = new Control();
         this._grid = new Grid(width, height);
         this._animations = [];
-
-        // test animation
-        this._animations = [
-            new Animation(0, 0, [
-                new Frame([new Target(0, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(1, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(2, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(3, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(4, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(5, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(6, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(7, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(8, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(9, 0, new Tile(Tileset.CharBigDot, 0))])
-            ]),
-            new Animation(0, 1, [
-                new Frame([new Target(0, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(1, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(2, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(3, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(4, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(5, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(6, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(7, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(8, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(9, 0, new Tile(Tileset.CharBigDot, 0))])
-            ])
-        ];
     }
 
     /**
@@ -114,6 +86,14 @@ class Engine {
     }
 
     /**
+     * Adds an animation to the queue.
+     * @param animation 
+     */
+    public addAnimation(animation: Animation) {
+        this._animations.push(animation);
+    }
+
+    /**
      * Draws the engine.
      */
     public draw() {
@@ -134,6 +114,7 @@ class Engine {
                 dx = Tileset.TileWidthInPixel * x;
                 dy = Tileset.TileHeightInPixel * y;
 
+                this._context.globalAlpha = this._grid.tiles[x][y].opacity;
                 this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
             }
         }
@@ -151,6 +132,7 @@ class Engine {
                     dx = Tileset.TileWidthInPixel * (this._animations[i].x + target.xOffset);
                     dy = Tileset.TileHeightInPixel * (this._animations[i].y + target.yOffset);
 
+                    this._context.globalAlpha = target.tile.opacity;
                     this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
                 }
             } else {

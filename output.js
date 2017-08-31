@@ -1233,7 +1233,7 @@ class Grid {
         for (let x = 0; x < width; x++) {
             this._tiles[x] = [];
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile(Tileset.CharTransparent, 0);
+                this._tiles[x][y] = new Tile(Tileset.CharTransparent, 0, 1);
             }
         }
     }
@@ -1340,11 +1340,13 @@ class Tile {
      * Creates a tile.
      * @param  {number} char - The character.
      * @param  {number} z - The z.
+     * @param  {number} opacity - The opacity.
      * @return {Tile}
      */
-    constructor(char, z) {
+    constructor(char, z, opacity) {
         this._char = char;
         this._z = z;
+        this._opacity = opacity;
     }
     get character() {
         return this._char;
@@ -1357,6 +1359,9 @@ class Tile {
     }
     set z(value) {
         this._z = value;
+    }
+    get opacity() {
+        return this._opacity;
     }
 }
 /**
@@ -1473,7 +1478,7 @@ class Engine {
      * @return {Engine}
      */
     constructor(width, height) {
-        this._fps = 1000 / 60;
+        this._fps = 1000 / 30;
         this._canvas = document.createElement('canvas');
         this._canvas.id = 'canvas';
         this._canvas.width = width * Tileset.TileWidthInPixel;
@@ -1484,33 +1489,6 @@ class Engine {
         this._control = new Control();
         this._grid = new Grid(width, height);
         this._animations = [];
-        // test animation
-        this._animations = [
-            new Animation(0, 0, [
-                new Frame([new Target(0, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(1, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(2, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(3, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(4, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(5, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(6, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(7, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(8, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(9, 0, new Tile(Tileset.CharBigDot, 0))])
-            ]),
-            new Animation(0, 1, [
-                new Frame([new Target(0, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(1, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(2, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(3, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(4, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(5, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(6, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(7, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(8, 0, new Tile(Tileset.CharBigDot, 0))]),
-                new Frame([new Target(9, 0, new Tile(Tileset.CharBigDot, 0))])
-            ])
-        ];
     }
     /**
      * Initializes the engine.
@@ -1548,6 +1526,13 @@ class Engine {
         this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     }
     /**
+     * Adds an animation to the queue.
+     * @param animation
+     */
+    addAnimation(animation) {
+        this._animations.push(animation);
+    }
+    /**
      * Draws the engine.
      */
     draw() {
@@ -1566,6 +1551,7 @@ class Engine {
                 sy = Tileset.TileHeightInPixel * Math.floor(this._grid.tiles[x][y].character / Tileset.TilesetHeightInTile);
                 dx = Tileset.TileWidthInPixel * x;
                 dy = Tileset.TileHeightInPixel * y;
+                this._context.globalAlpha = this._grid.tiles[x][y].opacity;
                 this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
             }
         }
@@ -1579,6 +1565,7 @@ class Engine {
                     sy = Tileset.TileHeightInPixel * Math.floor(target.tile.character / Tileset.TilesetHeightInTile);
                     dx = Tileset.TileWidthInPixel * (this._animations[i].x + target.xOffset);
                     dy = Tileset.TileHeightInPixel * (this._animations[i].y + target.yOffset);
+                    this._context.globalAlpha = target.tile.opacity;
                     this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
                 }
             }
@@ -2216,6 +2203,130 @@ class Ruleset {
 let engine = new Engine(40, 30);
 engine.init();
 engine.start();
+setInterval(function () {
+    engine.addAnimation(new Animation(0, 0, [
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+        new Frame([
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+            new Target(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), new Tile(Tileset.CharBigDot, 0, 1)),
+        ]),
+    ]));
+}, 1000);
 let abilityScores1 = [16, 14, 14, 10, 14, 11];
 let skillProficiencies1 = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
 let human = new Character("Human", 1, RaceEnum.HUMAN, ClassEnum.FIGHTER, abilityScores1, skillProficiencies1);
