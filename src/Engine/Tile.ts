@@ -5,6 +5,7 @@ class Tile {
     private _char: number;
     private _z: number;
     private _opacity: number;
+    private _dirty: boolean;
 
     /**
      * Creates a tile.
@@ -17,6 +18,7 @@ class Tile {
         this._char = char;
         this._z = z;
         this._opacity = opacity;
+        this._dirty = true;
     }
 
     public get character() {
@@ -37,5 +39,17 @@ class Tile {
 
     public get opacity() {
         return this._opacity;
+    }
+
+    public set opacity(value: number) {
+        this._opacity = value;
+    }
+
+    public get dirty() {
+        return this._dirty;
+    }
+
+    public set dirty(value: boolean) {
+        this._dirty = value;
     }
 }

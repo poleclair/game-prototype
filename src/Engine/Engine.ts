@@ -111,7 +111,9 @@ class Engine {
                 dy = Tileset.TileHeightInPixel * y;
 
                 this._context.globalAlpha = this._grid.tiles[x][y].opacity;
-                this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                this._context.fillStyle = 'rgb(' + [255, 0, 0] + ')';
+                this._context.fillRect(dx, dy, Tileset.TileWidthInPixel, Tileset.TileHeightInPixel);
+                // this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
             }
         }
 
