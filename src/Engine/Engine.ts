@@ -11,7 +11,7 @@
  * Class representing an engine.
  */
 class Engine {
-    private readonly _fps: number = 1000 / 30;
+    private readonly _fps: number = 1000 / 60;
 
     private _canvas: HTMLCanvasElement;
     private _context: CanvasRenderingContext2D;
@@ -31,6 +31,7 @@ class Engine {
     public constructor(width: number, height: number) {
         this._canvas = document.createElement('canvas');
         this._canvas.id = 'canvas';
+        this._canvas.style.cursor = 'none';
         this._canvas.width = width * Tileset.TileWidthInPixel;
         this._canvas.height = height * Tileset.TileHeightInPixel;
 
