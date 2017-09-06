@@ -2039,8 +2039,7 @@ class Engine {
         // grid layer
         for (let x = 0; x < this.layerGround.width; x++) {
             for (let y = 0; y < this.layerGround.height; y++) {
-                this.context.globalAlpha = this.layerGround.pixels[x][y].alpha;
-                this.context.fillStyle = 'rgb(' + this.layerGround.pixels[x][y].red + ',' + this.layerGround.pixels[x][y].green + ',' + this.layerGround.pixels[x][y].blue + ')';
+                this.context.fillStyle = 'rgba(' + this.layerGround.pixels[x][y].red + ',' + this.layerGround.pixels[x][y].green + ',' + this.layerGround.pixels[x][y].blue + ',' + this.layerGround.pixels[x][y].alpha + ')';
                 this.context.fillRect(x * this.resolution, y * this.resolution, this.resolution, this.resolution);
             }
         }
@@ -2050,8 +2049,7 @@ class Engine {
                 let frame = this.animator.animations[i].frames.shift();
                 for (let j = 0; j < frame.targets.length; j++) {
                     let target = frame.targets.shift();
-                    this.context.globalAlpha = target.pixel.alpha;
-                    this.context.fillStyle = 'rgb(' + target.pixel.red + ',' + target.pixel.green + ',' + target.pixel.blue + ')';
+                    this.context.fillStyle = 'rgba(' + target.pixel.red + ',' + target.pixel.green + ',' + target.pixel.blue + ',' + target.pixel.alpha + ')';
                     this.context.fillRect((this.animator.animations[i].x + target.xOffset) * this.resolution, (this.animator.animations[i].y + target.yOffset) * this.resolution, this.resolution, this.resolution);
                 }
             }
@@ -2064,7 +2062,7 @@ class Engine {
         let x = Math.floor(this.control.x / this.resolution);
         let y = Math.floor(this.control.y / this.resolution);
         this.context.globalAlpha = 1;
-        this.context.fillStyle = 'rgb(255,255,255)';
+        this.context.fillStyle = 'rgba(255,255,255,1)';
         this.context.fillRect(x * this.resolution, y * this.resolution, this.resolution, this.resolution);
     }
     /**
