@@ -4,7 +4,7 @@
 class Grid {
     private _width: number;
     private _height: number;
-    private _tiles: Array<Array<Tile>>;
+    private _pixels: Array<Array<Pixel>>;
 
     /**
      * Creates a grid.
@@ -15,13 +15,13 @@ class Grid {
     public constructor(width: number, height: number) {
         this._width = width;
         this._height = height;
-        this._tiles = [];
+        this._pixels = [];
 
         for (let x = 0; x < width; x++) {
-            this._tiles[x] = [];
+            this._pixels[x] = [];
 
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile(Tileset.CharTransparent, 0, 1);
+                this._pixels[x][y] = new Pixel(0, 0, 0, 1);
             }
         }
     }
@@ -34,8 +34,8 @@ class Grid {
         return this._height;
     }
 
-    public get tiles() {
-        return this._tiles;
+    public get pixels() {
+        return this._pixels;
     }
 
     /**

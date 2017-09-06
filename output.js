@@ -1675,37 +1675,6 @@ class Character {
     }
 }
 /**
- * Class representing a color.
- */
-class Color {
-    /**
-     * Creates a color.
-     * @param  {number} red - The red.
-     * @param  {number} green - The green.
-     * @param  {number} blue - The blue.
-     * @param  {number} alpha - The alpha.
-     * @return {Color}
-     */
-    constructor(red, green, blue, alpha) {
-        this._red = red;
-        this._green = green;
-        this._blue = blue;
-        this._alpha = alpha;
-    }
-    get red() {
-        return this._red;
-    }
-    get green() {
-        return this._green;
-    }
-    get blue() {
-        return this._blue;
-    }
-    get alpha() {
-        return this._alpha;
-    }
-}
-/**
  * Class representing a control.
  */
 class Control {
@@ -1727,67 +1696,94 @@ class Control {
     get x() {
         return this._x;
     }
+    set x(value) {
+        this._x = value;
+    }
     get y() {
         return this._y;
+    }
+    set y(value) {
+        this._y = value;
     }
     get xDown() {
         return this._xDown;
     }
+    set xDown(value) {
+        this._xDown = value;
+    }
     get yDown() {
         return this._yDown;
+    }
+    set yDown(value) {
+        this._yDown = value;
     }
     get xUp() {
         return this._xUp;
     }
+    set xUp(value) {
+        this._xUp = value;
+    }
     get yUp() {
         return this._yUp;
+    }
+    set yUp(value) {
+        this._yUp = value;
     }
     get xContextMenu() {
         return this._xUp;
     }
+    set xContextMenu(value) {
+        this._xUp = value;
+    }
     get yContextMenu() {
         return this._yUp;
     }
+    set yContextMenu(value) {
+        this._yUp = value;
+    }
     get kKeyDown() {
         return this._kKeyDown;
+    }
+    set kKeyDown(value) {
+        this._kKeyDown = value;
     }
     /**
      * Triggers mouse down.
      */
     mouseDown(event) {
         event.preventDefault();
-        this._xDown = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this._yDown = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this.xDown = event.layerX;
+        this.yDown = event.layerY;
     }
     /**
      * Triggers mouse up.
      */
     mouseUp(event) {
         event.preventDefault();
-        this._xUp = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this._yUp = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this.xUp = event.layerX;
+        this.yUp = event.layerY;
     }
     /**
      * Triggers mouse move.
      */
     mouseMove(event) {
         event.preventDefault();
-        this._x = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this._y = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this.x = event.layerX;
+        this.y = event.layerY;
     }
     /**
      * Triggers context menu.
      */
     contextMenu(event) {
         event.preventDefault();
-        this._xContextMenu = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this._yContextMenu = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this.xContextMenu = event.layerX;
+        this.yContextMenu = event.layerY;
     }
     /**
      * Triggers key down.
      */
     keyDown(event) {
-        this._kKeyDown = event.keyCode;
+        this.kKeyDown = event.keyCode;
     }
 }
 /**
@@ -1840,13 +1836,13 @@ class Target {
      * Creates a target.
      * @param  {number} xOffset - The x offset.
      * @param  {number} yOffset - The y offset.
-     * @param  {Tile} tile - The tile.
+     * @param  {Pixel} pixel - The pixel.
      * @return {Target}
      */
-    constructor(xOffset, yOffset, tile) {
+    constructor(xOffset, yOffset, pixel) {
         this._xOffset = xOffset;
         this._yOffset = yOffset;
-        this._tile = tile;
+        this._pixel = pixel;
     }
     get xOffset() {
         return this._xOffset;
@@ -1854,8 +1850,8 @@ class Target {
     get yOffset() {
         return this._yOffset;
     }
-    get tile() {
-        return this._tile;
+    get pixel() {
+        return this._pixel;
     }
 }
 /**
@@ -1871,11 +1867,11 @@ class Grid {
     constructor(width, height) {
         this._width = width;
         this._height = height;
-        this._tiles = [];
+        this._pixels = [];
         for (let x = 0; x < width; x++) {
-            this._tiles[x] = [];
+            this._pixels[x] = [];
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile(Tileset.CharTransparent, 0, 1);
+                this._pixels[x][y] = new Pixel(0, 0, 0, 1);
             }
         }
     }
@@ -1885,44 +1881,56 @@ class Grid {
     get height() {
         return this._height;
     }
-    get tiles() {
-        return this._tiles;
+    get pixels() {
+        return this._pixels;
     }
 }
 /**
- * Class representing a tile.
+ * Class representing a pixel.
  */
-class Tile {
+class Pixel {
     /**
-     * Creates a tile.
-     * @param  {number} char - The character.
-     * @param  {number} z - The z.
-     * @param  {number} opacity - The opacity.
-     * @return {Tile}
+     * Creates a pixel.
+     * @param  {number} red - The red.
+     * @param  {number} green - The green.
+     * @param  {number} blue - The blue.
+     * @param  {number} alpha - The alpha.
+     * @return {Pixel}
      */
-    constructor(char, z, opacity) {
-        this._char = char;
-        this._z = z;
-        this._opacity = opacity;
+    constructor(red, green, blue, alpha) {
+        this._red = red;
+        this._green = green;
+        this._blue = blue;
+        this._alpha = alpha;
         this._dirty = true;
     }
-    get character() {
-        return this._char;
+    get red() {
+        return this._red;
     }
-    set character(value) {
-        this._char = value;
+    set red(value) {
+        this._red = value;
+        this.dirty = true;
     }
-    get z() {
-        return this._z;
+    get green() {
+        return this._green;
     }
-    set z(value) {
-        this._z = value;
+    set green(value) {
+        this._green = value;
+        this.dirty = true;
     }
-    get opacity() {
-        return this._opacity;
+    get blue() {
+        return this._blue;
     }
-    set opacity(value) {
-        this._opacity = value;
+    set blue(value) {
+        this._blue = value;
+        this.dirty = true;
+    }
+    get alpha() {
+        return this._alpha;
+    }
+    set alpha(value) {
+        this._alpha = value;
+        this.dirty = true;
     }
     get dirty() {
         return this._dirty;
@@ -1931,111 +1939,12 @@ class Tile {
         this._dirty = value;
     }
 }
-/**
- * Class representing a tileset.
- */
-class Tileset {
-    /**
-     * Gets the tileset info.
-     */
-    static get TilesetSourceImage() {
-        return './src/Engine/img/cp437_16x16.png';
-    }
-    static get TilesetWidthInTile() {
-        return 16;
-    }
-    static get TilesetHeightInTile() {
-        return 16;
-    }
-    /**
-     * Gets the tile info.
-     */
-    static get TileWidthInPixel() {
-        return 16;
-    }
-    static get TileHeightInPixel() {
-        return 16;
-    }
-    /**
-     * Gets the characters info.
-     */
-    static get CharTransparent() {
-        return 0;
-    }
-    static get CharFill() {
-        return 219;
-    }
-    static get CharSmallDot() {
-        return 250;
-    }
-    static get CharBigDot() {
-        return 249;
-    }
-    static get CharMultiply() {
-        return 42;
-    }
-    static get CharSimpleBorderTopLeft() {
-        return 218;
-    }
-    static get CharSimpleBorderTopRight() {
-        return 191;
-    }
-    static get CharSimpleBorderBottomLeft() {
-        return 192;
-    }
-    static get CharSimpleBorderBottomRight() {
-        return 217;
-    }
-    static get CharSimpleBorderHorizontal() {
-        return 196;
-    }
-    static get CharSimpleBorderVertical() {
-        return 179;
-    }
-    static get CharDoubleBorderTopLeft() {
-        return 201;
-    }
-    static get CharDoubleBorderTopRight() {
-        return 187;
-    }
-    static get CharDoubleBorderBottomLeft() {
-        return 200;
-    }
-    static get CharDoubleBorderBottomRight() {
-        return 188;
-    }
-    static get CharDoubleBorderHorizontal() {
-        return 205;
-    }
-    static get CharDoubleBorderVertical() {
-        return 186;
-    }
-    /**
-     * Gets the colors info.
-     */
-    static get COLOR_BLACK() {
-        return "black";
-    }
-    static get COLOR_WHITE() {
-        return "white";
-    }
-    static get COLOR_RED() {
-        return "red";
-    }
-    static get COLOR_GREEN() {
-        return "green";
-    }
-    static get COLOR_BLUE() {
-        return "blue";
-    }
-}
 /// <reference path="Animation/Animation.ts"/>
 /// <reference path="Animation/Frame.ts"/>
 /// <reference path="Animation/Target.ts"/>
-/// <reference path="Grid.ts"/>
 /// <reference path="Control.ts"/>
-/// <reference path="Tile.ts"/>
-/// <reference path="Tileset.ts"/>
+/// <reference path="Grid.ts"/>
+/// <reference path="Pixel.ts"/>
 /**
  * Class representing an engine.
  */
@@ -2043,19 +1952,20 @@ class Engine {
     /**
      * Creates an engine.
      * @constructor
-     * @param {number} width - The width in tile.
-     * @param {number} height - The width in tile.
+     * @param {number} width - The width.
+     * @param {number} height - The width.
+     * @param {number} resolution - The resolution.
+     * @param {number} fps - The frame per second.
      * @return {Engine}
      */
-    constructor(width, height) {
-        this._fps = 1000 / 60;
+    constructor(width, height, resolution, fps) {
+        this._fps = 1000 / fps;
+        this._resolution = resolution;
         this._canvas = document.createElement('canvas');
         this._canvas.id = 'canvas';
         this._canvas.style.cursor = 'none';
-        this._canvas.width = width * Tileset.TileWidthInPixel;
-        this._canvas.height = height * Tileset.TileHeightInPixel;
-        this._image = new Image();
-        this._image.src = Tileset.TilesetSourceImage;
+        this._canvas.width = width * this._resolution;
+        this._canvas.height = height * this._resolution;
         this._context = this._canvas.getContext('2d');
         this._control = new Control();
         this._grid = new Grid(width, height);
@@ -2064,78 +1974,85 @@ class Engine {
     get animator() {
         return this._animator;
     }
+    get canvas() {
+        return this._canvas;
+    }
+    get context() {
+        return this._context;
+    }
+    get control() {
+        return this._control;
+    }
+    get fps() {
+        return this._fps;
+    }
+    get layerGround() {
+        return this._grid;
+    }
+    get pid() {
+        return this._pid;
+    }
+    set pid(value) {
+        this._pid = value;
+    }
+    get resolution() {
+        return this._resolution;
+    }
     /**
      * Initializes the engine.
      */
     init() {
         window.onload = function () {
             document.body.appendChild(this._canvas);
-            document.getElementById('canvas').appendChild(this._image);
             document.addEventListener('keydown', this.propagateKeyDown.bind(this));
-            this._canvas.addEventListener('mousedown', this.propagateMouseDown.bind(this));
-            this._canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
-            this._canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
-            this._canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
+            this.canvas.addEventListener('mousedown', this.propagateMouseDown.bind(this));
+            this.canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
+            this.canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
+            this.canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
         }.bind(this);
     }
     /**
      * Starts the engine.
      */
     start() {
-        this._pid = setInterval(function () {
+        this.pid = setInterval(function () {
             this.clear();
             this.draw();
-        }.bind(this), this._fps);
+        }.bind(this), this.fps);
     }
     /**
      * Stops the engine.
      */
     stop() {
-        clearInterval(this._pid);
+        clearInterval(this.pid);
     }
     /**
      * Clears the engine.
      */
     clear() {
-        this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
     /**
      * Draws the engine.
      */
     draw() {
-        let sx = 0;
-        let sy = 0;
-        let sWidth = Tileset.TileWidthInPixel;
-        let sHeight = Tileset.TileHeightInPixel;
-        let dx = 0;
-        let dy = 0;
-        let dWidth = Tileset.TileWidthInPixel;
-        let dHeight = Tileset.TileHeightInPixel;
         // grid layer
-        for (let x = 0; x < this._grid.width; x++) {
-            for (let y = 0; y < this._grid.height; y++) {
-                sx = Tileset.TileWidthInPixel * (this._grid.tiles[x][y].character % Tileset.TilesetWidthInTile);
-                sy = Tileset.TileHeightInPixel * Math.floor(this._grid.tiles[x][y].character / Tileset.TilesetHeightInTile);
-                dx = Tileset.TileWidthInPixel * x;
-                dy = Tileset.TileHeightInPixel * y;
-                this._context.globalAlpha = this._grid.tiles[x][y].opacity;
-                this._context.fillStyle = 'rgb(' + [255, 0, 0] + ')';
-                this._context.fillRect(dx, dy, Tileset.TileWidthInPixel, Tileset.TileHeightInPixel);
-                // this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        for (let x = 0; x < this.layerGround.width; x++) {
+            for (let y = 0; y < this.layerGround.height; y++) {
+                this.context.globalAlpha = this.layerGround.pixels[x][y].alpha;
+                this.context.fillStyle = 'rgb(' + this.layerGround.pixels[x][y].red + ',' + this.layerGround.pixels[x][y].green + ',' + this.layerGround.pixels[x][y].blue + ')';
+                this.context.fillRect(x * this.resolution, y * this.resolution, this.resolution, this.resolution);
             }
         }
         // animation layer
-        for (let i = 0; i < this._animator.animations.length; i++) {
-            if (this._animator.animations[i].frames.length > 0) {
-                let frame = this._animator.animations[i].frames.shift();
+        for (let i = 0; i < this.animator.animations.length; i++) {
+            if (this.animator.animations[i].frames.length > 0) {
+                let frame = this.animator.animations[i].frames.shift();
                 for (let j = 0; j < frame.targets.length; j++) {
                     let target = frame.targets.shift();
-                    sx = Tileset.TileWidthInPixel * (target.tile.character % Tileset.TilesetWidthInTile);
-                    sy = Tileset.TileHeightInPixel * Math.floor(target.tile.character / Tileset.TilesetHeightInTile);
-                    dx = Tileset.TileWidthInPixel * (this._animator.animations[i].x + target.xOffset);
-                    dy = Tileset.TileHeightInPixel * (this._animator.animations[i].y + target.yOffset);
-                    this._context.globalAlpha = target.tile.opacity;
-                    this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                    this.context.globalAlpha = target.pixel.alpha;
+                    this.context.fillStyle = 'rgb(' + target.pixel.red + ',' + target.pixel.green + ',' + target.pixel.blue + ')';
+                    this.context.fillRect((this.animator.animations[i].x + target.xOffset) * this.resolution, (this.animator.animations[i].y + target.yOffset) * this.resolution, this.resolution, this.resolution);
                 }
             }
             else {
@@ -2144,46 +2061,45 @@ class Engine {
             }
         }
         // mouse layer
-        sx = Tileset.TileWidthInPixel * (Tileset.CharFill % Tileset.TilesetWidthInTile);
-        sy = Tileset.TileHeightInPixel * Math.floor(Tileset.CharFill / Tileset.TilesetHeightInTile);
-        dx = Tileset.TileWidthInPixel * this._control.x;
-        dy = Tileset.TileHeightInPixel * this._control.y;
-        this._context.globalAlpha = 1;
-        this._context.drawImage(this._image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        let x = Math.floor(this.control.x / this.resolution);
+        let y = Math.floor(this.control.y / this.resolution);
+        this.context.globalAlpha = 1;
+        this.context.fillStyle = 'rgb(255,255,255)';
+        this.context.fillRect(x * this.resolution, y * this.resolution, this.resolution, this.resolution);
     }
     /**
      * Propagates mouse down event.
      */
     propagateMouseDown(event) {
         event.preventDefault();
-        this._control.mouseDown(event);
+        this.control.mouseDown(event);
     }
     /**
      * Propagates mouse up event.
      */
     propagateMouseUp(event) {
         event.preventDefault();
-        this._control.mouseUp(event);
+        this.control.mouseUp(event);
     }
     /**
      * Propagates context menu event.
      */
     propagateContextMenu(event) {
         event.preventDefault();
-        this._control.contextMenu(event);
+        this.control.contextMenu(event);
     }
     /**
      * Propagates mouse move event.
      */
     propagateMouseMove(event) {
         event.preventDefault();
-        this._control.mouseMove(event);
+        this.control.mouseMove(event);
     }
     /**
      * Propagates key down event.
      */
     propagateKeyDown(event) {
-        this._control.keyDown(event);
+        this.control.keyDown(event);
     }
 }
 /**
@@ -2207,17 +2123,16 @@ class Animator {
      */
     addFire(x, y) {
         let animation = new Animation(x, y, [
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 1.0))]),
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 0.9))]),
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 0.8))]),
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 0.7))]),
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 0.6))]),
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 0.6))]),
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 0.5))]),
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 0.4))]),
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 0.3))]),
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 0.2))]),
-            new Frame([new Target(x, y, new Tile(Tileset.CharMultiply, 0, 0.1))])
+            new Frame([new Target(0, 0, new Pixel(255, 0, 0, 1.0))]),
+            new Frame([new Target(0, 0, new Pixel(255, 25, 0, 0.9))]),
+            new Frame([new Target(0, 0, new Pixel(255, 50, 0, 0.8))]),
+            new Frame([new Target(0, 0, new Pixel(255, 75, 0, 0.7))]),
+            new Frame([new Target(0, 0, new Pixel(255, 100, 0, 0.6))]),
+            new Frame([new Target(0, 0, new Pixel(255, 125, 0, 0.5))]),
+            new Frame([new Target(0, 0, new Pixel(255, 150, 0, 0.4))]),
+            new Frame([new Target(0, 0, new Pixel(255, 175, 0, 0.3))]),
+            new Frame([new Target(0, 0, new Pixel(255, 200, 0, 0.2))]),
+            new Frame([new Target(0, 0, new Pixel(255, 225, 0, 0.1))])
         ]);
         this._animations.push(animation);
     }
@@ -2280,7 +2195,7 @@ var RaceEnum;
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
-let engine = new Engine(40, 30);
+let engine = new Engine(40, 30, 15, 60);
 engine.init();
 engine.start();
 setInterval(function () {

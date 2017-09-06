@@ -29,7 +29,7 @@
 -- BASE DAMAGE => 1d4 [20, 40]
 */
 
-let engine = new Engine(40, 30);
+let engine = new Engine(40, 30, 15, 60);
 
 engine.init();
 engine.start();

@@ -4,19 +4,19 @@
 class Target {
     private _xOffset: number;
     private _yOffset: number;
-    private _tile: Tile;
+    private _pixel: Pixel;
 
     /**
      * Creates a target.
      * @param  {number} xOffset - The x offset.
      * @param  {number} yOffset - The y offset.
-     * @param  {Tile} tile - The tile.
+     * @param  {Pixel} pixel - The pixel.
      * @return {Target}
      */
-    public constructor(xOffset: number, yOffset: number, tile: Tile) {
+    public constructor(xOffset: number, yOffset: number, pixel: Pixel) {
         this._xOffset = xOffset;
         this._yOffset = yOffset;
-        this._tile = tile;
+        this._pixel = pixel;
     }
 
     public get xOffset() {
@@ -27,7 +27,7 @@ class Target {
         return this._yOffset;
     }
 
-    public get tile() {
-        return this._tile;
+    public get pixel() {
+        return this._pixel;
     }
 }

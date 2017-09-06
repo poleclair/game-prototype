@@ -32,36 +32,72 @@ class Control {
         return this._x;
     }
 
+    public set x(value: number) {
+        this._x = value;
+    }
+
     public get y() {
         return this._y;
+    }
+
+    public set y(value: number) {
+        this._y = value;
     }
 
     public get xDown() {
         return this._xDown;
     }
 
+    public set xDown(value: number) {
+        this._xDown = value;
+    }
+
     public get yDown() {
         return this._yDown;
+    }
+
+    public set yDown(value: number) {
+        this._yDown = value;
     }
 
     public get xUp() {
         return this._xUp;
     }
 
+    public set xUp(value: number) {
+        this._xUp = value;
+    }
+
     public get yUp() {
         return this._yUp;
+    }
+
+    public set yUp(value: number) {
+        this._yUp = value;
     }
 
     public get xContextMenu() {
         return this._xUp;
     }
 
+    public set xContextMenu(value: number) {
+        this._xUp = value;
+    }
+
     public get yContextMenu() {
         return this._yUp;
     }
 
+    public set yContextMenu(value: number) {
+        this._yUp = value;
+    }
+
     public get kKeyDown() {
         return this._kKeyDown;
+    }
+
+    public set kKeyDown(value: number) {
+        this._kKeyDown = value;
     }
 
     /**
@@ -70,8 +106,8 @@ class Control {
     public mouseDown(event: MouseEvent) {
         event.preventDefault();
 
-        this._xDown = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this._yDown = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this.xDown = event.layerX;
+        this.yDown = event.layerY;
     }
 
     /**
@@ -80,8 +116,8 @@ class Control {
     public mouseUp(event: MouseEvent) {
         event.preventDefault();
 
-        this._xUp = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this._yUp = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this.xUp = event.layerX;
+        this.yUp = event.layerY;
     }
 
     /**
@@ -90,8 +126,8 @@ class Control {
     public mouseMove(event: MouseEvent) {
         event.preventDefault();
 
-        this._x = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this._y = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this.x = event.layerX;
+        this.y = event.layerY;
     }
 
     /**
@@ -100,14 +136,14 @@ class Control {
     public contextMenu(event: MouseEvent) {
         event.preventDefault();
 
-        this._xContextMenu = Math.floor(event.layerX / Tileset.TileWidthInPixel);
-        this._yContextMenu = Math.floor(event.layerY / Tileset.TileHeightInPixel);
+        this.xContextMenu = event.layerX;
+        this.yContextMenu = event.layerY;
     }
 
     /**
      * Triggers key down.
      */
     public keyDown(event: KeyboardEvent) {
-        this._kKeyDown = event.keyCode;
+        this.kKeyDown = event.keyCode;
     }
 }
