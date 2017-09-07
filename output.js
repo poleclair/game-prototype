@@ -1880,7 +1880,7 @@ class Engine {
         this._fps = 1000 / fps;
         this._canvas = document.createElement('canvas');
         this._canvas.id = this.name;
-        this._canvas.style.cursor = 'none';
+        // this._canvas.style.cursor = 'none';
         this._canvas.width = this.width * this.tileset.width;
         this._canvas.height = this.height * this.tileset.height;
         this._context = this._canvas.getContext('2d');
@@ -1938,7 +1938,7 @@ class Engine {
             for (let x = 0; x < this.width; x++) {
                 this._matrix[x] = [];
                 for (let y = 0; y < this.height; y++) {
-                    this._matrix[x][y] = new Tile(250, 1);
+                    this._matrix[x][y] = new Tile(0, 1);
                 }
             }
         }.bind(this);
@@ -2007,11 +2007,12 @@ class Engine {
             }
         }
         // mouse layer
-        let x = Math.floor(this.control.x / sWidth);
-        let y = Math.floor(this.control.y / sHeight);
-        this.context.globalAlpha = 1;
-        this.context.fillStyle = 'rgba(255,255,255,1)';
-        this.context.fillRect(x * sWidth, y * sHeight, sWidth, sHeight);
+        // sx = sWidth * (255 % Tileset.TilesetWidthInTile);
+        // sy = sHeight * Math.floor(255 / Tileset.TilesetHeightInTile);
+        // dx = dWidth * Math.floor(this.control.x / sWidth);
+        // dy = dHeight * Math.floor(this.control.y / sHeight);
+        // this.context.globalAlpha = 1;
+        // this._context.drawImage(this.tileset.image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     }
     /**
      * Propagates mouse down event.
@@ -2280,6 +2281,7 @@ var RaceEnum;
 })(RaceEnum || (RaceEnum = {}));
 /// <reference path="../Class/Character.ts"/>
 /// <reference path="../Engine/Engine.ts"/>
+/// <reference path="../Engine/Tileset.ts"/>
 /// <reference path="../Enum/AbilityEnum.ts"/>
 /// <reference path="../Enum/AttackRollResultEnum.ts"/>
 /// <reference path="../Enum/ClassEnum.ts"/>
@@ -2304,7 +2306,7 @@ var RaceEnum;
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
-let tileset = new Tileset('./src/Engine/img/cp437_16x16.png', 16, 16);
+let tileset = new Tileset('./src/Engine/img/cp437_16x16_black.png', 16, 16);
 let engine = new Engine('game', 64, 48, tileset, 60);
 engine.init();
 engine.start();

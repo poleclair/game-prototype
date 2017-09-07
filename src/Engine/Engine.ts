@@ -39,7 +39,7 @@ class Engine {
 
         this._canvas = document.createElement('canvas');
         this._canvas.id = this.name;
-        this._canvas.style.cursor = 'none';
+        // this._canvas.style.cursor = 'none';
         this._canvas.width = this.width * this.tileset.width;
         this._canvas.height = this.height * this.tileset.height;
 
@@ -116,7 +116,7 @@ class Engine {
                 this._matrix[x] = [];
 
                 for (let y = 0; y < this.height; y++) {
-                    this._matrix[x][y] = new Tile(250, 1);
+                    this._matrix[x][y] = new Tile(0, 1);
                 }
             }
         }.bind(this);
@@ -195,12 +195,13 @@ class Engine {
         }
 
         // mouse layer
-        let x = Math.floor(this.control.x / sWidth);
-        let y = Math.floor(this.control.y / sHeight);
+        // sx = sWidth * (255 % Tileset.TilesetWidthInTile);
+        // sy = sHeight * Math.floor(255 / Tileset.TilesetHeightInTile);
+        // dx = dWidth * Math.floor(this.control.x / sWidth);
+        // dy = dHeight * Math.floor(this.control.y / sHeight);
 
-        this.context.globalAlpha = 1;
-        this.context.fillStyle = 'rgba(255,255,255,1)';
-        this.context.fillRect(x * sWidth, y * sHeight, sWidth, sHeight);
+        // this.context.globalAlpha = 1;
+        // this._context.drawImage(this.tileset.image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     }
 
     /**
