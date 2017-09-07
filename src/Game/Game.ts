@@ -28,8 +28,8 @@
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
-
-let engine = new Engine(40, 30, 15, 60);
+let tileset = new Tileset('./src/Engine/img/cp437_16x16.png', 16, 16);
+let engine = new Engine('game', 64, 48, tileset, 60);
 
 engine.init();
 engine.start();

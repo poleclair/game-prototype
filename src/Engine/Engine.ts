@@ -3,51 +3,71 @@
 /// <reference path="Animation/Target.ts"/>
 
 /// <reference path="Control.ts"/>
-/// <reference path="Grid.ts"/>
-/// <reference path="Pixel.ts"/>
 
 /**
  * Class representing an engine.
  */
 class Engine {
+    private _name: string;
+    private _width: number;
+    private _height: number;
+    private _tileset: Tileset;
     private _fps: number;
-
-    private _pid: number;
-    private _resolution: number;
     private _canvas: HTMLCanvasElement;
     private _context: CanvasRenderingContext2D;
-    private _control: Control;
     private _animator: Animator;
-    private _grid: Grid;
+    private _control: Control;
+    private _matrix: Array<Array<Tile>>;
+    private _pid: number;
 
     /**
      * Creates an engine.
      * @constructor
+     * @param {string} name - The name.
      * @param {number} width - The width.
      * @param {number} height - The width.
-     * @param {number} resolution - The resolution.
+     * @param {Tileset} tileset - The tileset.
      * @param {number} fps - The frame per second.
      * @return {Engine}
      */
-    public constructor(width: number, height: number, resolution: number, fps: number) {
+    public constructor(name: string, width: number, height: number, tileset: Tileset, fps: number) {
+        this._name = name;
+        this._width = width;
+        this._height = height;
+        this._tileset = tileset;
         this._fps = 1000 / fps;
-        this._resolution = resolution;
 
         this._canvas = document.createElement('canvas');
-        this._canvas.id = 'canvas';
+        this._canvas.id = this.name;
         this._canvas.style.cursor = 'none';
-        this._canvas.width = width * this._resolution;
-        this._canvas.height = height * this._resolution;
+        this._canvas.width = this.width * this.tileset.width;
+        this._canvas.height = this.height * this.tileset.height;
 
         this._context = this._canvas.getContext('2d');
 
-        this._control = new Control();
-        this._grid = new Grid(width, height);
         this._animator = new Animator();
+        this._control = new Control();
+        this._matrix = [];
     }
 
-    public get animator() {
-        return this._animator;
+    public get name() {
+        return this._name;
+    }
+
+    public get width() {
+        return this._width;
+    }
+
+    public get height() {
+        return this._height;
+    }
+
+    public get fps() {
+        return this._fps;
+    }
+
+    public get tileset() {
+        return this._tileset;
     }
 
     public get canvas() {
@@ -58,16 +78,16 @@ class Engine {
         return this._context;
     }
 
+    public get animator() {
+        return this._animator;
+    }
+
     public get control() {
         return this._control;
     }
 
-    public get fps() {
-        return this._fps;
-    }
-
-    public get layerGround() {
-        return this._grid;
+    public get matrix() {
+        return this._matrix;
     }
 
     public get pid() {
@@ -76,10 +96,6 @@ class Engine {
 
     public set pid(value: number) {
         this._pid = value;
-    }
-
-    public get resolution() {
-        return this._resolution;
     }
 
     /**
@@ -95,6 +111,14 @@ class Engine {
             this.canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
             this.canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
             this.canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
+
+            for (let x = 0; x < this.width; x++) {
+                this._matrix[x] = [];
+
+                for (let y = 0; y < this.height; y++) {
+                    this._matrix[x][y] = new Tile(250, 1);
+                }
+            }
         }.bind(this);
     }
 
@@ -126,11 +150,25 @@ class Engine {
      * Draws the engine.
      */
     public draw() {
+        let sx = 0;
+        let sy = 0;
+        let sWidth = this.tileset.width;
+        let sHeight = this.tileset.height;
+        let dx = 0;
+        let dy = 0;
+        let dWidth = this.tileset.width;
+        let dHeight = this.tileset.height;
+
         // grid layer
-        for (let x = 0; x < this.layerGround.width; x++) {
-            for (let y = 0; y < this.layerGround.height; y++) {
-                this.context.fillStyle = 'rgba(' + this.layerGround.pixels[x][y].red + ',' + this.layerGround.pixels[x][y].green + ',' + this.layerGround.pixels[x][y].blue + ',' + this.layerGround.pixels[x][y].alpha + ')';
-                this.context.fillRect(x * this.resolution, y * this.resolution, this.resolution, this.resolution);
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
+                sx = sWidth * (this.matrix[x][y].value % Tileset.TilesetWidthInTile);
+                sy = sHeight * Math.floor(this.matrix[x][y].value / Tileset.TilesetHeightInTile);
+                dx = dWidth * x;
+                dy = dHeight * y;
+
+                this._context.globalAlpha = this.matrix[x][y].alpha;
+                this._context.drawImage(this.tileset.image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
             }
         }
 
@@ -142,8 +180,13 @@ class Engine {
                 for (let j = 0; j < frame.targets.length; j++) {
                     let target = frame.targets.shift();
 
-                    this.context.fillStyle = 'rgba(' + target.pixel.red + ',' + target.pixel.green + ',' + target.pixel.blue + ',' + target.pixel.alpha + ')';
-                    this.context.fillRect((this.animator.animations[i].x + target.xOffset) * this.resolution, (this.animator.animations[i].y + target.yOffset) * this.resolution, this.resolution, this.resolution);
+                    sx = sWidth * (target.tile.value % Tileset.TilesetWidthInTile);
+                    sy = sHeight * Math.floor(target.tile.value / Tileset.TilesetHeightInTile);
+                    dx = dWidth * (this.animator.animations[i].x + target.xOffset);
+                    dy = dHeight * (this.animator.animations[i].y + target.yOffset);
+
+                    this._context.globalAlpha = target.tile.alpha;
+                    this._context.drawImage(this.tileset.image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
                 }
             } else {
                 this._animator.animations.splice(i, 1);
@@ -152,12 +195,12 @@ class Engine {
         }
 
         // mouse layer
-        let x = Math.floor(this.control.x / this.resolution);
-        let y = Math.floor(this.control.y / this.resolution);
+        let x = Math.floor(this.control.x / sWidth);
+        let y = Math.floor(this.control.y / sHeight);
 
         this.context.globalAlpha = 1;
         this.context.fillStyle = 'rgba(255,255,255,1)';
-        this.context.fillRect(x * this.resolution, y * this.resolution, this.resolution, this.resolution);
+        this.context.fillRect(x * sWidth, y * sHeight, sWidth, sHeight);
     }
 
     /**

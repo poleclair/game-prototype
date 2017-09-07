@@ -1,29 +1,50 @@
 /**
- * Class representing a grid.
+ * Class representing a layer.
  */
-class Grid {
+class Layer {
+    private _x: number;
+    private _y: number;
+    private _z: number;
     private _width: number;
     private _height: number;
-    private _pixels: Array<Array<Pixel>>;
+    private _values: Array<Array<number>>;
 
     /**
-     * Creates a grid.
+     * Creates a layer.
+     * @param  {number} x - The x.
+     * @param  {number} y - The y.
+     * @param  {number} z - The y.
      * @param  {number} width - The width.
      * @param  {number} height - The height.
-     * @return {Grid}
+     * @return {Layer}
      */
-    public constructor(width: number, height: number) {
+    public constructor(x: number, y: number, z: number, width: number, height: number) {
+        this._x = x;
+        this._y = y;
+        this._z = z;
         this._width = width;
         this._height = height;
-        this._pixels = [];
+        this._values = [];
 
         for (let x = 0; x < width; x++) {
-            this._pixels[x] = [];
+            this._values[x] = [];
 
             for (let y = 0; y < height; y++) {
-                this._pixels[x][y] = new Pixel(0, 0, 0, 1);
+                this._values[x][y] = 0;
             }
         }
+    }
+
+    public get x() {
+        return this._x;
+    }
+
+    public get y() {
+        return this._y;
+    }
+
+    public get z() {
+        return this._z;
     }
 
     public get width() {
@@ -34,8 +55,8 @@ class Grid {
         return this._height;
     }
 
-    public get pixels() {
-        return this._pixels;
+    public get values() {
+        return this._values;
     }
 
     /**
