@@ -173,7 +173,7 @@ class Engine {
             if (this.animator.animations[i].frames.length > 0) {
                 let frame = this.animator.animations[i].frames.shift();
 
-                for (let j = 0; j < frame.targets.length; j++) {
+                for (let j = frame.targets.length; j > 0; j--) {
                     let target = frame.targets.shift();
 
                     this._context.globalAlpha = target.tile.alpha;
@@ -196,18 +196,18 @@ class Engine {
         }
 
         // mouse layer
-        this.context.globalAlpha = 1;
-        this._context.drawImage(
-            this.tileset.image,
-            this.tileset.tileWidth * 15,
-            this.tileset.tileHeight * 15,
-            this.tileset.tileWidth,
-            this.tileset.tileHeight,
-            this.tileset.tileWidth * Math.floor(this.control.x / this.tileset.tileWidth),
-            this.tileset.tileHeight * Math.floor(this.control.y / this.tileset.tileHeight),
-            this.tileset.tileWidth,
-            this.tileset.tileHeight
-        );
+        // this.context.globalAlpha = 1;
+        // this._context.drawImage(
+        //     this.tileset.image,
+        //     this.tileset.tileWidth * 15,
+        //     this.tileset.tileHeight * 15,
+        //     this.tileset.tileWidth,
+        //     this.tileset.tileHeight,
+        //     this.tileset.tileWidth * Math.floor(this.control.x / this.tileset.tileWidth),
+        //     this.tileset.tileHeight * Math.floor(this.control.y / this.tileset.tileHeight),
+        //     this.tileset.tileWidth,
+        //     this.tileset.tileHeight
+        // );
     }
 
     /**

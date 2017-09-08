@@ -36,11 +36,7 @@ engine.init();
 engine.start();
 
 setInterval(function () {
-    engine.animator.addFire(9, 10);
-    engine.animator.addFire(10, 9);
-    engine.animator.addFire(10, 10);
-    engine.animator.addFire(10, 11);
-    engine.animator.addFire(11, 10);
+    engine.animator.addCircleFadeOut(10, 10, 10, 2);
 }, 1000);
 
 let abilityScores1 = [16, 14, 14, 10, 14, 11];

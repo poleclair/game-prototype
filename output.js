@@ -1979,7 +1979,7 @@ class Engine {
         for (let i = 0; i < this.animator.animations.length; i++) {
             if (this.animator.animations[i].frames.length > 0) {
                 let frame = this.animator.animations[i].frames.shift();
-                for (let j = 0; j < frame.targets.length; j++) {
+                for (let j = frame.targets.length; j > 0; j--) {
                     let target = frame.targets.shift();
                     this._context.globalAlpha = target.tile.alpha;
                     this._context.drawImage(this.tileset.image, this.tileset.tileWidth * target.tile.x, this.tileset.tileHeight * target.tile.y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset), this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset), this.tileset.tileWidth, this.tileset.tileHeight);
@@ -1991,8 +1991,18 @@ class Engine {
             }
         }
         // mouse layer
-        this.context.globalAlpha = 1;
-        this._context.drawImage(this.tileset.image, this.tileset.tileWidth * 15, this.tileset.tileHeight * 15, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * Math.floor(this.control.x / this.tileset.tileWidth), this.tileset.tileHeight * Math.floor(this.control.y / this.tileset.tileHeight), this.tileset.tileWidth, this.tileset.tileHeight);
+        // this.context.globalAlpha = 1;
+        // this._context.drawImage(
+        //     this.tileset.image,
+        //     this.tileset.tileWidth * 15,
+        //     this.tileset.tileHeight * 15,
+        //     this.tileset.tileWidth,
+        //     this.tileset.tileHeight,
+        //     this.tileset.tileWidth * Math.floor(this.control.x / this.tileset.tileWidth),
+        //     this.tileset.tileHeight * Math.floor(this.control.y / this.tileset.tileHeight),
+        //     this.tileset.tileWidth,
+        //     this.tileset.tileHeight
+        // );
     }
     /**
      * Propagates mouse down event.
@@ -2107,6 +2117,28 @@ class Animator {
             new Frame([new Target(0, 0, new Tile(15, 15, 0.2))]),
             new Frame([new Target(0, 0, new Tile(15, 15, 0.1))])
         ]);
+        this._animations.push(animation);
+    }
+    /**
+     * Adds a circle fade out animation to the queue.
+     * @param {number} x - The x;
+     * @param {number} y - The y;
+     * @param {number} length - The length;
+     * @param {number} size - The size;
+     */
+    addCircleFadeOut(x, y, length, size) {
+        let animation = new Animation(x, y, []);
+        let alpha = 1 / length;
+        for (let i = 0; i < length; i++) {
+            let frame = new Frame([new Target(0, 0, new Tile(15, 15, 1 - (alpha * i)))]);
+            for (let j = 1; j < size; j++) {
+                frame.targets.push(new Target(0, 0 + j, new Tile(15, 15, 1 - (alpha * i))));
+                frame.targets.push(new Target(0, 0 - j, new Tile(15, 15, 1 - (alpha * i))));
+                frame.targets.push(new Target(0 + j, 0, new Tile(15, 15, 1 - (alpha * i))));
+                frame.targets.push(new Target(0 - j, 0, new Tile(15, 15, 1 - (alpha * i))));
+            }
+            animation.frames.push(frame);
+        }
         this._animations.push(animation);
     }
 }
@@ -2236,11 +2268,7 @@ let engine = new Engine('game', 64, 48, tileset, 60);
 engine.init();
 engine.start();
 setInterval(function () {
-    engine.animator.addFire(9, 10);
-    engine.animator.addFire(10, 9);
-    engine.animator.addFire(10, 10);
-    engine.animator.addFire(10, 11);
-    engine.animator.addFire(11, 10);
+    engine.animator.addCircleFadeOut(10, 10, 10, 2);
 }, 1000);
 let abilityScores1 = [16, 14, 14, 10, 14, 11];
 let skillProficiencies1 = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
