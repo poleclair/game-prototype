@@ -1,6 +1,6 @@
-/// <reference path="Animation/Animation.ts"/>
-/// <reference path="Animation/Frame.ts"/>
-/// <reference path="Animation/Target.ts"/>
+/// <reference path="Animator/Animation.ts"/>
+/// <reference path="Animator/Frame.ts"/>
+/// <reference path="Animator/Target.ts"/>
 
 /// <reference path="Control.ts"/>
 
