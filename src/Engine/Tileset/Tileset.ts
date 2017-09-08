@@ -2,35 +2,53 @@
  * Class representing a tileset.
  */
 class Tileset {
-    private _width: number;
-    private _height: number;
+    private _tileWidth: number;
+    private _tileHeight: number;
     private _image: HTMLImageElement;
 
     /**
      * Creates a tileset.
      * @param  {string} source - The source.
-     * @param  {number} width - The width.
-     * @param  {number} height - The height.
+     * @param  {number} tileWidth - The tile width.
+     * @param  {number} tileHeight - The tile height.
      * @return {Tileset}
      */
-    public constructor(source: string, width: number, height: number) {
-        this._width = width;
-        this._height = height;
+    public constructor(source: string, tileWidth: number, tileHeight: number) {
+        this._tileWidth = tileWidth;
+        this._tileHeight = tileHeight;
 
         this._image = new Image();
         this._image.src = source;
     }
 
-    public get width() {
-        return this._width;
+    public get tileWidth() {
+        return this._tileWidth;
     }
 
-    public get height() {
-        return this._height;
+    public get tileHeight() {
+        return this._tileHeight;
     }
 
     public get image() {
         return this._image;
+    }
+
+    /**
+     * Gets the x position of a tile.
+     * @param {number} tileValue - The tile value.
+     * @return {number}
+     */
+    public tileX(tileValue: number) {
+        return this.tileWidth * (tileValue % (this.image.width / this.tileWidth));
+    }
+
+    /**
+     * Gets the y position of a tile.
+     * @param {number} tileValue - The tile value.
+     * @return {number}
+     */
+    public tileY(tileValue: number) {
+        return this.tileHeight * Math.floor(tileValue / (this.image.height / this.tileHeight));
     }
 
     /**

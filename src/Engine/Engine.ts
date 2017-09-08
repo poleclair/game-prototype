@@ -40,8 +40,8 @@ class Engine {
         this._canvas = document.createElement('canvas');
         this._canvas.id = this.name;
         // this._canvas.style.cursor = 'none';
-        this._canvas.width = this.width * this.tileset.width;
-        this._canvas.height = this.height * this.tileset.height;
+        this._canvas.width = this.width * this.tileset.tileWidth;
+        this._canvas.height = this.height * this.tileset.tileHeight;
 
         this._context = this._canvas.getContext('2d');
 
@@ -116,7 +116,7 @@ class Engine {
                 this.matrix[x] = [];
 
                 for (let y = 0; y < this.height; y++) {
-                    this.matrix[x][y] = new Tile(0, 1);
+                    this.matrix[x][y] = new Tile(250, 1);
                 }
             }
         }.bind(this);
@@ -152,23 +152,28 @@ class Engine {
     public draw() {
         let sx = 0;
         let sy = 0;
-        let sWidth = this.tileset.width;
-        let sHeight = this.tileset.height;
+        let sWidth = this.tileset.tileWidth;
+        let sHeight = this.tileset.tileHeight;
         let dx = 0;
         let dy = 0;
-        let dWidth = this.tileset.width;
-        let dHeight = this.tileset.height;
+        let dWidth = this.tileset.tileWidth;
+        let dHeight = this.tileset.tileHeight;
 
         // grid layer
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
-                sx = sWidth * (this.matrix[x][y].value % Tileset.TilesetWidthInTile);
-                sy = sHeight * Math.floor(this.matrix[x][y].value / Tileset.TilesetHeightInTile);
-                dx = dWidth * x;
-                dy = dHeight * y;
-
                 this._context.globalAlpha = this.matrix[x][y].alpha;
-                this._context.drawImage(this.tileset.image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                this._context.drawImage(
+                    this.tileset.image,
+                    this.tileset.tileX(this.matrix[x][y].value),
+                    this.tileset.tileY(this.matrix[x][y].value),
+                    this.tileset.tileWidth,
+                    this.tileset.tileHeight,
+                    dWidth * x,
+                    dHeight * y,
+                    this.tileset.tileWidth,
+                    this.tileset.tileHeight
+                );
             }
         }
 
@@ -180,13 +185,18 @@ class Engine {
                 for (let j = 0; j < frame.targets.length; j++) {
                     let target = frame.targets.shift();
 
-                    sx = sWidth * (target.tile.value % Tileset.TilesetWidthInTile);
-                    sy = sHeight * Math.floor(target.tile.value / Tileset.TilesetHeightInTile);
-                    dx = dWidth * (this.animator.animations[i].x + target.xOffset);
-                    dy = dHeight * (this.animator.animations[i].y + target.yOffset);
-
                     this._context.globalAlpha = target.tile.alpha;
-                    this._context.drawImage(this.tileset.image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                    this._context.drawImage(
+                        this.tileset.image,
+                        this.tileset.tileX(target.tile.value),
+                        this.tileset.tileY(target.tile.value),
+                        this.tileset.tileWidth,
+                        this.tileset.tileHeight,
+                        this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset),
+                        this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset),
+                        this.tileset.tileWidth,
+                        this.tileset.tileHeight
+                    );
                 }
             } else {
                 this._animator.animations.splice(i, 1);
@@ -195,13 +205,18 @@ class Engine {
         }
 
         // mouse layer
-        // sx = sWidth * (255 % Tileset.TilesetWidthInTile);
-        // sy = sHeight * Math.floor(255 / Tileset.TilesetHeightInTile);
-        // dx = dWidth * Math.floor(this.control.x / sWidth);
-        // dy = dHeight * Math.floor(this.control.y / sHeight);
-
-        // this.context.globalAlpha = 1;
-        // this._context.drawImage(this.tileset.image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        this.context.globalAlpha = 1;
+        this._context.drawImage(
+            this.tileset.image,
+            this.tileset.tileX(255),
+            this.tileset.tileY(255),
+            this.tileset.tileWidth,
+            this.tileset.tileHeight,
+            this.tileset.tileWidth * Math.floor(this.control.x / sWidth),
+            this.tileset.tileHeight * Math.floor(this.control.y / sHeight),
+            this.tileset.tileWidth,
+            this.tileset.tileHeight
+        );
     }
 
     /**
