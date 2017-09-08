@@ -1936,9 +1936,9 @@ class Engine {
             this.canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
             this.canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
             for (let x = 0; x < this.width; x++) {
-                this._matrix[x] = [];
+                this.matrix[x] = [];
                 for (let y = 0; y < this.height; y++) {
-                    this._matrix[x][y] = new Tile(0, 1);
+                    this.matrix[x][y] = new Tile(0, 1);
                 }
             }
         }.bind(this);
