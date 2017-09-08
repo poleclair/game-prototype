@@ -1938,7 +1938,7 @@ class Engine {
             for (let x = 0; x < this.width; x++) {
                 this.matrix[x] = [];
                 for (let y = 0; y < this.height; y++) {
-                    this.matrix[x][y] = new Tile(250, 1);
+                    this.matrix[x][y] = new Tile(0, 0, 1);
                 }
             }
         }.bind(this);
@@ -1968,19 +1968,11 @@ class Engine {
      * Draws the engine.
      */
     draw() {
-        let sx = 0;
-        let sy = 0;
-        let sWidth = this.tileset.tileWidth;
-        let sHeight = this.tileset.tileHeight;
-        let dx = 0;
-        let dy = 0;
-        let dWidth = this.tileset.tileWidth;
-        let dHeight = this.tileset.tileHeight;
         // grid layer
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
                 this._context.globalAlpha = this.matrix[x][y].alpha;
-                this._context.drawImage(this.tileset.image, this.tileset.tileX(this.matrix[x][y].value), this.tileset.tileY(this.matrix[x][y].value), this.tileset.tileWidth, this.tileset.tileHeight, dWidth * x, dHeight * y, this.tileset.tileWidth, this.tileset.tileHeight);
+                this._context.drawImage(this.tileset.image, this.tileset.tileWidth * this.matrix[x][y].x, this.tileset.tileHeight * this.matrix[x][y].y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * x, this.tileset.tileHeight * y, this.tileset.tileWidth, this.tileset.tileHeight);
             }
         }
         // animation layer
@@ -1990,7 +1982,7 @@ class Engine {
                 for (let j = 0; j < frame.targets.length; j++) {
                     let target = frame.targets.shift();
                     this._context.globalAlpha = target.tile.alpha;
-                    this._context.drawImage(this.tileset.image, this.tileset.tileX(target.tile.value), this.tileset.tileY(target.tile.value), this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset), this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset), this.tileset.tileWidth, this.tileset.tileHeight);
+                    this._context.drawImage(this.tileset.image, this.tileset.tileWidth * target.tile.x, this.tileset.tileHeight * target.tile.y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset), this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset), this.tileset.tileWidth, this.tileset.tileHeight);
                 }
             }
             else {
@@ -2000,7 +1992,7 @@ class Engine {
         }
         // mouse layer
         this.context.globalAlpha = 1;
-        this._context.drawImage(this.tileset.image, this.tileset.tileX(255), this.tileset.tileY(255), this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * Math.floor(this.control.x / sWidth), this.tileset.tileHeight * Math.floor(this.control.y / sHeight), this.tileset.tileWidth, this.tileset.tileHeight);
+        this._context.drawImage(this.tileset.image, this.tileset.tileWidth * 15, this.tileset.tileHeight * 15, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * Math.floor(this.control.x / this.tileset.tileWidth), this.tileset.tileHeight * Math.floor(this.control.y / this.tileset.tileHeight), this.tileset.tileWidth, this.tileset.tileHeight);
     }
     /**
      * Propagates mouse down event.
@@ -2084,33 +2076,6 @@ class Layer {
     }
 }
 /**
- * Class representing a tile.
- */
-class Tile {
-    /**
-     * Creates a tile.
-     * @param  {number} value - The value.
-     * @param  {number} alpha - The alpha.
-     * @return {Tile}
-     */
-    constructor(value, alpha) {
-        this._value = value;
-        this._alpha = alpha;
-    }
-    get value() {
-        return this._value;
-    }
-    set value(value) {
-        this._value = value;
-    }
-    get alpha() {
-        return this._alpha;
-    }
-    set alpha(value) {
-        this._alpha = value;
-    }
-}
-/**
  * Class representing an animator.
  */
 class Animator {
@@ -2131,18 +2096,53 @@ class Animator {
      */
     addFire(x, y) {
         let animation = new Animation(x, y, [
-            new Frame([new Target(0, 0, new Tile(255, 1.0))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.9))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.8))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.7))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.6))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.5))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.4))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.3))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.2))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.1))])
+            new Frame([new Target(0, 0, new Tile(15, 15, 1.0))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.9))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.8))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.7))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.6))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.5))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.4))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.3))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.2))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.1))])
         ]);
         this._animations.push(animation);
+    }
+}
+/**
+ * Class representing a tile.
+ */
+class Tile {
+    /**
+     * Creates a tile.
+     * @param {number} x - The x;
+     * @param {number} y - The y;
+     * @param  {number} alpha - The alpha.
+     * @return {Tile}
+     */
+    constructor(x, y, alpha) {
+        this._x = x;
+        this._y = y;
+        this._alpha = alpha;
+    }
+    get x() {
+        return this._x;
+    }
+    set x(value) {
+        this._x = value;
+    }
+    get y() {
+        return this._y;
+    }
+    set y(value) {
+        this._y = value;
+    }
+    get alpha() {
+        return this._alpha;
+    }
+    set alpha(value) {
+        this._alpha = value;
     }
 }
 /**
@@ -2170,85 +2170,6 @@ class Tileset {
     }
     get image() {
         return this._image;
-    }
-    /**
-     * Gets the x position of a tile.
-     * @param {number} tileValue - The tile value.
-     * @return {number}
-     */
-    tileX(tileValue) {
-        return this.tileWidth * (tileValue % (this.image.width / this.tileWidth));
-    }
-    /**
-     * Gets the y position of a tile.
-     * @param {number} tileValue - The tile value.
-     * @return {number}
-     */
-    tileY(tileValue) {
-        return this.tileHeight * Math.floor(tileValue / (this.image.height / this.tileHeight));
-    }
-    /**
-     * Gets the tileset info.
-     */
-    static get TilesetWidthInTile() {
-        return 16;
-    }
-    static get TilesetHeightInTile() {
-        return 16;
-    }
-    /**
-     * Gets the characters info.
-     */
-    static get CharTransparent() {
-        return 0;
-    }
-    static get CharFill() {
-        return 219;
-    }
-    static get CharSmallDot() {
-        return 250;
-    }
-    static get CharBigDot() {
-        return 249;
-    }
-    static get CharMultiply() {
-        return 42;
-    }
-    static get CharSimpleBorderTopLeft() {
-        return 218;
-    }
-    static get CharSimpleBorderTopRight() {
-        return 191;
-    }
-    static get CharSimpleBorderBottomLeft() {
-        return 192;
-    }
-    static get CharSimpleBorderBottomRight() {
-        return 217;
-    }
-    static get CharSimpleBorderHorizontal() {
-        return 196;
-    }
-    static get CharSimpleBorderVertical() {
-        return 179;
-    }
-    static get CharDoubleBorderTopLeft() {
-        return 201;
-    }
-    static get CharDoubleBorderTopRight() {
-        return 187;
-    }
-    static get CharDoubleBorderBottomLeft() {
-        return 200;
-    }
-    static get CharDoubleBorderBottomRight() {
-        return 188;
-    }
-    static get CharDoubleBorderHorizontal() {
-        return 205;
-    }
-    static get CharDoubleBorderVertical() {
-        return 186;
     }
 }
 /**
@@ -2310,7 +2231,7 @@ var RaceEnum;
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
-let tileset = new Tileset('./src/Engine/Tileset/img/cp437_16x16_black.png', 16, 16);
+let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
 let engine = new Engine('game', 64, 48, tileset, 60);
 engine.init();
 engine.start();

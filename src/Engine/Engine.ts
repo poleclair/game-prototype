@@ -116,7 +116,7 @@ class Engine {
                 this.matrix[x] = [];
 
                 for (let y = 0; y < this.height; y++) {
-                    this.matrix[x][y] = new Tile(250, 1);
+                    this.matrix[x][y] = new Tile(0, 0, 1);
                 }
             }
         }.bind(this);
@@ -150,27 +150,18 @@ class Engine {
      * Draws the engine.
      */
     public draw() {
-        let sx = 0;
-        let sy = 0;
-        let sWidth = this.tileset.tileWidth;
-        let sHeight = this.tileset.tileHeight;
-        let dx = 0;
-        let dy = 0;
-        let dWidth = this.tileset.tileWidth;
-        let dHeight = this.tileset.tileHeight;
-
         // grid layer
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
                 this._context.globalAlpha = this.matrix[x][y].alpha;
                 this._context.drawImage(
                     this.tileset.image,
-                    this.tileset.tileX(this.matrix[x][y].value),
-                    this.tileset.tileY(this.matrix[x][y].value),
+                    this.tileset.tileWidth * this.matrix[x][y].x,
+                    this.tileset.tileHeight * this.matrix[x][y].y,
                     this.tileset.tileWidth,
                     this.tileset.tileHeight,
-                    dWidth * x,
-                    dHeight * y,
+                    this.tileset.tileWidth * x,
+                    this.tileset.tileHeight * y,
                     this.tileset.tileWidth,
                     this.tileset.tileHeight
                 );
@@ -188,8 +179,8 @@ class Engine {
                     this._context.globalAlpha = target.tile.alpha;
                     this._context.drawImage(
                         this.tileset.image,
-                        this.tileset.tileX(target.tile.value),
-                        this.tileset.tileY(target.tile.value),
+                        this.tileset.tileWidth * target.tile.x,
+                        this.tileset.tileHeight * target.tile.y,
                         this.tileset.tileWidth,
                         this.tileset.tileHeight,
                         this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset),
@@ -208,12 +199,12 @@ class Engine {
         this.context.globalAlpha = 1;
         this._context.drawImage(
             this.tileset.image,
-            this.tileset.tileX(255),
-            this.tileset.tileY(255),
+            this.tileset.tileWidth * 15,
+            this.tileset.tileHeight * 15,
             this.tileset.tileWidth,
             this.tileset.tileHeight,
-            this.tileset.tileWidth * Math.floor(this.control.x / sWidth),
-            this.tileset.tileHeight * Math.floor(this.control.y / sHeight),
+            this.tileset.tileWidth * Math.floor(this.control.x / this.tileset.tileWidth),
+            this.tileset.tileHeight * Math.floor(this.control.y / this.tileset.tileHeight),
             this.tileset.tileWidth,
             this.tileset.tileHeight
         );

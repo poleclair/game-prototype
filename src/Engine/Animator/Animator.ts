@@ -23,16 +23,16 @@ class Animator {
      */
     public addFire(x: number, y: number) {
         let animation = new Animation(x, y, [
-            new Frame([new Target(0, 0, new Tile(255, 1.0))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.9))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.8))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.7))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.6))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.5))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.4))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.3))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.2))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.1))])
+            new Frame([new Target(0, 0, new Tile(15, 15, 1.0))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.9))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.8))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.7))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.6))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.5))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.4))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.3))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.2))]),
+            new Frame([new Target(0, 0, new Tile(15, 15, 0.1))])
         ]);
 
         this._animations.push(animation);
