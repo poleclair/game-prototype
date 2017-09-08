@@ -2123,6 +2123,41 @@ class Tile {
     }
 }
 /**
+ * Class representing an animator.
+ */
+class Animator {
+    /**
+     * Creates an animator.
+     * @return {Animator}
+     */
+    constructor() {
+        this._animations = [];
+    }
+    get animations() {
+        return this._animations;
+    }
+    /**
+     * Adds a fire animation to the queue.
+     * @param {number} x - The x;
+     * @param {number} y - The y;
+     */
+    addFire(x, y) {
+        let animation = new Animation(x, y, [
+            new Frame([new Target(0, 0, new Tile(255, 1.0))]),
+            new Frame([new Target(0, 0, new Tile(255, 0.9))]),
+            new Frame([new Target(0, 0, new Tile(255, 0.8))]),
+            new Frame([new Target(0, 0, new Tile(255, 0.7))]),
+            new Frame([new Target(0, 0, new Tile(255, 0.6))]),
+            new Frame([new Target(0, 0, new Tile(255, 0.5))]),
+            new Frame([new Target(0, 0, new Tile(255, 0.4))]),
+            new Frame([new Target(0, 0, new Tile(255, 0.3))]),
+            new Frame([new Target(0, 0, new Tile(255, 0.2))]),
+            new Frame([new Target(0, 0, new Tile(255, 0.1))])
+        ]);
+        this._animations.push(animation);
+    }
+}
+/**
  * Class representing a tileset.
  */
 class Tileset {
@@ -2213,41 +2248,6 @@ class Tileset {
     }
 }
 /**
- * Class representing an animator.
- */
-class Animator {
-    /**
-     * Creates an animator.
-     * @return {Animator}
-     */
-    constructor() {
-        this._animations = [];
-    }
-    get animations() {
-        return this._animations;
-    }
-    /**
-     * Adds a fire animation to the queue.
-     * @param {number} x - The x;
-     * @param {number} y - The y;
-     */
-    addFire(x, y) {
-        let animation = new Animation(x, y, [
-            new Frame([new Target(0, 0, new Tile(255, 1.0))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.9))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.8))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.7))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.6))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.5))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.4))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.3))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.2))]),
-            new Frame([new Target(0, 0, new Tile(255, 0.1))])
-        ]);
-        this._animations.push(animation);
-    }
-}
-/**
  * Enum representing an attack roll result.
  */
 var AttackRollResultEnum;
@@ -2281,7 +2281,7 @@ var RaceEnum;
 })(RaceEnum || (RaceEnum = {}));
 /// <reference path="../Class/Character.ts"/>
 /// <reference path="../Engine/Engine.ts"/>
-/// <reference path="../Engine/Tileset.ts"/>
+/// <reference path="../Engine/Tileset/Tileset.ts"/>
 /// <reference path="../Enum/AbilityEnum.ts"/>
 /// <reference path="../Enum/AttackRollResultEnum.ts"/>
 /// <reference path="../Enum/ClassEnum.ts"/>
@@ -2306,7 +2306,7 @@ var RaceEnum;
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
-let tileset = new Tileset('./src/Engine/img/cp437_16x16_black.png', 16, 16);
+let tileset = new Tileset('./src/Engine/Tileset/img/cp437_16x16_black.png', 16, 16);
 let engine = new Engine('game', 64, 48, tileset, 60);
 engine.init();
 engine.start();

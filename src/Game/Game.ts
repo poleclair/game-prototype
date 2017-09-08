@@ -1,7 +1,7 @@
 /// <reference path="../Class/Character.ts"/>
 
 /// <reference path="../Engine/Engine.ts"/>
-/// <reference path="../Engine/Tileset.ts"/>
+/// <reference path="../Engine/Tileset/Tileset.ts"/>
 
 /// <reference path="../Enum/AbilityEnum.ts"/>
 /// <reference path="../Enum/AttackRollResultEnum.ts"/>
@@ -29,7 +29,7 @@
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
-let tileset = new Tileset('./src/Engine/img/cp437_16x16_black.png', 16, 16);
+let tileset = new Tileset('./src/Engine/Tileset/img/cp437_16x16_black.png', 16, 16);
 let engine = new Engine('game', 64, 48, tileset, 60);
 
 engine.init();
