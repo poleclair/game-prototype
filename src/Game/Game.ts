@@ -19,6 +19,10 @@ let engine = new Engine('game', 64, 36, tileset, 60);
 
 engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
 engine.layers.push(new Layer(1, 1, 44, 34, new Tile(10, 15, 1)));
+engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
+engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
+engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
+engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
 
 engine.init(function () {
     // ui
@@ -42,10 +46,21 @@ engine.init(function () {
     engine.start();
 
     setInterval(function () {
-        engine.layers[1].animator.addCircleFadeOut(0, 0, 10, 2);
-        engine.layers[1].animator.addCircleFadeOut(43, 0, 10, 2);
-        engine.layers[1].animator.addCircleFadeOut(0, 33, 10, 2);
-        engine.layers[1].animator.addCircleFadeOut(43, 33, 10, 2);
+        // engine.layers[1].animator.addCircleFadeOut(0, 0, 10, 2);
+        // engine.layers[1].animator.addCircleFadeOut(43, 0, 10, 2);
+        // engine.layers[1].animator.addCircleFadeOut(0, 33, 10, 2);
+        // engine.layers[1].animator.addCircleFadeOut(43, 33, 10, 2);
+        engine.layers[1].animator.addProjectile(0, 0, 43, 0);
+        engine.layers[1].animator.addProjectile(0, 1, 43, 1);
+        engine.layers[1].animator.addProjectile(0, 2, 43, 2);
+        engine.layers[1].animator.addProjectile(0, 3, 43, 3);
+        engine.layers[1].animator.addProjectile(0, 4, 43, 4);
+        engine.layers[1].animator.addProjectile(0, 5, 43, 5);
+        engine.layers[1].animator.addProjectile(0, 6, 43, 6);
+        engine.layers[1].animator.addProjectile(0, 7, 43, 7);
+        engine.layers[1].animator.addProjectile(0, 8, 43, 8);
+        engine.layers[1].animator.addProjectile(0, 9, 43, 9);
+        engine.layers[1].animator.addProjectile(0, 0, 33, 33);
     }, 1000);
 });
 

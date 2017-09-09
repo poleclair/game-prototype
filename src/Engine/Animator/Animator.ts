@@ -17,28 +17,6 @@ class Animator {
     }
 
     /**
-     * Adds a fire animation to the queue.
-     * @param {number} x - The x;
-     * @param {number} y - The y;
-     */
-    public addFire(x: number, y: number) {
-        let animation = new Animation(x, y, [
-            new Frame([new Target(0, 0, new Tile(15, 15, 1.0))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.9))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.8))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.7))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.6))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.5))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.4))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.3))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.2))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.1))])
-        ]);
-
-        this._animations.push(animation);
-    }
-
-    /**
      * Adds a circle fade out animation to the queue.
      * @param {number} x - The x;
      * @param {number} y - The y;
@@ -60,6 +38,48 @@ class Animator {
             }
 
             animation.frames.push(frame);
+        }
+
+        this._animations.push(animation);
+    }
+
+    /**
+     * Adds a circle fade out animation to the queue.
+     * @param {number} x0 - The x0;
+     * @param {number} y0 - The y0;
+     * @param {number} x1 - The x1;
+     * @param {number} y1 - The y1;
+     */
+    public addProjectile(x0: number, y0: number, x1: number, y1: number) {
+        let animation = new Animation(x0, y0, []);
+
+        let dx = x1 - x0;
+        let dy = y1 - y0;
+        let nx = Math.abs(dx);
+        let ny = Math.abs(dy);
+        let sign_x = dx > 0 ? 1 : -1;
+        let sign_y = dy > 0 ? 1 : -1;
+
+        let cx = x0;
+        let cy = x0;
+
+        animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
+
+        for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
+            if ((0.5 + ix) / nx == (0.5 + iy) / ny) {
+                cx += sign_x;
+                cy += sign_y;
+                ix++;
+                iy++;
+            } else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
+                cx += sign_x;
+                ix++;
+            } else {
+                cy += sign_y;
+                iy++;
+            }
+
+            animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
         }
 
         this._animations.push(animation);

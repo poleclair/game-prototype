@@ -186,7 +186,7 @@ class Engine {
                         }
                     }
                 } else {
-                    this.layers[l].animator.animations.pop();
+                    this.layers[l].animator.animations.splice(i, 1);
                 }
             }
         }

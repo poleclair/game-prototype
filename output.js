@@ -1984,7 +1984,7 @@ class Engine {
                     }
                 }
                 else {
-                    this.layers[l].animator.animations.pop();
+                    this.layers[l].animator.animations.splice(i, 1);
                 }
             }
         }
@@ -2098,26 +2098,6 @@ class Animator {
         return this._animations;
     }
     /**
-     * Adds a fire animation to the queue.
-     * @param {number} x - The x;
-     * @param {number} y - The y;
-     */
-    addFire(x, y) {
-        let animation = new Animation(x, y, [
-            new Frame([new Target(0, 0, new Tile(15, 15, 1.0))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.9))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.8))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.7))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.6))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.5))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.4))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.3))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.2))]),
-            new Frame([new Target(0, 0, new Tile(15, 15, 0.1))])
-        ]);
-        this._animations.push(animation);
-    }
-    /**
      * Adds a circle fade out animation to the queue.
      * @param {number} x - The x;
      * @param {number} y - The y;
@@ -2136,6 +2116,43 @@ class Animator {
                 frame.targets.push(new Target(0 - j, 0, new Tile(15, 15, 1 - (alpha * i))));
             }
             animation.frames.push(frame);
+        }
+        this._animations.push(animation);
+    }
+    /**
+     * Adds a circle fade out animation to the queue.
+     * @param {number} x0 - The x0;
+     * @param {number} y0 - The y0;
+     * @param {number} x1 - The x1;
+     * @param {number} y1 - The y1;
+     */
+    addProjectile(x0, y0, x1, y1) {
+        let animation = new Animation(x0, y0, []);
+        let dx = x1 - x0;
+        let dy = y1 - y0;
+        let nx = Math.abs(dx);
+        let ny = Math.abs(dy);
+        let sign_x = dx > 0 ? 1 : -1;
+        let sign_y = dy > 0 ? 1 : -1;
+        let cx = x0;
+        let cy = x0;
+        animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
+        for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
+            if ((0.5 + ix) / nx == (0.5 + iy) / ny) {
+                cx += sign_x;
+                cy += sign_y;
+                ix++;
+                iy++;
+            }
+            else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
+                cx += sign_x;
+                ix++;
+            }
+            else {
+                cy += sign_y;
+                iy++;
+            }
+            animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
         }
         this._animations.push(animation);
     }
@@ -2250,6 +2267,10 @@ let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
 let engine = new Engine('game', 64, 36, tileset, 60);
 engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
 engine.layers.push(new Layer(1, 1, 44, 34, new Tile(10, 15, 1)));
+engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
+engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
+engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
+engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
 engine.init(function () {
     // ui
     for (let i = 1; i < engine.width - 1; i++) {
@@ -2269,10 +2290,21 @@ engine.init(function () {
     engine.layers[0].tiles[engine.width - 1][engine.height - 1] = new Tile(9, 13, 1);
     engine.start();
     setInterval(function () {
-        engine.layers[1].animator.addCircleFadeOut(0, 0, 10, 2);
-        engine.layers[1].animator.addCircleFadeOut(43, 0, 10, 2);
-        engine.layers[1].animator.addCircleFadeOut(0, 33, 10, 2);
-        engine.layers[1].animator.addCircleFadeOut(43, 33, 10, 2);
+        // engine.layers[1].animator.addCircleFadeOut(0, 0, 10, 2);
+        // engine.layers[1].animator.addCircleFadeOut(43, 0, 10, 2);
+        // engine.layers[1].animator.addCircleFadeOut(0, 33, 10, 2);
+        // engine.layers[1].animator.addCircleFadeOut(43, 33, 10, 2);
+        engine.layers[1].animator.addProjectile(0, 0, 43, 0);
+        engine.layers[1].animator.addProjectile(0, 1, 43, 1);
+        engine.layers[1].animator.addProjectile(0, 2, 43, 2);
+        engine.layers[1].animator.addProjectile(0, 3, 43, 3);
+        engine.layers[1].animator.addProjectile(0, 4, 43, 4);
+        engine.layers[1].animator.addProjectile(0, 5, 43, 5);
+        engine.layers[1].animator.addProjectile(0, 6, 43, 6);
+        engine.layers[1].animator.addProjectile(0, 7, 43, 7);
+        engine.layers[1].animator.addProjectile(0, 8, 43, 8);
+        engine.layers[1].animator.addProjectile(0, 9, 43, 9);
+        engine.layers[1].animator.addProjectile(0, 0, 33, 33);
     }, 1000);
 });
 /*
