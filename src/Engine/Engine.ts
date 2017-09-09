@@ -17,7 +17,7 @@ class Engine {
     private _context: CanvasRenderingContext2D;
     private _animator: Animator;
     private _control: Control;
-    private _matrix: Array<Array<Tile>>;
+    private _layers: Array<Layer>;
     private _pid: number;
 
     /**
@@ -39,15 +39,14 @@ class Engine {
 
         this._canvas = document.createElement('canvas');
         this._canvas.id = this.name;
-        // this._canvas.style.cursor = 'none';
-        this._canvas.width = this.width * this.tileset.tileWidth;
-        this._canvas.height = this.height * this.tileset.tileHeight;
+        this._canvas.width = this._width * this._tileset.tileWidth;
+        this._canvas.height = this._height * this._tileset.tileHeight;
 
         this._context = this._canvas.getContext('2d');
 
         this._animator = new Animator();
         this._control = new Control();
-        this._matrix = [];
+        this._layers = [];
     }
 
     public get name() {
@@ -86,8 +85,8 @@ class Engine {
         return this._control;
     }
 
-    public get matrix() {
-        return this._matrix;
+    public get layers() {
+        return this._layers;
     }
 
     public get pid() {
@@ -101,7 +100,7 @@ class Engine {
     /**
      * Initializes the engine.
      */
-    public init() {
+    public init(callback) {
         window.onload = function () {
             document.body.appendChild(this._canvas);
 
@@ -112,13 +111,7 @@ class Engine {
             this.canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
             this.canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
 
-            for (let x = 0; x < this.width; x++) {
-                this.matrix[x] = [];
-
-                for (let y = 0; y < this.height; y++) {
-                    this.matrix[x][y] = new Tile(0, 0, 1);
-                }
-            }
+            callback();
         }.bind(this);
     }
 
@@ -150,48 +143,51 @@ class Engine {
      * Draws the engine.
      */
     public draw() {
-        // grid layer
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                this._context.globalAlpha = this.matrix[x][y].alpha;
-                this._context.drawImage(
-                    this.tileset.image,
-                    this.tileset.tileWidth * this.matrix[x][y].x,
-                    this.tileset.tileHeight * this.matrix[x][y].y,
-                    this.tileset.tileWidth,
-                    this.tileset.tileHeight,
-                    this.tileset.tileWidth * x,
-                    this.tileset.tileHeight * y,
-                    this.tileset.tileWidth,
-                    this.tileset.tileHeight
-                );
-            }
-        }
-
-        // animation layer
-        for (let i = 0; i < this.animator.animations.length; i++) {
-            if (this.animator.animations[i].frames.length > 0) {
-                let frame = this.animator.animations[i].frames.shift();
-
-                for (let j = frame.targets.length; j > 0; j--) {
-                    let target = frame.targets.shift();
-
-                    this._context.globalAlpha = target.tile.alpha;
+        for (let l = 0; l < this.layers.length; l++) {
+            for (let x = 0; x < this.layers[l].width; x++) {
+                for (let y = 0; y < this.layers[l].height; y++) {
+                    this._context.globalAlpha = this.layers[l].tiles[x][y].alpha;
                     this._context.drawImage(
                         this.tileset.image,
-                        this.tileset.tileWidth * target.tile.x,
-                        this.tileset.tileHeight * target.tile.y,
+                        this.tileset.tileWidth * this.layers[l].tiles[x][y].x,
+                        this.tileset.tileHeight * this.layers[l].tiles[x][y].y,
                         this.tileset.tileWidth,
                         this.tileset.tileHeight,
-                        this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset),
-                        this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset),
+                        (this.tileset.tileWidth * x) + (this.tileset.tileWidth * this.layers[l].x),
+                        (this.tileset.tileHeight * y) + (this.tileset.tileHeight * this.layers[l].y),
                         this.tileset.tileWidth,
                         this.tileset.tileHeight
                     );
                 }
-            } else {
-                this._animator.animations.splice(i, 1);
-                i--;
+            }
+            for (let i = this.layers[l].animator.animations.length - 1; i >= 0; i--) {
+                if (this.layers[l].animator.animations[i].frames.length > 0) {
+                    let frame = this.layers[l].animator.animations[i].frames.shift();
+
+                    for (let j = frame.targets.length; j > 0; j--) {
+                        let target = frame.targets.shift();
+
+                        if (this.layers[l].animator.animations[i].x + target.xOffset >= 0 &&
+                            this.layers[l].animator.animations[i].x + target.xOffset < this.layers[l].width &&
+                            this.layers[l].animator.animations[i].y + target.yOffset >= 0 &&
+                            this.layers[l].animator.animations[i].y + target.yOffset < this.layers[l].height) {
+                            this._context.globalAlpha = target.tile.alpha;
+                            this._context.drawImage(
+                                this.tileset.image,
+                                this.tileset.tileWidth * target.tile.x,
+                                this.tileset.tileHeight * target.tile.y,
+                                this.tileset.tileWidth,
+                                this.tileset.tileHeight,
+                                (this.tileset.tileWidth * (this.layers[l].animator.animations[i].x + target.xOffset)) + (this.tileset.tileWidth * this.layers[l].x),
+                                (this.tileset.tileHeight * (this.layers[l].animator.animations[i].y + target.yOffset)) + (this.tileset.tileHeight * this.layers[l].y),
+                                this.tileset.tileWidth,
+                                this.tileset.tileHeight
+                            );
+                        }
+                    }
+                } else {
+                    this.layers[l].animator.animations.pop();
+                }
             }
         }
 

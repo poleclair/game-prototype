@@ -1880,13 +1880,12 @@ class Engine {
         this._fps = 1000 / fps;
         this._canvas = document.createElement('canvas');
         this._canvas.id = this.name;
-        // this._canvas.style.cursor = 'none';
-        this._canvas.width = this.width * this.tileset.tileWidth;
-        this._canvas.height = this.height * this.tileset.tileHeight;
+        this._canvas.width = this._width * this._tileset.tileWidth;
+        this._canvas.height = this._height * this._tileset.tileHeight;
         this._context = this._canvas.getContext('2d');
         this._animator = new Animator();
         this._control = new Control();
-        this._matrix = [];
+        this._layers = [];
     }
     get name() {
         return this._name;
@@ -1915,8 +1914,8 @@ class Engine {
     get control() {
         return this._control;
     }
-    get matrix() {
-        return this._matrix;
+    get layers() {
+        return this._layers;
     }
     get pid() {
         return this._pid;
@@ -1927,7 +1926,7 @@ class Engine {
     /**
      * Initializes the engine.
      */
-    init() {
+    init(callback) {
         window.onload = function () {
             document.body.appendChild(this._canvas);
             document.addEventListener('keydown', this.propagateKeyDown.bind(this));
@@ -1935,12 +1934,7 @@ class Engine {
             this.canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
             this.canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
             this.canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
-            for (let x = 0; x < this.width; x++) {
-                this.matrix[x] = [];
-                for (let y = 0; y < this.height; y++) {
-                    this.matrix[x][y] = new Tile(0, 0, 1);
-                }
-            }
+            callback();
         }.bind(this);
     }
     /**
@@ -1968,26 +1962,30 @@ class Engine {
      * Draws the engine.
      */
     draw() {
-        // grid layer
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                this._context.globalAlpha = this.matrix[x][y].alpha;
-                this._context.drawImage(this.tileset.image, this.tileset.tileWidth * this.matrix[x][y].x, this.tileset.tileHeight * this.matrix[x][y].y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * x, this.tileset.tileHeight * y, this.tileset.tileWidth, this.tileset.tileHeight);
-            }
-        }
-        // animation layer
-        for (let i = 0; i < this.animator.animations.length; i++) {
-            if (this.animator.animations[i].frames.length > 0) {
-                let frame = this.animator.animations[i].frames.shift();
-                for (let j = frame.targets.length; j > 0; j--) {
-                    let target = frame.targets.shift();
-                    this._context.globalAlpha = target.tile.alpha;
-                    this._context.drawImage(this.tileset.image, this.tileset.tileWidth * target.tile.x, this.tileset.tileHeight * target.tile.y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset), this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset), this.tileset.tileWidth, this.tileset.tileHeight);
+        for (let l = 0; l < this.layers.length; l++) {
+            for (let x = 0; x < this.layers[l].width; x++) {
+                for (let y = 0; y < this.layers[l].height; y++) {
+                    this._context.globalAlpha = this.layers[l].tiles[x][y].alpha;
+                    this._context.drawImage(this.tileset.image, this.tileset.tileWidth * this.layers[l].tiles[x][y].x, this.tileset.tileHeight * this.layers[l].tiles[x][y].y, this.tileset.tileWidth, this.tileset.tileHeight, (this.tileset.tileWidth * x) + (this.tileset.tileWidth * this.layers[l].x), (this.tileset.tileHeight * y) + (this.tileset.tileHeight * this.layers[l].y), this.tileset.tileWidth, this.tileset.tileHeight);
                 }
             }
-            else {
-                this._animator.animations.splice(i, 1);
-                i--;
+            for (let i = this.layers[l].animator.animations.length - 1; i >= 0; i--) {
+                if (this.layers[l].animator.animations[i].frames.length > 0) {
+                    let frame = this.layers[l].animator.animations[i].frames.shift();
+                    for (let j = frame.targets.length; j > 0; j--) {
+                        let target = frame.targets.shift();
+                        if (this.layers[l].animator.animations[i].x + target.xOffset >= 0 &&
+                            this.layers[l].animator.animations[i].x + target.xOffset < this.layers[l].width &&
+                            this.layers[l].animator.animations[i].y + target.yOffset >= 0 &&
+                            this.layers[l].animator.animations[i].y + target.yOffset < this.layers[l].height) {
+                            this._context.globalAlpha = target.tile.alpha;
+                            this._context.drawImage(this.tileset.image, this.tileset.tileWidth * target.tile.x, this.tileset.tileHeight * target.tile.y, this.tileset.tileWidth, this.tileset.tileHeight, (this.tileset.tileWidth * (this.layers[l].animator.animations[i].x + target.xOffset)) + (this.tileset.tileWidth * this.layers[l].x), (this.tileset.tileHeight * (this.layers[l].animator.animations[i].y + target.yOffset)) + (this.tileset.tileHeight * this.layers[l].y), this.tileset.tileWidth, this.tileset.tileHeight);
+                        }
+                    }
+                }
+                else {
+                    this.layers[l].animator.animations.pop();
+                }
             }
         }
         // mouse layer
@@ -2047,22 +2045,22 @@ class Layer {
      * Creates a layer.
      * @param  {number} x - The x.
      * @param  {number} y - The y.
-     * @param  {number} z - The y.
      * @param  {number} width - The width.
      * @param  {number} height - The height.
+     * @param  {number} tile - The filling tile.
      * @return {Layer}
      */
-    constructor(x, y, z, width, height) {
+    constructor(x, y, width, height, tile) {
         this._x = x;
         this._y = y;
-        this._z = z;
         this._width = width;
         this._height = height;
-        this._values = [];
+        this._animator = new Animator();
+        this._tiles = [];
         for (let x = 0; x < width; x++) {
-            this._values[x] = [];
+            this._tiles[x] = [];
             for (let y = 0; y < height; y++) {
-                this._values[x][y] = 0;
+                this._tiles[x][y] = tile;
             }
         }
     }
@@ -2072,17 +2070,17 @@ class Layer {
     get y() {
         return this._y;
     }
-    get z() {
-        return this._z;
-    }
     get width() {
         return this._width;
     }
     get height() {
         return this._height;
     }
-    get values() {
-        return this._values;
+    get animator() {
+        return this._animator;
+    }
+    get tiles() {
+        return this._tiles;
     }
 }
 /**
@@ -2248,6 +2246,35 @@ var RaceEnum;
 /// <reference path="../Die.ts"/>
 /// <reference path="../Logger.ts"/>
 /// <reference path="../Ruleset.ts"/>
+let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
+let engine = new Engine('game', 64, 36, tileset, 60);
+engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
+engine.layers.push(new Layer(1, 1, 44, 34, new Tile(10, 15, 1)));
+engine.init(function () {
+    // ui
+    for (let i = 1; i < engine.width - 1; i++) {
+        engine.layers[0].tiles[i][0] = new Tile(4, 12, 1);
+        engine.layers[0].tiles[i][engine.height - 1] = new Tile(4, 12, 1);
+    }
+    engine.layers[0].tiles[0][0] = new Tile(10, 13, 1);
+    engine.layers[0].tiles[engine.width - 1][0] = new Tile(15, 11, 1);
+    for (let i = 1; i < engine.height - 1; i++) {
+        engine.layers[0].tiles[0][i] = new Tile(3, 11, 1);
+        engine.layers[0].tiles[45][i] = new Tile(3, 11, 1);
+        engine.layers[0].tiles[engine.width - 1][i] = new Tile(3, 11, 1);
+    }
+    engine.layers[0].tiles[0][engine.height - 1] = new Tile(0, 12, 1);
+    engine.layers[0].tiles[45][0] = new Tile(2, 12, 1);
+    engine.layers[0].tiles[45][engine.height - 1] = new Tile(1, 12, 1);
+    engine.layers[0].tiles[engine.width - 1][engine.height - 1] = new Tile(9, 13, 1);
+    engine.start();
+    setInterval(function () {
+        engine.layers[1].animator.addCircleFadeOut(0, 0, 10, 2);
+        engine.layers[1].animator.addCircleFadeOut(43, 0, 10, 2);
+        engine.layers[1].animator.addCircleFadeOut(0, 33, 10, 2);
+        engine.layers[1].animator.addCircleFadeOut(43, 33, 10, 2);
+    }, 1000);
+});
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
 
@@ -2263,13 +2290,6 @@ var RaceEnum;
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
-let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
-let engine = new Engine('game', 64, 48, tileset, 60);
-engine.init();
-engine.start();
-setInterval(function () {
-    engine.animator.addCircleFadeOut(10, 10, 10, 2);
-}, 1000);
 let abilityScores1 = [16, 14, 14, 10, 14, 11];
 let skillProficiencies1 = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
 let human = new Character("Human", 1, RaceEnum.HUMAN, ClassEnum.FIGHTER, abilityScores1, skillProficiencies1);
