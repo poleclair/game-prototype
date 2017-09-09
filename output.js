@@ -2172,24 +2172,34 @@ class Tile {
         this._x = x;
         this._y = y;
         this._alpha = alpha;
+        this._dirty = true;
     }
     get x() {
         return this._x;
     }
     set x(value) {
         this._x = value;
+        this.dirty = true;
     }
     get y() {
         return this._y;
     }
     set y(value) {
         this._y = value;
+        this.dirty = true;
     }
     get alpha() {
         return this._alpha;
     }
     set alpha(value) {
         this._alpha = value;
+        this.dirty = true;
+    }
+    get dirty() {
+        return this._dirty;
+    }
+    set dirty(value) {
+        this._dirty = value;
     }
 }
 /**
@@ -2264,7 +2274,7 @@ var RaceEnum;
 /// <reference path="../Logger.ts"/>
 /// <reference path="../Ruleset.ts"/>
 let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
-let engine = new Engine('game', 64, 36, tileset, 60);
+let engine = new Engine('game', 64, 36, tileset, 30);
 engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
 engine.layers.push(new Layer(1, 1, 44, 34, new Tile(10, 15, 1)));
 engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
