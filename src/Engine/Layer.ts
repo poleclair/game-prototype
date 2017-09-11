@@ -30,7 +30,7 @@ class Layer {
             this._tiles[x] = [];
 
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = tile;
+                this._tiles[x][y] = new Tile(tile.x, tile.y, tile.alpha);
             }
         }
     }

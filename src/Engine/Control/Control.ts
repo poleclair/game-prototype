@@ -104,8 +104,6 @@ class Control {
      * Triggers mouse down.
      */
     public mouseDown(event: MouseEvent) {
-        event.preventDefault();
-
         this.xDown = event.layerX;
         this.yDown = event.layerY;
     }
@@ -114,8 +112,6 @@ class Control {
      * Triggers mouse up.
      */
     public mouseUp(event: MouseEvent) {
-        event.preventDefault();
-
         this.xUp = event.layerX;
         this.yUp = event.layerY;
     }
@@ -124,8 +120,6 @@ class Control {
      * Triggers mouse move.
      */
     public mouseMove(event: MouseEvent) {
-        event.preventDefault();
-
         this.x = event.layerX;
         this.y = event.layerY;
     }
@@ -134,8 +128,6 @@ class Control {
      * Triggers context menu.
      */
     public contextMenu(event: MouseEvent) {
-        event.preventDefault();
-
         this.xContextMenu = event.layerX;
         this.yContextMenu = event.layerY;
     }

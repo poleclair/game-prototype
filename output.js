@@ -1819,7 +1819,6 @@ class Control {
      * Triggers mouse down.
      */
     mouseDown(event) {
-        event.preventDefault();
         this.xDown = event.layerX;
         this.yDown = event.layerY;
     }
@@ -1827,7 +1826,6 @@ class Control {
      * Triggers mouse up.
      */
     mouseUp(event) {
-        event.preventDefault();
         this.xUp = event.layerX;
         this.yUp = event.layerY;
     }
@@ -1835,7 +1833,6 @@ class Control {
      * Triggers mouse move.
      */
     mouseMove(event) {
-        event.preventDefault();
         this.x = event.layerX;
         this.y = event.layerY;
     }
@@ -1843,7 +1840,6 @@ class Control {
      * Triggers context menu.
      */
     contextMenu(event) {
-        event.preventDefault();
         this.xContextMenu = event.layerX;
         this.yContextMenu = event.layerY;
     }
@@ -2060,7 +2056,7 @@ class Layer {
         for (let x = 0; x < width; x++) {
             this._tiles[x] = [];
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = tile;
+                this._tiles[x][y] = new Tile(tile.x, tile.y, tile.alpha);
             }
         }
     }
