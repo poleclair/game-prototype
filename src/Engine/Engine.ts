@@ -2,7 +2,7 @@
 /// <reference path="Animator/Frame.ts"/>
 /// <reference path="Animator/Target.ts"/>
 
-/// <reference path="Control.ts"/>
+/// <reference path="Control/Control.ts"/>
 
 /**
  * Class representing an engine.

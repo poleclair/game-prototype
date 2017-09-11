@@ -1675,6 +1675,74 @@ class Character {
     }
 }
 /**
+ * Class representing an animation.
+ */
+class Animation {
+    /**
+     * Creates an animation.
+     * @param {number} x - The x.
+     * @param {number} y - The y.
+     * @param {Array<Frame>} frames - The frames.
+     * @return {Animation}
+     */
+    constructor(x, y, frames) {
+        this._x = x;
+        this._y = y;
+        this._frames = frames;
+    }
+    get x() {
+        return this._x;
+    }
+    get y() {
+        return this._y;
+    }
+    get frames() {
+        return this._frames;
+    }
+}
+/**
+ * Class representing a frame.
+ */
+class Frame {
+    /**
+     * Creates a frame.
+     * @param {Array<Target>} targets - The targets
+     * @return {Frame}
+     */
+    constructor(targets) {
+        this._targets = targets;
+    }
+    get targets() {
+        return this._targets;
+    }
+}
+/**
+ * Class representing a target.
+ */
+class Target {
+    /**
+     * Creates a target.
+     * @param  {number} xOffset - The x offset.
+     * @param  {number} yOffset - The y offset.
+     * @param  {Tile} tile - The tile.
+     * @return {Target}
+     */
+    constructor(xOffset, yOffset, tile) {
+        this._xOffset = xOffset;
+        this._yOffset = yOffset;
+        this._tile = tile;
+    }
+    get xOffset() {
+        return this._xOffset;
+    }
+    get yOffset() {
+        return this._yOffset;
+    }
+    get tile() {
+        return this._tile;
+    }
+}
+/**
  * Class representing a control.
  */
 class Control {
@@ -1786,78 +1854,10 @@ class Control {
         this.kKeyDown = event.keyCode;
     }
 }
-/**
- * Class representing an animation.
- */
-class Animation {
-    /**
-     * Creates an animation.
-     * @param {number} x - The x.
-     * @param {number} y - The y.
-     * @param {Array<Frame>} frames - The frames.
-     * @return {Animation}
-     */
-    constructor(x, y, frames) {
-        this._x = x;
-        this._y = y;
-        this._frames = frames;
-    }
-    get x() {
-        return this._x;
-    }
-    get y() {
-        return this._y;
-    }
-    get frames() {
-        return this._frames;
-    }
-}
-/**
- * Class representing a frame.
- */
-class Frame {
-    /**
-     * Creates a frame.
-     * @param {Array<Target>} targets - The targets
-     * @return {Frame}
-     */
-    constructor(targets) {
-        this._targets = targets;
-    }
-    get targets() {
-        return this._targets;
-    }
-}
-/**
- * Class representing a target.
- */
-class Target {
-    /**
-     * Creates a target.
-     * @param  {number} xOffset - The x offset.
-     * @param  {number} yOffset - The y offset.
-     * @param  {Tile} tile - The tile.
-     * @return {Target}
-     */
-    constructor(xOffset, yOffset, tile) {
-        this._xOffset = xOffset;
-        this._yOffset = yOffset;
-        this._tile = tile;
-    }
-    get xOffset() {
-        return this._xOffset;
-    }
-    get yOffset() {
-        return this._yOffset;
-    }
-    get tile() {
-        return this._tile;
-    }
-}
 /// <reference path="Animator/Animation.ts"/>
 /// <reference path="Animator/Frame.ts"/>
 /// <reference path="Animator/Target.ts"/>
-/// <reference path="Control.ts"/>
+/// <reference path="Control/Control.ts"/>
 /**
  * Class representing an engine.
  */
