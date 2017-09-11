@@ -1868,12 +1868,11 @@ class Engine {
      * @param {number} fps - The frame per second.
      * @return {Engine}
      */
-    constructor(name, width, height, tileset, fps) {
+    constructor(name, width, height, tileset) {
         this._name = name;
         this._width = width;
         this._height = height;
         this._tileset = tileset;
-        this._fps = 1000 / fps;
         this._canvas = document.createElement('canvas');
         this._canvas.id = this.name;
         this._canvas.width = this._width * this._tileset.tileWidth;
@@ -1891,9 +1890,6 @@ class Engine {
     }
     get height() {
         return this._height;
-    }
-    get fps() {
-        return this._fps;
     }
     get tileset() {
         return this._tileset;
@@ -1937,10 +1933,10 @@ class Engine {
      * Starts the engine.
      */
     start() {
-        this.pid = setInterval(function () {
+        this.pid = requestAnimationFrame(function () {
             this.clear();
             this.draw();
-        }.bind(this), this.fps);
+        }.bind(this));
     }
     /**
      * Stops the engine.
@@ -2270,7 +2266,7 @@ var RaceEnum;
 /// <reference path="../Logger.ts"/>
 /// <reference path="../Ruleset.ts"/>
 let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
-let engine = new Engine('game', 64, 36, tileset, 30);
+let engine = new Engine('game', 64, 36, tileset);
 engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
 engine.layers.push(new Layer(1, 1, 44, 34, new Tile(10, 15, 1)));
 engine.init(function () {

@@ -15,7 +15,7 @@
 /// <reference path="../Ruleset.ts"/>
 
 let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
-let engine = new Engine('game', 64, 36, tileset, 30);
+let engine = new Engine('game', 64, 36, tileset);
 
 engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
 engine.layers.push(new Layer(1, 1, 44, 34, new Tile(10, 15, 1)));

@@ -12,7 +12,6 @@ class Engine {
     private _width: number;
     private _height: number;
     private _tileset: Tileset;
-    private _fps: number;
     private _canvas: HTMLCanvasElement;
     private _context: CanvasRenderingContext2D;
     private _animator: Animator;
@@ -30,12 +29,11 @@ class Engine {
      * @param {number} fps - The frame per second.
      * @return {Engine}
      */
-    public constructor(name: string, width: number, height: number, tileset: Tileset, fps: number) {
+    public constructor(name: string, width: number, height: number, tileset: Tileset) {
         this._name = name;
         this._width = width;
         this._height = height;
         this._tileset = tileset;
-        this._fps = 1000 / fps;
 
         this._canvas = document.createElement('canvas');
         this._canvas.id = this.name;
@@ -59,10 +57,6 @@ class Engine {
 
     public get height() {
         return this._height;
-    }
-
-    public get fps() {
-        return this._fps;
     }
 
     public get tileset() {
@@ -119,10 +113,10 @@ class Engine {
      * Starts the engine.
      */
     public start() {
-        this.pid = setInterval(function () {
+        this.pid = requestAnimationFrame(function () {
             this.clear();
             this.draw();
-        }.bind(this), this.fps);
+        }.bind(this));
     }
 
     /**
