@@ -15,10 +15,12 @@
 /// <reference path="../Ruleset.ts"/>
 
 let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
-let engine = new Engine('game', 64, 36, tileset);
+let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight);
+let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, tileset);
+let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, tileset);
 
-engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
-engine.layers.push(new Layer(1, 1, 44, 34, new Tile(10, 15, 1)));
+engine.layers.push(uiLayer);
+engine.layers.push(mapLayer);
 
 engine.init(function () {
     // // ui

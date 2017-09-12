@@ -1675,74 +1675,6 @@ class Character {
     }
 }
 /**
- * Class representing an animation.
- */
-class Animation {
-    /**
-     * Creates an animation.
-     * @param {number} x - The x.
-     * @param {number} y - The y.
-     * @param {Array<Frame>} frames - The frames.
-     * @return {Animation}
-     */
-    constructor(x, y, frames) {
-        this._x = x;
-        this._y = y;
-        this._frames = frames;
-    }
-    get x() {
-        return this._x;
-    }
-    get y() {
-        return this._y;
-    }
-    get frames() {
-        return this._frames;
-    }
-}
-/**
- * Class representing a frame.
- */
-class Frame {
-    /**
-     * Creates a frame.
-     * @param {Array<Target>} targets - The targets
-     * @return {Frame}
-     */
-    constructor(targets) {
-        this._targets = targets;
-    }
-    get targets() {
-        return this._targets;
-    }
-}
-/**
- * Class representing a target.
- */
-class Target {
-    /**
-     * Creates a target.
-     * @param  {number} xOffset - The x offset.
-     * @param  {number} yOffset - The y offset.
-     * @param  {Tile} tile - The tile.
-     * @return {Target}
-     */
-    constructor(xOffset, yOffset, tile) {
-        this._xOffset = xOffset;
-        this._yOffset = yOffset;
-        this._tile = tile;
-    }
-    get xOffset() {
-        return this._xOffset;
-    }
-    get yOffset() {
-        return this._yOffset;
-    }
-    get tile() {
-        return this._tile;
-    }
-}
-/**
  * Class representing a control.
  */
 class Control {
@@ -1850,9 +1782,6 @@ class Control {
         this.kKeyDown = event.keyCode;
     }
 }
-/// <reference path="Animator/Animation.ts"/>
-/// <reference path="Animator/Frame.ts"/>
-/// <reference path="Animator/Target.ts"/>
 /// <reference path="Control/Control.ts"/>
 /**
  * Class representing an engine.
@@ -1861,37 +1790,31 @@ class Engine {
     /**
      * Creates an engine.
      * @constructor
-     * @param {string} name - The name.
+     * @param {string} id - The id.
      * @param {number} width - The width.
      * @param {number} height - The width.
-     * @param {Tileset} tileset - The tileset.
-     * @param {number} fps - The frame per second.
      * @return {Engine}
      */
-    constructor(name, width, height, tileset) {
-        this._name = name;
+    constructor(id, width, height) {
+        this._id = id;
         this._width = width;
         this._height = height;
-        this._tileset = tileset;
-        // this._canvas = document.createElement('canvas');
-        // this._canvas.id = this.name;
-        // this._canvas.width = this._width * this._tileset.tileWidth;
-        // this._canvas.height = this._height * this._tileset.tileHeight;
-        // this._context = this._canvas.getContext('2d');
-        this._control = new Control();
         this._layers = [];
+        this._control = new Control();
+        this._container = document.createElement('div');
+        this._container.id = id;
+        this._container.style.width = width + 'px';
+        this._container.style.height = height + 'px';
+        this._container.style.position = 'relative';
     }
-    get name() {
-        return this._name;
+    get id() {
+        return this._id;
     }
     get width() {
         return this._width;
     }
     get height() {
         return this._height;
-    }
-    get tileset() {
-        return this._tileset;
     }
     get container() {
         return this._container;
@@ -1913,24 +1836,15 @@ class Engine {
      */
     init(callback) {
         window.onload = function () {
-            this.container = document.createElement('div');
-            this.container.id = this.name;
-            this.container.style.width = (this._width * this._tileset.tileWidth) + 'px';
-            this.container.style.height = (this._height * this._tileset.tileHeight) + 'px';
-            document.body.appendChild(this._container);
-            this.layers.forEach(element => {
-                // this._canvas = document.createElement('canvas');
-                // this._canvas.id = this.name;
-                // this._canvas.width = this._width * this._tileset.tileWidth;
-                // this._canvas.height = this._height * this._tileset.tileHeight;
-                // this._context = this._canvas.getContext('2d');
+            this.layers.forEach(layer => {
+                this.container.appendChild(layer.canvas);
             });
-            // document.body.appendChild(this._canvas);
-            // document.addEventListener('keydown', this.propagateKeyDown.bind(this));
-            // this.canvas.addEventListener('mousedown', this.propagateMouseDown.bind(this));
-            // this.canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
-            // this.canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
-            // this.canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
+            document.body.appendChild(this.container);
+            document.addEventListener('keydown', this.propagateKeyDown.bind(this));
+            this.container.addEventListener('mousedown', this.propagateMouseDown.bind(this));
+            this.container.addEventListener('mouseup', this.propagateMouseUp.bind(this));
+            this.container.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
+            this.container.addEventListener('mousemove', this.propagateMouseMove.bind(this));
             callback();
         }.bind(this);
     }
@@ -1944,8 +1858,8 @@ class Engine {
      * Updates the engine.
      */
     update() {
-        this.clear();
-        this.draw();
+        // this.clear();
+        // this.draw();
         this.pid = requestAnimationFrame(this.update.bind(this));
     }
     /**
@@ -1953,56 +1867,6 @@ class Engine {
      */
     stop() {
         cancelAnimationFrame(this.pid);
-    }
-    /**
-     * Clears the engine.
-     */
-    clear() {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-    /**
-     * Draws the engine.
-     */
-    draw() {
-        for (let l = 0; l < this.layers.length; l++) {
-            for (let x = 0; x < this.layers[l].width; x++) {
-                for (let y = 0; y < this.layers[l].height; y++) {
-                    this._context.globalAlpha = this.layers[l].tiles[x][y].alpha;
-                    this._context.drawImage(this.tileset.image, this.tileset.tileWidth * this.layers[l].tiles[x][y].x, this.tileset.tileHeight * this.layers[l].tiles[x][y].y, this.tileset.tileWidth, this.tileset.tileHeight, (this.tileset.tileWidth * x) + (this.tileset.tileWidth * this.layers[l].x), (this.tileset.tileHeight * y) + (this.tileset.tileHeight * this.layers[l].y), this.tileset.tileWidth, this.tileset.tileHeight);
-                }
-            }
-            for (let i = this.layers[l].animator.animations.length - 1; i >= 0; i--) {
-                if (this.layers[l].animator.animations[i].frames.length > 0) {
-                    let frame = this.layers[l].animator.animations[i].frames.shift();
-                    for (let j = frame.targets.length; j > 0; j--) {
-                        let target = frame.targets.shift();
-                        if (this.layers[l].animator.animations[i].x + target.xOffset >= 0 &&
-                            this.layers[l].animator.animations[i].x + target.xOffset < this.layers[l].width &&
-                            this.layers[l].animator.animations[i].y + target.yOffset >= 0 &&
-                            this.layers[l].animator.animations[i].y + target.yOffset < this.layers[l].height) {
-                            this._context.globalAlpha = target.tile.alpha;
-                            this._context.drawImage(this.tileset.image, this.tileset.tileWidth * target.tile.x, this.tileset.tileHeight * target.tile.y, this.tileset.tileWidth, this.tileset.tileHeight, (this.tileset.tileWidth * (this.layers[l].animator.animations[i].x + target.xOffset)) + (this.tileset.tileWidth * this.layers[l].x), (this.tileset.tileHeight * (this.layers[l].animator.animations[i].y + target.yOffset)) + (this.tileset.tileHeight * this.layers[l].y), this.tileset.tileWidth, this.tileset.tileHeight);
-                        }
-                    }
-                }
-                else {
-                    this.layers[l].animator.animations.splice(i, 1);
-                }
-            }
-        }
-        // mouse layer
-        // this.context.globalAlpha = 1;
-        // this._context.drawImage(
-        //     this.tileset.image,
-        //     this.tileset.tileWidth * 15,
-        //     this.tileset.tileHeight * 15,
-        //     this.tileset.tileWidth,
-        //     this.tileset.tileHeight,
-        //     this.tileset.tileWidth * Math.floor(this.control.x / this.tileset.tileWidth),
-        //     this.tileset.tileHeight * Math.floor(this.control.y / this.tileset.tileHeight),
-        //     this.tileset.tileWidth,
-        //     this.tileset.tileHeight
-        // );
     }
     /**
      * Propagates mouse down event.
@@ -2045,34 +1909,41 @@ class Engine {
 class Layer {
     /**
      * Creates a layer.
-     * @param  {number} id - The id.
-     * @param  {number} x - The x.
-     * @param  {number} y - The y.
-     * @param  {number} z - The z.
-     * @param  {number} width - The width.
-     * @param  {number} height - The height.
+     * @param {string} id - The id.
+     * @param {number} x - The x.
+     * @param {number} y - The y.
+     * @param {number} z - The z.
+     * @param {number} width - The width.
+     * @param {number} height - The height.
+     * @param {Tileset} tileset - The tileset.
      * @return {Layer}
      */
-    constructor(id, x, y, z, width, height) {
+    constructor(id, x, y, z, width, height, tileset) {
         this._id = id;
         this._x = x;
         this._y = y;
         this._z = z;
         this._width = width;
         this._height = height;
+        this._tileset = tileset;
+        this._widthInTile = width / tileset.tileWidth;
+        this._heightInTile = height / tileset.tileHeight;
         this._animator = new Animator();
         this._tiles = [];
         for (let x = 0; x < width; x++) {
             this._tiles[x] = [];
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile(0, 0, 1);
+                this._tiles[x][y] = new Tile(1, 1, 1);
             }
         }
         this._canvas = document.createElement('canvas');
-        this._canvas.id = id.toString();
+        this._canvas.id = id;
         this._canvas.width = width;
         this._canvas.height = height;
         this._canvas.style.zIndex = z.toString();
+        this._canvas.style.position = 'absolute';
+        this._canvas.style.left = x + 'px';
+        this._canvas.style.top = y + 'px';
         this._context = this._canvas.getContext('2d');
     }
     get id() {
@@ -2093,6 +1964,15 @@ class Layer {
     get height() {
         return this._height;
     }
+    get tileset() {
+        return this._tileset;
+    }
+    get widthInTile() {
+        return this._widthInTile;
+    }
+    get heightInTile() {
+        return this._heightInTile;
+    }
     get animator() {
         return this._animator;
     }
@@ -2104,6 +1984,76 @@ class Layer {
     }
     get context() {
         return this._context;
+    }
+    /**
+     * Clears the engine.
+     */
+    clear() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    /**
+     * Draws the engine.
+     */
+    draw() {
+        for (let x = 0; x < this.widthInTile; x++) {
+            for (let y = 0; y < this.heightInTile; y++) {
+                // this.context.globalAlpha = this.tiles[x][y].alpha;
+                this.context.drawImage(this.tileset.image, this.tileset.tileWidth * this.tiles[x][y].x, this.tileset.tileHeight * this.tiles[x][y].y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * x, this.tileset.tileHeight * y, this.tileset.tileWidth, this.tileset.tileHeight);
+            }
+        }
+        // for (let i = this.animator.animations.length - 1; i >= 0; i--) {
+        //     if (this.animator.animations[i].frames.length > 0) {
+        //         let frame = this.animator.animations[i].frames.shift();
+        //         for (let j = frame.targets.length; j > 0; j--) {
+        //             let target = frame.targets.shift();
+        //             if (this.animator.animations[i].x + target.xOffset >= 0 &&
+        //                 this.animator.animations[i].x + target.xOffset < this.width &&
+        //                 this.animator.animations[i].y + target.yOffset >= 0 &&
+        //                 this.animator.animations[i].y + target.yOffset < this.height) {
+        //                 // this._context.globalAlpha = target.tile.alpha;
+        //                 this._context.drawImage(
+        //                     this.tileset.image,
+        //                     this.tileset.tileWidth * target.tile.x,
+        //                     this.tileset.tileHeight * target.tile.y,
+        //                     this.tileset.tileWidth,
+        //                     this.tileset.tileHeight,
+        //                     (this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset)) + (this.tileset.tileWidth * this.x),
+        //                     (this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset)) + (this.tileset.tileHeight * this.y),
+        //                     this.tileset.tileWidth,
+        //                     this.tileset.tileHeight
+        //                 );
+        //             }
+        //         }
+        //     } else {
+        //         this.animator.animations.splice(i, 1);
+        //     }
+        // }
+    }
+}
+/**
+ * Class representing an animation.
+ */
+class Animation {
+    /**
+     * Creates an animation.
+     * @param {number} x - The x.
+     * @param {number} y - The y.
+     * @param {Array<Frame>} frames - The frames.
+     * @return {Animation}
+     */
+    constructor(x, y, frames) {
+        this._x = x;
+        this._y = y;
+        this._frames = frames;
+    }
+    get x() {
+        return this._x;
+    }
+    get y() {
+        return this._y;
+    }
+    get frames() {
+        return this._frames;
     }
 }
 /**
@@ -2178,6 +2128,48 @@ class Animator {
             animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
         }
         this._animations.push(animation);
+    }
+}
+/**
+ * Class representing a frame.
+ */
+class Frame {
+    /**
+     * Creates a frame.
+     * @param {Array<Target>} targets - The targets
+     * @return {Frame}
+     */
+    constructor(targets) {
+        this._targets = targets;
+    }
+    get targets() {
+        return this._targets;
+    }
+}
+/**
+ * Class representing a target.
+ */
+class Target {
+    /**
+     * Creates a target.
+     * @param  {number} xOffset - The x offset.
+     * @param  {number} yOffset - The y offset.
+     * @param  {Tile} tile - The tile.
+     * @return {Target}
+     */
+    constructor(xOffset, yOffset, tile) {
+        this._xOffset = xOffset;
+        this._yOffset = yOffset;
+        this._tile = tile;
+    }
+    get xOffset() {
+        return this._xOffset;
+    }
+    get yOffset() {
+        return this._yOffset;
+    }
+    get tile() {
+        return this._tile;
     }
 }
 /**
@@ -2287,9 +2279,11 @@ var RaceEnum;
 /// <reference path="../Logger.ts"/>
 /// <reference path="../Ruleset.ts"/>
 let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
-let engine = new Engine('game', 64, 36, tileset);
-engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
-engine.layers.push(new Layer(1, 1, 44, 34, new Tile(10, 15, 1)));
+let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight);
+let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, tileset);
+let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, tileset);
+engine.layers.push(uiLayer);
+engine.layers.push(mapLayer);
 engine.init(function () {
     // // ui
     // for (let i = 1; i < engine.width - 1; i++) {
