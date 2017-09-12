@@ -1825,12 +1825,6 @@ class Engine {
     get layers() {
         return this._layers;
     }
-    get pid() {
-        return this._pid;
-    }
-    set pid(value) {
-        this._pid = value;
-    }
     /**
      * Initializes the engine.
      */
@@ -1852,21 +1846,17 @@ class Engine {
      * Starts the engine.
      */
     start() {
-        this.pid = requestAnimationFrame(this.update.bind(this));
-    }
-    /**
-     * Updates the engine.
-     */
-    update() {
-        // this.clear();
-        // this.draw();
-        this.pid = requestAnimationFrame(this.update.bind(this));
+        this.layers.forEach(layer => {
+            layer.start();
+        });
     }
     /**
      * Stops the engine.
      */
     stop() {
-        cancelAnimationFrame(this.pid);
+        this.layers.forEach(layer => {
+            layer.stop();
+        });
     }
     /**
      * Propagates mouse down event.
@@ -1933,7 +1923,7 @@ class Layer {
         for (let x = 0; x < width; x++) {
             this._tiles[x] = [];
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile(1, 1, 1);
+                this._tiles[x][y] = new Tile(0, 0, 1);
             }
         }
         this._canvas = document.createElement('canvas');
@@ -1985,6 +1975,38 @@ class Layer {
     get context() {
         return this._context;
     }
+    get pid() {
+        return this._pid;
+    }
+    set pid(value) {
+        this._pid = value;
+    }
+    /**
+     * Starts the layer.
+     */
+    start() {
+        this.pid = requestAnimationFrame(this.update.bind(this));
+    }
+    /**
+     * Updates the layer.
+     */
+    update() {
+        this.tick();
+        this.pid = requestAnimationFrame(this.update.bind(this));
+    }
+    /**
+     * Ticks the layer.
+     */
+    tick() {
+        this.clear();
+        this.draw();
+    }
+    /**
+     * Stops the layer.
+     */
+    stop() {
+        cancelAnimationFrame(this.pid);
+    }
     /**
      * Clears the engine.
      */
@@ -1997,37 +2019,28 @@ class Layer {
     draw() {
         for (let x = 0; x < this.widthInTile; x++) {
             for (let y = 0; y < this.heightInTile; y++) {
-                // this.context.globalAlpha = this.tiles[x][y].alpha;
+                this.context.globalAlpha = this.tiles[x][y].alpha;
                 this.context.drawImage(this.tileset.image, this.tileset.tileWidth * this.tiles[x][y].x, this.tileset.tileHeight * this.tiles[x][y].y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * x, this.tileset.tileHeight * y, this.tileset.tileWidth, this.tileset.tileHeight);
             }
         }
-        // for (let i = this.animator.animations.length - 1; i >= 0; i--) {
-        //     if (this.animator.animations[i].frames.length > 0) {
-        //         let frame = this.animator.animations[i].frames.shift();
-        //         for (let j = frame.targets.length; j > 0; j--) {
-        //             let target = frame.targets.shift();
-        //             if (this.animator.animations[i].x + target.xOffset >= 0 &&
-        //                 this.animator.animations[i].x + target.xOffset < this.width &&
-        //                 this.animator.animations[i].y + target.yOffset >= 0 &&
-        //                 this.animator.animations[i].y + target.yOffset < this.height) {
-        //                 // this._context.globalAlpha = target.tile.alpha;
-        //                 this._context.drawImage(
-        //                     this.tileset.image,
-        //                     this.tileset.tileWidth * target.tile.x,
-        //                     this.tileset.tileHeight * target.tile.y,
-        //                     this.tileset.tileWidth,
-        //                     this.tileset.tileHeight,
-        //                     (this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset)) + (this.tileset.tileWidth * this.x),
-        //                     (this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset)) + (this.tileset.tileHeight * this.y),
-        //                     this.tileset.tileWidth,
-        //                     this.tileset.tileHeight
-        //                 );
-        //             }
-        //         }
-        //     } else {
-        //         this.animator.animations.splice(i, 1);
-        //     }
-        // }
+        for (let i = this.animator.animations.length - 1; i >= 0; i--) {
+            if (this.animator.animations[i].frames.length > 0) {
+                let frame = this.animator.animations[i].frames.shift();
+                for (let j = frame.targets.length; j > 0; j--) {
+                    let target = frame.targets.shift();
+                    if (this.animator.animations[i].x + target.xOffset >= 0 &&
+                        this.animator.animations[i].x + target.xOffset < this.width &&
+                        this.animator.animations[i].y + target.yOffset >= 0 &&
+                        this.animator.animations[i].y + target.yOffset < this.height) {
+                        this._context.globalAlpha = target.tile.alpha;
+                        this._context.drawImage(this.tileset.image, this.tileset.tileWidth * target.tile.x, this.tileset.tileHeight * target.tile.y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset), this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset), this.tileset.tileWidth, this.tileset.tileHeight);
+                    }
+                }
+            }
+            else {
+                this.animator.animations.splice(i, 1);
+            }
+        }
     }
 }
 /**
@@ -2282,43 +2295,44 @@ let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
 let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight);
 let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, tileset);
 let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, tileset);
+// ui layer
+for (let i = 1; i < uiLayer.widthInTile - 1; i++) {
+    uiLayer.tiles[i][0] = new Tile(4, 12, 1);
+    uiLayer.tiles[i][uiLayer.heightInTile - 1] = new Tile(4, 12, 1);
+}
+for (let i = 1; i < uiLayer.heightInTile - 1; i++) {
+    uiLayer.tiles[0][i] = new Tile(3, 11, 1);
+    uiLayer.tiles[45][i] = new Tile(3, 11, 1);
+    uiLayer.tiles[uiLayer.widthInTile - 1][i] = new Tile(3, 11, 1);
+}
+uiLayer.tiles[0][0] = new Tile(10, 13, 1);
+uiLayer.tiles[uiLayer.widthInTile - 1][0] = new Tile(15, 11, 1);
+uiLayer.tiles[0][uiLayer.heightInTile - 1] = new Tile(0, 12, 1);
+uiLayer.tiles[uiLayer.widthInTile - 1][uiLayer.heightInTile - 1] = new Tile(9, 13, 1);
+uiLayer.tiles[45][0] = new Tile(2, 12, 1);
+uiLayer.tiles[45][uiLayer.heightInTile - 1] = new Tile(1, 12, 1);
+// map layer
 engine.layers.push(uiLayer);
 engine.layers.push(mapLayer);
 engine.init(function () {
-    // // ui
-    // for (let i = 1; i < engine.width - 1; i++) {
-    //     engine.layers[0].tiles[i][0] = new Tile(4, 12, 1);
-    //     engine.layers[0].tiles[i][engine.height - 1] = new Tile(4, 12, 1);
-    // }
-    // engine.layers[0].tiles[0][0] = new Tile(10, 13, 1);
-    // engine.layers[0].tiles[engine.width - 1][0] = new Tile(15, 11, 1);
-    // for (let i = 1; i < engine.height - 1; i++) {
-    //     engine.layers[0].tiles[0][i] = new Tile(3, 11, 1);
-    //     engine.layers[0].tiles[45][i] = new Tile(3, 11, 1);
-    //     engine.layers[0].tiles[engine.width - 1][i] = new Tile(3, 11, 1);
-    // }
-    // engine.layers[0].tiles[0][engine.height - 1] = new Tile(0, 12, 1);
-    // engine.layers[0].tiles[45][0] = new Tile(2, 12, 1);
-    // engine.layers[0].tiles[45][engine.height - 1] = new Tile(1, 12, 1);
-    // engine.layers[0].tiles[engine.width - 1][engine.height - 1] = new Tile(9, 13, 1);
-    // engine.start();
-    // setInterval(function () {
-    //     // engine.layers[1].animator.addCircleFadeOut(0, 0, 10, 2);
-    //     // engine.layers[1].animator.addCircleFadeOut(43, 0, 10, 2);
-    //     // engine.layers[1].animator.addCircleFadeOut(0, 33, 10, 2);
-    //     // engine.layers[1].animator.addCircleFadeOut(43, 33, 10, 2);
-    //     engine.layers[1].animator.addProjectile(0, 0, 43, 0);
-    //     engine.layers[1].animator.addProjectile(0, 1, 43, 1);
-    //     engine.layers[1].animator.addProjectile(0, 2, 43, 2);
-    //     engine.layers[1].animator.addProjectile(0, 3, 43, 3);
-    //     engine.layers[1].animator.addProjectile(0, 4, 43, 4);
-    //     engine.layers[1].animator.addProjectile(0, 5, 43, 5);
-    //     engine.layers[1].animator.addProjectile(0, 6, 43, 6);
-    //     engine.layers[1].animator.addProjectile(0, 7, 43, 7);
-    //     engine.layers[1].animator.addProjectile(0, 8, 43, 8);
-    //     engine.layers[1].animator.addProjectile(0, 9, 43, 9);
-    //     engine.layers[1].animator.addProjectile(0, 0, 33, 33);
-    // }, 1000);
+    engine.start();
+    setInterval(function () {
+        mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
+        mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
+        mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
+        mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
+        mapLayer.animator.addProjectile(0, 0, 43, 0);
+        mapLayer.animator.addProjectile(0, 1, 43, 1);
+        mapLayer.animator.addProjectile(0, 2, 43, 2);
+        mapLayer.animator.addProjectile(0, 3, 43, 3);
+        mapLayer.animator.addProjectile(0, 4, 43, 4);
+        mapLayer.animator.addProjectile(0, 5, 43, 5);
+        mapLayer.animator.addProjectile(0, 6, 43, 6);
+        mapLayer.animator.addProjectile(0, 7, 43, 7);
+        mapLayer.animator.addProjectile(0, 8, 43, 8);
+        mapLayer.animator.addProjectile(0, 9, 43, 9);
+        mapLayer.animator.addProjectile(0, 0, 33, 33);
+    }, 1000);
 });
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)

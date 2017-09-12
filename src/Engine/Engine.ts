@@ -11,7 +11,6 @@ class Engine {
     private _layers: Array<Layer>;
     private _control: Control;
     private _container: HTMLDivElement;
-    private _pid: number;
 
     /**
      * Creates an engine.
@@ -60,14 +59,6 @@ class Engine {
         return this._layers;
     }
 
-    public get pid() {
-        return this._pid;
-    }
-
-    public set pid(value: number) {
-        this._pid = value;
-    }
-
     /**
      * Initializes the engine.
      */
@@ -95,23 +86,18 @@ class Engine {
      * Starts the engine.
      */
     public start() {
-        this.pid = requestAnimationFrame(this.update.bind(this));
-    }
-
-    /**
-     * Updates the engine.
-     */
-    public update() {
-        // this.clear();
-        // this.draw();
-        this.pid = requestAnimationFrame(this.update.bind(this));
+        this.layers.forEach(layer => {
+            layer.start();
+        });
     }
 
     /**
      * Stops the engine.
      */
     public stop() {
-        cancelAnimationFrame(this.pid);
+        this.layers.forEach(layer => {
+            layer.stop();
+        });
     }
 
     /**

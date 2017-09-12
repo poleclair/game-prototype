@@ -19,49 +19,52 @@ let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight)
 let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, tileset);
 let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, tileset);
 
+// ui layer
+for (let i = 1; i < uiLayer.widthInTile - 1; i++) {
+    uiLayer.tiles[i][0] = new Tile(4, 12, 1);
+    uiLayer.tiles[i][uiLayer.heightInTile - 1] = new Tile(4, 12, 1);
+}
+
+for (let i = 1; i < uiLayer.heightInTile - 1; i++) {
+    uiLayer.tiles[0][i] = new Tile(3, 11, 1);
+    uiLayer.tiles[45][i] = new Tile(3, 11, 1);
+    uiLayer.tiles[uiLayer.widthInTile - 1][i] = new Tile(3, 11, 1);
+}
+
+uiLayer.tiles[0][0] = new Tile(10, 13, 1);
+uiLayer.tiles[uiLayer.widthInTile - 1][0] = new Tile(15, 11, 1);
+uiLayer.tiles[0][uiLayer.heightInTile - 1] = new Tile(0, 12, 1);
+uiLayer.tiles[uiLayer.widthInTile - 1][uiLayer.heightInTile - 1] = new Tile(9, 13, 1);
+uiLayer.tiles[45][0] = new Tile(2, 12, 1);
+uiLayer.tiles[45][uiLayer.heightInTile - 1] = new Tile(1, 12, 1);
+
+// map layer
+
+
 engine.layers.push(uiLayer);
 engine.layers.push(mapLayer);
 
 engine.init(function () {
-    // // ui
-    // for (let i = 1; i < engine.width - 1; i++) {
-    //     engine.layers[0].tiles[i][0] = new Tile(4, 12, 1);
-    //     engine.layers[0].tiles[i][engine.height - 1] = new Tile(4, 12, 1);
-    // }
-    // engine.layers[0].tiles[0][0] = new Tile(10, 13, 1);
-    // engine.layers[0].tiles[engine.width - 1][0] = new Tile(15, 11, 1);
+    engine.start();
 
-    // for (let i = 1; i < engine.height - 1; i++) {
-    //     engine.layers[0].tiles[0][i] = new Tile(3, 11, 1);
-    //     engine.layers[0].tiles[45][i] = new Tile(3, 11, 1);
-    //     engine.layers[0].tiles[engine.width - 1][i] = new Tile(3, 11, 1);
-    // }
-    // engine.layers[0].tiles[0][engine.height - 1] = new Tile(0, 12, 1);
-    // engine.layers[0].tiles[45][0] = new Tile(2, 12, 1);
-    // engine.layers[0].tiles[45][engine.height - 1] = new Tile(1, 12, 1);
-    // engine.layers[0].tiles[engine.width - 1][engine.height - 1] = new Tile(9, 13, 1);
-
-    // engine.start();
-
-    // setInterval(function () {
-    //     // engine.layers[1].animator.addCircleFadeOut(0, 0, 10, 2);
-    //     // engine.layers[1].animator.addCircleFadeOut(43, 0, 10, 2);
-    //     // engine.layers[1].animator.addCircleFadeOut(0, 33, 10, 2);
-    //     // engine.layers[1].animator.addCircleFadeOut(43, 33, 10, 2);
-    //     engine.layers[1].animator.addProjectile(0, 0, 43, 0);
-    //     engine.layers[1].animator.addProjectile(0, 1, 43, 1);
-    //     engine.layers[1].animator.addProjectile(0, 2, 43, 2);
-    //     engine.layers[1].animator.addProjectile(0, 3, 43, 3);
-    //     engine.layers[1].animator.addProjectile(0, 4, 43, 4);
-    //     engine.layers[1].animator.addProjectile(0, 5, 43, 5);
-    //     engine.layers[1].animator.addProjectile(0, 6, 43, 6);
-    //     engine.layers[1].animator.addProjectile(0, 7, 43, 7);
-    //     engine.layers[1].animator.addProjectile(0, 8, 43, 8);
-    //     engine.layers[1].animator.addProjectile(0, 9, 43, 9);
-    //     engine.layers[1].animator.addProjectile(0, 0, 33, 33);
-    // }, 1000);
+    setInterval(function () {
+        mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
+        mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
+        mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
+        mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
+        mapLayer.animator.addProjectile(0, 0, 43, 0);
+        mapLayer.animator.addProjectile(0, 1, 43, 1);
+        mapLayer.animator.addProjectile(0, 2, 43, 2);
+        mapLayer.animator.addProjectile(0, 3, 43, 3);
+        mapLayer.animator.addProjectile(0, 4, 43, 4);
+        mapLayer.animator.addProjectile(0, 5, 43, 5);
+        mapLayer.animator.addProjectile(0, 6, 43, 6);
+        mapLayer.animator.addProjectile(0, 7, 43, 7);
+        mapLayer.animator.addProjectile(0, 8, 43, 8);
+        mapLayer.animator.addProjectile(0, 9, 43, 9);
+        mapLayer.animator.addProjectile(0, 0, 33, 33);
+    }, 1000);
 });
-
 
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)

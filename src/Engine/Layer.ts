@@ -10,13 +10,13 @@ class Layer {
     private _height: number;
     private _tileset: Tileset;
 
-    private _pid: number;
     private _widthInTile: number;
     private _heightInTile: number;
     private _animator: Animator;
     private _tiles: Array<Array<Tile>>;
     private _canvas: HTMLCanvasElement;
     private _context: CanvasRenderingContext2D;
+    private _pid: number;
 
     /**
      * Creates a layer.
@@ -47,7 +47,7 @@ class Layer {
             this._tiles[x] = [];
 
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile(1, 1, 1);
+                this._tiles[x][y] = new Tile(0, 0, 1);
             }
         }
 
@@ -115,6 +115,44 @@ class Layer {
         return this._context;
     }
 
+    public get pid() {
+        return this._pid;
+    }
+
+    public set pid(value: number) {
+        this._pid = value;
+    }
+
+    /**
+     * Starts the layer.
+     */
+    public start() {
+        this.pid = requestAnimationFrame(this.update.bind(this));
+    }
+
+    /**
+     * Updates the layer.
+     */
+    public update() {
+        this.tick();
+        this.pid = requestAnimationFrame(this.update.bind(this));
+    }
+
+    /**
+     * Ticks the layer.
+     */
+    public tick() {
+        this.clear();
+        this.draw();
+    }
+
+    /**
+     * Stops the layer.
+     */
+    public stop() {
+        cancelAnimationFrame(this.pid);
+    }
+
     /**
      * Clears the engine.
      */
@@ -128,7 +166,7 @@ class Layer {
     public draw() {
         for (let x = 0; x < this.widthInTile; x++) {
             for (let y = 0; y < this.heightInTile; y++) {
-                // this.context.globalAlpha = this.tiles[x][y].alpha;
+                this.context.globalAlpha = this.tiles[x][y].alpha;
                 this.context.drawImage(
                     this.tileset.image,
                     this.tileset.tileWidth * this.tiles[x][y].x,
@@ -142,34 +180,35 @@ class Layer {
                 );
             }
         }
-        // for (let i = this.animator.animations.length - 1; i >= 0; i--) {
-        //     if (this.animator.animations[i].frames.length > 0) {
-        //         let frame = this.animator.animations[i].frames.shift();
 
-        //         for (let j = frame.targets.length; j > 0; j--) {
-        //             let target = frame.targets.shift();
+        for (let i = this.animator.animations.length - 1; i >= 0; i--) {
+            if (this.animator.animations[i].frames.length > 0) {
+                let frame = this.animator.animations[i].frames.shift();
 
-        //             if (this.animator.animations[i].x + target.xOffset >= 0 &&
-        //                 this.animator.animations[i].x + target.xOffset < this.width &&
-        //                 this.animator.animations[i].y + target.yOffset >= 0 &&
-        //                 this.animator.animations[i].y + target.yOffset < this.height) {
-        //                 // this._context.globalAlpha = target.tile.alpha;
-        //                 this._context.drawImage(
-        //                     this.tileset.image,
-        //                     this.tileset.tileWidth * target.tile.x,
-        //                     this.tileset.tileHeight * target.tile.y,
-        //                     this.tileset.tileWidth,
-        //                     this.tileset.tileHeight,
-        //                     (this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset)) + (this.tileset.tileWidth * this.x),
-        //                     (this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset)) + (this.tileset.tileHeight * this.y),
-        //                     this.tileset.tileWidth,
-        //                     this.tileset.tileHeight
-        //                 );
-        //             }
-        //         }
-        //     } else {
-        //         this.animator.animations.splice(i, 1);
-        //     }
-        // }
+                for (let j = frame.targets.length; j > 0; j--) {
+                    let target = frame.targets.shift();
+
+                    if (this.animator.animations[i].x + target.xOffset >= 0 &&
+                        this.animator.animations[i].x + target.xOffset < this.width &&
+                        this.animator.animations[i].y + target.yOffset >= 0 &&
+                        this.animator.animations[i].y + target.yOffset < this.height) {
+                        this._context.globalAlpha = target.tile.alpha;
+                        this._context.drawImage(
+                            this.tileset.image,
+                            this.tileset.tileWidth * target.tile.x,
+                            this.tileset.tileHeight * target.tile.y,
+                            this.tileset.tileWidth,
+                            this.tileset.tileHeight,
+                            this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset),
+                            this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset),
+                            this.tileset.tileWidth,
+                            this.tileset.tileHeight
+                        );
+                    }
+                }
+            } else {
+                this.animator.animations.splice(i, 1);
+            }
+        }
     }
 }
