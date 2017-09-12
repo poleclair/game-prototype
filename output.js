@@ -2118,24 +2118,24 @@ class Animator {
         let dy = y1 - y0;
         let nx = Math.abs(dx);
         let ny = Math.abs(dy);
-        let sign_x = dx > 0 ? 1 : -1;
-        let sign_y = dy > 0 ? 1 : -1;
+        let signX = dx > 0 ? 1 : -1;
+        let signY = dy > 0 ? 1 : -1;
         let cx = x0;
         let cy = x0;
         animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
         for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
             if ((0.5 + ix) / nx == (0.5 + iy) / ny) {
-                cx += sign_x;
-                cy += sign_y;
+                cx += signX;
+                cy += signY;
                 ix++;
                 iy++;
             }
             else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
-                cx += sign_x;
+                cx += signX;
                 ix++;
             }
             else {
-                cy += sign_y;
+                cy += signY;
                 iy++;
             }
             animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
