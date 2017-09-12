@@ -52,17 +52,7 @@ engine.init(function () {
         mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
         mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
         mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
-        mapLayer.animator.addProjectile(0, 0, 43, 0);
-        mapLayer.animator.addProjectile(0, 1, 43, 1);
-        mapLayer.animator.addProjectile(0, 2, 43, 2);
-        mapLayer.animator.addProjectile(0, 3, 43, 3);
-        mapLayer.animator.addProjectile(0, 4, 43, 4);
-        mapLayer.animator.addProjectile(0, 5, 43, 5);
-        mapLayer.animator.addProjectile(0, 6, 43, 6);
-        mapLayer.animator.addProjectile(0, 7, 43, 7);
-        mapLayer.animator.addProjectile(0, 8, 43, 8);
-        mapLayer.animator.addProjectile(0, 9, 43, 9);
-        mapLayer.animator.addProjectile(0, 0, 33, 33);
+        mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
     }, 1000);
 });
 
