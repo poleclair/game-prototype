@@ -5,7 +5,6 @@ class Tile {
     private _x: number;
     private _y: number;
     private _alpha: number;
-    private _dirty: boolean;
 
     /**
      * Creates a tile.
@@ -18,7 +17,6 @@ class Tile {
         this._x = x;
         this._y = y;
         this._alpha = alpha;
-        this._dirty = true;
     }
 
     public get x() {
@@ -27,7 +25,6 @@ class Tile {
 
     public set x(value: number) {
         this._x = value;
-        this.dirty = true;
     }
 
     public get y() {
@@ -36,7 +33,6 @@ class Tile {
 
     public set y(value: number) {
         this._y = value;
-        this.dirty = true;
     }
 
     public get alpha() {
@@ -45,14 +41,5 @@ class Tile {
 
     public set alpha(value: number) {
         this._alpha = value;
-        this.dirty = true;
-    }
-
-    public get dirty() {
-        return this._dirty;
-    }
-
-    public set dirty(value: boolean) {
-        this._dirty = value;
     }
 }

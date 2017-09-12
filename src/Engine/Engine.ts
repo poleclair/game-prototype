@@ -12,9 +12,7 @@ class Engine {
     private _width: number;
     private _height: number;
     private _tileset: Tileset;
-    private _canvas: HTMLCanvasElement;
-    private _context: CanvasRenderingContext2D;
-    private _animator: Animator;
+    private _container: HTMLDivElement;
     private _control: Control;
     private _layers: Array<Layer>;
     private _pid: number;
@@ -35,14 +33,13 @@ class Engine {
         this._height = height;
         this._tileset = tileset;
 
-        this._canvas = document.createElement('canvas');
-        this._canvas.id = this.name;
-        this._canvas.width = this._width * this._tileset.tileWidth;
-        this._canvas.height = this._height * this._tileset.tileHeight;
+        // this._canvas = document.createElement('canvas');
+        // this._canvas.id = this.name;
+        // this._canvas.width = this._width * this._tileset.tileWidth;
+        // this._canvas.height = this._height * this._tileset.tileHeight;
 
-        this._context = this._canvas.getContext('2d');
+        // this._context = this._canvas.getContext('2d');
 
-        this._animator = new Animator();
         this._control = new Control();
         this._layers = [];
     }
@@ -63,16 +60,8 @@ class Engine {
         return this._tileset;
     }
 
-    public get canvas() {
-        return this._canvas;
-    }
-
-    public get context() {
-        return this._context;
-    }
-
-    public get animator() {
-        return this._animator;
+    public get container() {
+        return this._container;
     }
 
     public get control() {
@@ -96,14 +85,31 @@ class Engine {
      */
     public init(callback) {
         window.onload = function () {
-            document.body.appendChild(this._canvas);
+            this.container = document.createElement('div');
+            this.container.id = this.name;
+            this.container.style.width = (this._width * this._tileset.tileWidth) + 'px';
+            this.container.style.height = (this._height * this._tileset.tileHeight) + 'px';
 
-            document.addEventListener('keydown', this.propagateKeyDown.bind(this));
+            document.body.appendChild(this._container);
 
-            this.canvas.addEventListener('mousedown', this.propagateMouseDown.bind(this));
-            this.canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
-            this.canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
-            this.canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
+            this.layers.forEach(element => {
+                // this._canvas = document.createElement('canvas');
+                // this._canvas.id = this.name;
+                // this._canvas.width = this._width * this._tileset.tileWidth;
+                // this._canvas.height = this._height * this._tileset.tileHeight;
+
+                // this._context = this._canvas.getContext('2d');
+            });
+
+
+            // document.body.appendChild(this._canvas);
+
+            // document.addEventListener('keydown', this.propagateKeyDown.bind(this));
+
+            // this.canvas.addEventListener('mousedown', this.propagateMouseDown.bind(this));
+            // this.canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
+            // this.canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
+            // this.canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
 
             callback();
         }.bind(this);
@@ -113,17 +119,23 @@ class Engine {
      * Starts the engine.
      */
     public start() {
-        this.pid = requestAnimationFrame(function () {
-            this.clear();
-            this.draw();
-        }.bind(this));
+        this.pid = requestAnimationFrame(this.update.bind(this));
+    }
+
+    /**
+     * Updates the engine.
+     */
+    public update() {
+        this.clear();
+        this.draw();
+        this.pid = requestAnimationFrame(this.update.bind(this));
     }
 
     /**
      * Stops the engine.
      */
     public stop() {
-        clearInterval(this.pid);
+        cancelAnimationFrame(this.pid);
     }
 
     /**

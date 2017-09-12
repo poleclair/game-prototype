@@ -1873,12 +1873,11 @@ class Engine {
         this._width = width;
         this._height = height;
         this._tileset = tileset;
-        this._canvas = document.createElement('canvas');
-        this._canvas.id = this.name;
-        this._canvas.width = this._width * this._tileset.tileWidth;
-        this._canvas.height = this._height * this._tileset.tileHeight;
-        this._context = this._canvas.getContext('2d');
-        this._animator = new Animator();
+        // this._canvas = document.createElement('canvas');
+        // this._canvas.id = this.name;
+        // this._canvas.width = this._width * this._tileset.tileWidth;
+        // this._canvas.height = this._height * this._tileset.tileHeight;
+        // this._context = this._canvas.getContext('2d');
         this._control = new Control();
         this._layers = [];
     }
@@ -1894,14 +1893,8 @@ class Engine {
     get tileset() {
         return this._tileset;
     }
-    get canvas() {
-        return this._canvas;
-    }
-    get context() {
-        return this._context;
-    }
-    get animator() {
-        return this._animator;
+    get container() {
+        return this._container;
     }
     get control() {
         return this._control;
@@ -1920,12 +1913,24 @@ class Engine {
      */
     init(callback) {
         window.onload = function () {
-            document.body.appendChild(this._canvas);
-            document.addEventListener('keydown', this.propagateKeyDown.bind(this));
-            this.canvas.addEventListener('mousedown', this.propagateMouseDown.bind(this));
-            this.canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
-            this.canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
-            this.canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
+            this.container = document.createElement('div');
+            this.container.id = this.name;
+            this.container.style.width = (this._width * this._tileset.tileWidth) + 'px';
+            this.container.style.height = (this._height * this._tileset.tileHeight) + 'px';
+            document.body.appendChild(this._container);
+            this.layers.forEach(element => {
+                // this._canvas = document.createElement('canvas');
+                // this._canvas.id = this.name;
+                // this._canvas.width = this._width * this._tileset.tileWidth;
+                // this._canvas.height = this._height * this._tileset.tileHeight;
+                // this._context = this._canvas.getContext('2d');
+            });
+            // document.body.appendChild(this._canvas);
+            // document.addEventListener('keydown', this.propagateKeyDown.bind(this));
+            // this.canvas.addEventListener('mousedown', this.propagateMouseDown.bind(this));
+            // this.canvas.addEventListener('mouseup', this.propagateMouseUp.bind(this));
+            // this.canvas.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
+            // this.canvas.addEventListener('mousemove', this.propagateMouseMove.bind(this));
             callback();
         }.bind(this);
     }
@@ -1933,16 +1938,21 @@ class Engine {
      * Starts the engine.
      */
     start() {
-        this.pid = requestAnimationFrame(function () {
-            this.clear();
-            this.draw();
-        }.bind(this));
+        this.pid = requestAnimationFrame(this.update.bind(this));
+    }
+    /**
+     * Updates the engine.
+     */
+    update() {
+        this.clear();
+        this.draw();
+        this.pid = requestAnimationFrame(this.update.bind(this));
     }
     /**
      * Stops the engine.
      */
     stop() {
-        clearInterval(this.pid);
+        cancelAnimationFrame(this.pid);
     }
     /**
      * Clears the engine.
@@ -2035,16 +2045,19 @@ class Engine {
 class Layer {
     /**
      * Creates a layer.
+     * @param  {number} id - The id.
      * @param  {number} x - The x.
      * @param  {number} y - The y.
+     * @param  {number} z - The z.
      * @param  {number} width - The width.
      * @param  {number} height - The height.
-     * @param  {number} tile - The filling tile.
      * @return {Layer}
      */
-    constructor(x, y, width, height, tile) {
+    constructor(id, x, y, z, width, height) {
+        this._id = id;
         this._x = x;
         this._y = y;
+        this._z = z;
         this._width = width;
         this._height = height;
         this._animator = new Animator();
@@ -2052,15 +2065,27 @@ class Layer {
         for (let x = 0; x < width; x++) {
             this._tiles[x] = [];
             for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile(tile.x, tile.y, tile.alpha);
+                this._tiles[x][y] = new Tile(0, 0, 1);
             }
         }
+        this._canvas = document.createElement('canvas');
+        this._canvas.id = id.toString();
+        this._canvas.width = width;
+        this._canvas.height = height;
+        this._canvas.style.zIndex = z.toString();
+        this._context = this._canvas.getContext('2d');
+    }
+    get id() {
+        return this._id;
     }
     get x() {
         return this._x;
     }
     get y() {
         return this._y;
+    }
+    get z() {
+        return this._z;
     }
     get width() {
         return this._width;
@@ -2073,6 +2098,12 @@ class Layer {
     }
     get tiles() {
         return this._tiles;
+    }
+    get canvas() {
+        return this._canvas;
+    }
+    get context() {
+        return this._context;
     }
 }
 /**
@@ -2164,34 +2195,24 @@ class Tile {
         this._x = x;
         this._y = y;
         this._alpha = alpha;
-        this._dirty = true;
     }
     get x() {
         return this._x;
     }
     set x(value) {
         this._x = value;
-        this.dirty = true;
     }
     get y() {
         return this._y;
     }
     set y(value) {
         this._y = value;
-        this.dirty = true;
     }
     get alpha() {
         return this._alpha;
     }
     set alpha(value) {
         this._alpha = value;
-        this.dirty = true;
-    }
-    get dirty() {
-        return this._dirty;
-    }
-    set dirty(value) {
-        this._dirty = value;
     }
 }
 /**
@@ -2270,40 +2291,40 @@ let engine = new Engine('game', 64, 36, tileset);
 engine.layers.push(new Layer(0, 0, engine.width, engine.height, new Tile(0, 0, 1)));
 engine.layers.push(new Layer(1, 1, 44, 34, new Tile(10, 15, 1)));
 engine.init(function () {
-    // ui
-    for (let i = 1; i < engine.width - 1; i++) {
-        engine.layers[0].tiles[i][0] = new Tile(4, 12, 1);
-        engine.layers[0].tiles[i][engine.height - 1] = new Tile(4, 12, 1);
-    }
-    engine.layers[0].tiles[0][0] = new Tile(10, 13, 1);
-    engine.layers[0].tiles[engine.width - 1][0] = new Tile(15, 11, 1);
-    for (let i = 1; i < engine.height - 1; i++) {
-        engine.layers[0].tiles[0][i] = new Tile(3, 11, 1);
-        engine.layers[0].tiles[45][i] = new Tile(3, 11, 1);
-        engine.layers[0].tiles[engine.width - 1][i] = new Tile(3, 11, 1);
-    }
-    engine.layers[0].tiles[0][engine.height - 1] = new Tile(0, 12, 1);
-    engine.layers[0].tiles[45][0] = new Tile(2, 12, 1);
-    engine.layers[0].tiles[45][engine.height - 1] = new Tile(1, 12, 1);
-    engine.layers[0].tiles[engine.width - 1][engine.height - 1] = new Tile(9, 13, 1);
-    engine.start();
-    setInterval(function () {
-        // engine.layers[1].animator.addCircleFadeOut(0, 0, 10, 2);
-        // engine.layers[1].animator.addCircleFadeOut(43, 0, 10, 2);
-        // engine.layers[1].animator.addCircleFadeOut(0, 33, 10, 2);
-        // engine.layers[1].animator.addCircleFadeOut(43, 33, 10, 2);
-        engine.layers[1].animator.addProjectile(0, 0, 43, 0);
-        engine.layers[1].animator.addProjectile(0, 1, 43, 1);
-        engine.layers[1].animator.addProjectile(0, 2, 43, 2);
-        engine.layers[1].animator.addProjectile(0, 3, 43, 3);
-        engine.layers[1].animator.addProjectile(0, 4, 43, 4);
-        engine.layers[1].animator.addProjectile(0, 5, 43, 5);
-        engine.layers[1].animator.addProjectile(0, 6, 43, 6);
-        engine.layers[1].animator.addProjectile(0, 7, 43, 7);
-        engine.layers[1].animator.addProjectile(0, 8, 43, 8);
-        engine.layers[1].animator.addProjectile(0, 9, 43, 9);
-        engine.layers[1].animator.addProjectile(0, 0, 33, 33);
-    }, 1000);
+    // // ui
+    // for (let i = 1; i < engine.width - 1; i++) {
+    //     engine.layers[0].tiles[i][0] = new Tile(4, 12, 1);
+    //     engine.layers[0].tiles[i][engine.height - 1] = new Tile(4, 12, 1);
+    // }
+    // engine.layers[0].tiles[0][0] = new Tile(10, 13, 1);
+    // engine.layers[0].tiles[engine.width - 1][0] = new Tile(15, 11, 1);
+    // for (let i = 1; i < engine.height - 1; i++) {
+    //     engine.layers[0].tiles[0][i] = new Tile(3, 11, 1);
+    //     engine.layers[0].tiles[45][i] = new Tile(3, 11, 1);
+    //     engine.layers[0].tiles[engine.width - 1][i] = new Tile(3, 11, 1);
+    // }
+    // engine.layers[0].tiles[0][engine.height - 1] = new Tile(0, 12, 1);
+    // engine.layers[0].tiles[45][0] = new Tile(2, 12, 1);
+    // engine.layers[0].tiles[45][engine.height - 1] = new Tile(1, 12, 1);
+    // engine.layers[0].tiles[engine.width - 1][engine.height - 1] = new Tile(9, 13, 1);
+    // engine.start();
+    // setInterval(function () {
+    //     // engine.layers[1].animator.addCircleFadeOut(0, 0, 10, 2);
+    //     // engine.layers[1].animator.addCircleFadeOut(43, 0, 10, 2);
+    //     // engine.layers[1].animator.addCircleFadeOut(0, 33, 10, 2);
+    //     // engine.layers[1].animator.addCircleFadeOut(43, 33, 10, 2);
+    //     engine.layers[1].animator.addProjectile(0, 0, 43, 0);
+    //     engine.layers[1].animator.addProjectile(0, 1, 43, 1);
+    //     engine.layers[1].animator.addProjectile(0, 2, 43, 2);
+    //     engine.layers[1].animator.addProjectile(0, 3, 43, 3);
+    //     engine.layers[1].animator.addProjectile(0, 4, 43, 4);
+    //     engine.layers[1].animator.addProjectile(0, 5, 43, 5);
+    //     engine.layers[1].animator.addProjectile(0, 6, 43, 6);
+    //     engine.layers[1].animator.addProjectile(0, 7, 43, 7);
+    //     engine.layers[1].animator.addProjectile(0, 8, 43, 8);
+    //     engine.layers[1].animator.addProjectile(0, 9, 43, 9);
+    //     engine.layers[1].animator.addProjectile(0, 0, 33, 33);
+    // }, 1000);
 });
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
