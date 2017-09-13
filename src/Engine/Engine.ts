@@ -1,5 +1,3 @@
-/// <reference path="Control/Control.ts"/>
-
 /**
  * Class representing an engine.
  */

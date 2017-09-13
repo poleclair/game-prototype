@@ -1675,24 +1675,103 @@ class Character {
     }
 }
 /**
- * Class representing a coordinate.
+ * Class representing an animation.
  */
-class Coordinate {
+class Animation {
     /**
-     * Creates a coordinate.
-     * @param {number} x - The x;
-     * @param {number} y - The y;
-     * @return {Coordinate}
+     * Creates an animation.
+     * @param {number} x - The x.
+     * @param {number} y - The y.
+     * @param {Array<Frame>} frames - The frames.
+     * @return {Animation}
      */
-    constructor(x, y) {
+    constructor(x, y, frames) {
         this._x = x;
         this._y = y;
+        this._frames = frames;
     }
     get x() {
         return this._x;
     }
     get y() {
         return this._y;
+    }
+    get frames() {
+        return this._frames;
+    }
+}
+/**
+ * Class representing an animator.
+ */
+class Animator {
+    /**
+     * Creates an animator.
+     * @return {Animator}
+     */
+    constructor() {
+        this._animations = [];
+    }
+    get animations() {
+        return this._animations;
+    }
+    /**
+     * Adds a circle fade out animation to the queue.
+     * @param {number} x - The x;
+     * @param {number} y - The y;
+     * @param {number} length - The length;
+     * @param {number} size - The size;
+     */
+    addCircleFadeOut(x, y, length, size) {
+        let animation = new Animation(x, y, []);
+        let alpha = 1 / length;
+        for (let i = 0; i < length; i++) {
+            let frame = new Frame([new Target(0, 0, new Tile(15, 15, 1 - (alpha * i)))]);
+            for (let j = 1; j < size; j++) {
+                frame.targets.push(new Target(0, 0 + j, new Tile(15, 15, 1 - (alpha * i))));
+                frame.targets.push(new Target(0, 0 - j, new Tile(15, 15, 1 - (alpha * i))));
+                frame.targets.push(new Target(0 + j, 0, new Tile(15, 15, 1 - (alpha * i))));
+                frame.targets.push(new Target(0 - j, 0, new Tile(15, 15, 1 - (alpha * i))));
+            }
+            animation.frames.push(frame);
+        }
+        this._animations.push(animation);
+    }
+    /**
+     * Adds a circle fade out animation to the queue.
+     * @param {number} x0 - The x0;
+     * @param {number} y0 - The y0;
+     * @param {number} x1 - The x1;
+     * @param {number} y1 - The y1;
+     */
+    addProjectile(x0, y0, x1, y1) {
+        let animation = new Animation(x0, y0, []);
+        let dx = x1 - x0;
+        let dy = y1 - y0;
+        let nx = Math.abs(dx);
+        let ny = Math.abs(dy);
+        let signX = dx > 0 ? 1 : -1;
+        let signY = dy > 0 ? 1 : -1;
+        let cx = x0;
+        let cy = x0;
+        animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
+        for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
+            if ((0.5 + ix) / nx == (0.5 + iy) / ny) {
+                cx += signX;
+                cy += signY;
+                ix++;
+                iy++;
+            }
+            else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
+                cx += signX;
+                ix++;
+            }
+            else {
+                cy += signY;
+                iy++;
+            }
+            animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
+        }
+        this._animations.push(animation);
     }
 }
 /**
@@ -1803,7 +1882,27 @@ class Control {
         this.kKeyDown = event.keyCode;
     }
 }
-/// <reference path="Control/Control.ts"/>
+/**
+ * Class representing a coordinate.
+ */
+class Coordinate {
+    /**
+     * Creates a coordinate.
+     * @param {number} x - The x;
+     * @param {number} y - The y;
+     * @return {Coordinate}
+     */
+    constructor(x, y) {
+        this._x = x;
+        this._y = y;
+    }
+    get x() {
+        return this._x;
+    }
+    get y() {
+        return this._y;
+    }
+}
 /**
  * Class representing an engine.
  */
@@ -2029,6 +2128,22 @@ class Engine {
     }
 }
 /**
+ * Class representing a frame.
+ */
+class Frame {
+    /**
+     * Creates a frame.
+     * @param {Array<Target>} targets - The targets
+     * @return {Frame}
+     */
+    constructor(targets) {
+        this._targets = targets;
+    }
+    get targets() {
+        return this._targets;
+    }
+}
+/**
  * Class representing a layer.
  */
 class Layer {
@@ -2189,122 +2304,6 @@ class Layer {
     }
 }
 /**
- * Class representing an animation.
- */
-class Animation {
-    /**
-     * Creates an animation.
-     * @param {number} x - The x.
-     * @param {number} y - The y.
-     * @param {Array<Frame>} frames - The frames.
-     * @return {Animation}
-     */
-    constructor(x, y, frames) {
-        this._x = x;
-        this._y = y;
-        this._frames = frames;
-    }
-    get x() {
-        return this._x;
-    }
-    get y() {
-        return this._y;
-    }
-    get frames() {
-        return this._frames;
-    }
-}
-/**
- * Class representing an animator.
- */
-class Animator {
-    /**
-     * Creates an animator.
-     * @return {Animator}
-     */
-    constructor() {
-        this._animations = [];
-    }
-    get animations() {
-        return this._animations;
-    }
-    /**
-     * Adds a circle fade out animation to the queue.
-     * @param {number} x - The x;
-     * @param {number} y - The y;
-     * @param {number} length - The length;
-     * @param {number} size - The size;
-     */
-    addCircleFadeOut(x, y, length, size) {
-        let animation = new Animation(x, y, []);
-        let alpha = 1 / length;
-        for (let i = 0; i < length; i++) {
-            let frame = new Frame([new Target(0, 0, new Tile(15, 15, 1 - (alpha * i)))]);
-            for (let j = 1; j < size; j++) {
-                frame.targets.push(new Target(0, 0 + j, new Tile(15, 15, 1 - (alpha * i))));
-                frame.targets.push(new Target(0, 0 - j, new Tile(15, 15, 1 - (alpha * i))));
-                frame.targets.push(new Target(0 + j, 0, new Tile(15, 15, 1 - (alpha * i))));
-                frame.targets.push(new Target(0 - j, 0, new Tile(15, 15, 1 - (alpha * i))));
-            }
-            animation.frames.push(frame);
-        }
-        this._animations.push(animation);
-    }
-    /**
-     * Adds a circle fade out animation to the queue.
-     * @param {number} x0 - The x0;
-     * @param {number} y0 - The y0;
-     * @param {number} x1 - The x1;
-     * @param {number} y1 - The y1;
-     */
-    addProjectile(x0, y0, x1, y1) {
-        let animation = new Animation(x0, y0, []);
-        let dx = x1 - x0;
-        let dy = y1 - y0;
-        let nx = Math.abs(dx);
-        let ny = Math.abs(dy);
-        let signX = dx > 0 ? 1 : -1;
-        let signY = dy > 0 ? 1 : -1;
-        let cx = x0;
-        let cy = x0;
-        animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
-        for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
-            if ((0.5 + ix) / nx == (0.5 + iy) / ny) {
-                cx += signX;
-                cy += signY;
-                ix++;
-                iy++;
-            }
-            else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
-                cx += signX;
-                ix++;
-            }
-            else {
-                cy += signY;
-                iy++;
-            }
-            animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
-        }
-        this._animations.push(animation);
-    }
-}
-/**
- * Class representing a frame.
- */
-class Frame {
-    /**
-     * Creates a frame.
-     * @param {Array<Target>} targets - The targets
-     * @return {Frame}
-     */
-    constructor(targets) {
-        this._targets = targets;
-    }
-    get targets() {
-        return this._targets;
-    }
-}
-/**
  * Class representing a target.
  */
 class Target {
@@ -2349,20 +2348,11 @@ class Tile {
     get x() {
         return this._x;
     }
-    set x(value) {
-        this._x = value;
-    }
     get y() {
         return this._y;
     }
-    set y(value) {
-        this._y = value;
-    }
     get alpha() {
         return this._alpha;
-    }
-    set alpha(value) {
-        this._alpha = value;
     }
 }
 /**
@@ -2426,7 +2416,8 @@ var RaceEnum;
 })(RaceEnum || (RaceEnum = {}));
 /// <reference path="../Class/Character.ts"/>
 /// <reference path="../Engine/Engine.ts"/>
-/// <reference path="../Engine/Tileset/Tileset.ts"/>
+/// <reference path="../Engine/Tile.ts"/>
+/// <reference path="../Engine/Tileset.ts"/>
 /// <reference path="../Enum/AbilityEnum.ts"/>
 /// <reference path="../Enum/AttackRollResultEnum.ts"/>
 /// <reference path="../Enum/ClassEnum.ts"/>
@@ -2436,7 +2427,7 @@ var RaceEnum;
 /// <reference path="../Die.ts"/>
 /// <reference path="../Logger.ts"/>
 /// <reference path="../Ruleset.ts"/>
-let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
+let tileset = new Tileset('./src/Engine/Sprite/tileset.png', 16, 16);
 let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight);
 let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, false, tileset);
 let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, true, tileset);

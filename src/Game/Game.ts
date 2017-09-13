@@ -1,7 +1,8 @@
 /// <reference path="../Class/Character.ts"/>
 
 /// <reference path="../Engine/Engine.ts"/>
-/// <reference path="../Engine/Tileset/Tileset.ts"/>
+/// <reference path="../Engine/Tile.ts"/>
+/// <reference path="../Engine/Tileset.ts"/>
 
 /// <reference path="../Enum/AbilityEnum.ts"/>
 /// <reference path="../Enum/AttackRollResultEnum.ts"/>
@@ -14,7 +15,7 @@
 /// <reference path="../Logger.ts"/>
 /// <reference path="../Ruleset.ts"/>
 
-let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
+let tileset = new Tileset('./src/Engine/Sprite/tileset.png', 16, 16);
 let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight);
 let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, false, tileset);
 let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, true, tileset);

@@ -23,23 +23,11 @@ class Tile {
         return this._x;
     }
 
-    public set x(value: number) {
-        this._x = value;
-    }
-
     public get y() {
         return this._y;
     }
 
-    public set y(value: number) {
-        this._y = value;
-    }
-
     public get alpha() {
         return this._alpha;
-    }
-
-    public set alpha(value: number) {
-        this._alpha = value;
     }
 }
