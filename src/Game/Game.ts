@@ -17,13 +17,19 @@
 
 let tileset = new Tileset('./src/Engine/Sprite/tileset.png', 16, 16);
 let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight);
+
 let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, false, tileset);
 let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, true, tileset);
+let miniMapLayer = new Layer('minimap', 46 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 17 * tileset.tileHeight, 17 * tileset.tileHeight, true, tileset);
 
 // ui layer
 for (let i = 1; i < uiLayer.widthInTile - 1; i++) {
     uiLayer.tiles[i][0] = new Tile(4, 12, 1);
     uiLayer.tiles[i][uiLayer.heightInTile - 1] = new Tile(4, 12, 1);
+}
+
+for (let i = 46; i < uiLayer.widthInTile - 1; i++) {
+    uiLayer.tiles[i][18] = new Tile(4, 12, 1);
 }
 
 for (let i = 1; i < uiLayer.heightInTile - 1; i++) {
@@ -38,6 +44,9 @@ uiLayer.tiles[0][uiLayer.heightInTile - 1] = new Tile(0, 12, 1);
 uiLayer.tiles[uiLayer.widthInTile - 1][uiLayer.heightInTile - 1] = new Tile(9, 13, 1);
 uiLayer.tiles[45][0] = new Tile(2, 12, 1);
 uiLayer.tiles[45][uiLayer.heightInTile - 1] = new Tile(1, 12, 1);
+
+uiLayer.tiles[45][18] = new Tile(3, 12, 1);
+uiLayer.tiles[uiLayer.widthInTile - 1][18] = new Tile(4, 11, 1);
 
 // map layer
 let line = Engine.line(0, 0, 1, 11);
@@ -72,6 +81,7 @@ for (let i = 0; i < squareFilled.length; i++) {
 
 engine.layers.push(uiLayer);
 engine.layers.push(mapLayer);
+engine.layers.push(miniMapLayer);
 
 engine.start();
 
