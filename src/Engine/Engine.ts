@@ -151,10 +151,10 @@ class Engine {
      * @param {number} y0 - The y0.
      * @param {number} x1 - The x1.
      * @param {number} y1 - The y1.
-     * @return {Array<Object>}
+     * @return {Array<Coordinate>}
      */
     public static line(x0: number, y0: number, x1: number, y1: number) {
-        let result = [];
+        let result = new Array<Coordinate>();
 
         let dx = x1 - x0;
         let dy = y1 - y0;
@@ -166,10 +166,7 @@ class Engine {
         let cx = x0;
         let cy = x0;
 
-        result.push({
-            x: cx,
-            y: cy
-        });
+        result.push(new Coordinate(cx, cy));
 
         for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
             if ((0.5 + ix) / nx == (0.5 + iy) / ny) {
@@ -185,10 +182,7 @@ class Engine {
                 iy++;
             }
 
-            result.push({
-                x: cx,
-                y: cy
-            });
+            result.push(new Coordinate(cx, cy));
         }
 
         return result;
@@ -200,31 +194,19 @@ class Engine {
      * @param {number} y0 - The y.
      * @param {number} radius - The radius.
      * @param {boolean} isFill - Is filled.
-     * @return {Array<Object>}
+     * @return {Array<Coordinate>}
      */
     public static circle(x0: number, y0: number, radius: number, isFill: boolean) {
-        let result = [];
+        let result = new Array<Coordinate>();
 
         let x = 0;
         let y = radius;
         let d = 1 - radius;
 
-        result.push({
-            x: x0,
-            y: y0 + y
-        });
-        result.push({
-            x: x0,
-            y: y0 - y
-        });
-        result.push({
-            x: x0 + y,
-            y: y0
-        });
-        result.push({
-            x: x0 - y,
-            y: y0
-        });
+        result.push(new Coordinate(x0, y0 + y));
+        result.push(new Coordinate(x0, y0 - y));
+        result.push(new Coordinate(x0 + y, y0));
+        result.push(new Coordinate(x0 - y, y0));
 
         while (x < y - 1) {
             x = x + 1;
@@ -237,48 +219,21 @@ class Engine {
                 d = d + a + a;
             }
 
-            result.push({
-                x: x + x0,
-                y: y + y0
-            });
-            result.push({
-                x: y + x0,
-                y: x + y0
-            });
-            result.push({
-                x: y + x0,
-                y: 0 - x + y0
-            });
-            result.push({
-                x: x + x0,
-                y: 0 - y + y0
-            });
-            result.push({
-                x: 0 - x + x0,
-                y: 0 - y + y0
-            });
-            result.push({
-                x: 0 - y + x0,
-                y: 0 - x + y0
-            });
-            result.push({
-                x: 0 - y + x0,
-                y: x + y0
-            });
-            result.push({
-                x: 0 - x + x0,
-                y: y + y0
-            });
+            result.push(new Coordinate(x + x0, y + y0));
+            result.push(new Coordinate(y + x0, x + y0));
+            result.push(new Coordinate(y + x0, 0 - x + y0));
+            result.push(new Coordinate(x + x0, 0 - y + y0));
+            result.push(new Coordinate(0 - x + x0, 0 - y + y0));
+            result.push(new Coordinate(0 - y + x0, 0 - x + y0));
+            result.push(new Coordinate(0 - y + x0, x + y0));
+            result.push(new Coordinate(0 - x + x0, y + y0));
         }
 
         if (isFill) {
             for (let i = x0 - radius; i < x0 + radius; i++) {
                 for (let j = y0 - radius; j < y0 + radius; j++) {
                     if (Math.sqrt(Math.pow(i - x0, 2) + Math.pow(j - y0, 2)) <= radius) {
-                        result.push({
-                            x: i,
-                            y: j
-                        });
+                        result.push(new Coordinate(i, j));
                     }
                 }
             }
@@ -293,40 +248,25 @@ class Engine {
      * @param {number} y0 - The y.
      * @param {number} radius - The radius.
      * @param {boolean} isFill - Is filled.
-     * @return {Array<Object>}
+     * @return {Array<Coordinate>}
      */
     public static square(x0: number, y0: number, radius: number, isFill: boolean) {
-        let result = [];
+        let result = new Array<Coordinate>();
 
         for (let i = x0 - radius; i <= x0 + radius; i++) {
-            result.push({
-                x: i,
-                y: y0 + radius
-            });
-            result.push({
-                x: i,
-                y: y0 - radius
-            });
+            result.push(new Coordinate(i, y0 + radius));
+            result.push(new Coordinate(i, y0 - radius));
         }
 
         for (let i = y0 - radius + 1; i < y0 + radius; i++) {
-            result.push({
-                x: x0 + radius,
-                y: i,
-            });
-            result.push({
-                x: x0 - radius,
-                y: i
-            });
+            result.push(new Coordinate(x0 + radius, i));
+            result.push(new Coordinate(x0 - radius, i));
         }
 
         if (isFill) {
             for (let i = x0 - radius + 1; i < x0 + radius; i++) {
                 for (let j = y0 - radius + 1; j < y0 + radius; j++) {
-                    result.push({
-                        x: i,
-                        y: j,
-                    });
+                    result.push(new Coordinate(i, j));
                 }
             }
         }

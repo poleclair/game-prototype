@@ -39,23 +39,23 @@ uiLayer.tiles[45][0] = new Tile(2, 12, 1);
 uiLayer.tiles[45][uiLayer.heightInTile - 1] = new Tile(1, 12, 1);
 
 // map layer
-// let line = Engine.line(0, 0, 1, 11);
+let line = Engine.line(0, 0, 1, 11);
 
-// for (let i = 0; i < line.length; i++) {
-//     mapLayer.tiles[line[i].x][line[i].y] = new Tile(15, 15, 1);
-// }
+for (let i = 0; i < line.length; i++) {
+    mapLayer.tiles[line[i].x][line[i].y] = new Tile(15, 15, 1);
+}
 
-// let circle = Engine.circle(10, 10, 5, false);
+let circle = Engine.circle(10, 10, 5, false);
 
-// for (let i = 0; i < circle.length; i++) {
-//     mapLayer.tiles[circle[i].x][circle[i].y] = new Tile(15, 15, 1);
-// }
+for (let i = 0; i < circle.length; i++) {
+    mapLayer.tiles[circle[i].x][circle[i].y] = new Tile(15, 15, 1);
+}
 
-// let circleFilled = Engine.circle(20, 20, 4, true);
+let circleFilled = Engine.circle(20, 20, 4, true);
 
-// for (let i = 0; i < circleFilled.length; i++) {
-//     mapLayer.tiles[circleFilled[i].x][circleFilled[i].y] = new Tile(15, 15, 1);
-// }
+for (let i = 0; i < circleFilled.length; i++) {
+    mapLayer.tiles[circleFilled[i].x][circleFilled[i].y] = new Tile(15, 15, 1);
+}
 
 let square = Engine.square(10, 10, 2, false);
 
