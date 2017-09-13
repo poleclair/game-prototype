@@ -60,9 +60,29 @@ class Engine {
     }
 
     /**
+     * Starts the engine.
+     */
+    public start() {
+        this.init(function () {
+            this.layers.forEach(layer => {
+                layer.start();
+            });
+        }.bind(this));
+    }
+
+    /**
+     * Stops the engine.
+     */
+    public stop() {
+        this.layers.forEach(layer => {
+            layer.stop();
+        });
+    }
+
+    /**
      * Initializes the engine.
      */
-    public init(callback) {
+    private init(callback) {
         window.onload = function () {
 
             this.layers.forEach(layer => {
@@ -80,24 +100,6 @@ class Engine {
 
             callback();
         }.bind(this);
-    }
-
-    /**
-     * Starts the engine.
-     */
-    public start() {
-        this.layers.forEach(layer => {
-            layer.start();
-        });
-    }
-
-    /**
-     * Stops the engine.
-     */
-    public stop() {
-        this.layers.forEach(layer => {
-            layer.stop();
-        });
     }
 
     /**

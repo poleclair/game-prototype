@@ -1826,6 +1826,24 @@ class Engine {
         return this._layers;
     }
     /**
+     * Starts the engine.
+     */
+    start() {
+        this.init(function () {
+            this.layers.forEach(layer => {
+                layer.start();
+            });
+        }.bind(this));
+    }
+    /**
+     * Stops the engine.
+     */
+    stop() {
+        this.layers.forEach(layer => {
+            layer.stop();
+        });
+    }
+    /**
      * Initializes the engine.
      */
     init(callback) {
@@ -1841,22 +1859,6 @@ class Engine {
             this.container.addEventListener('mousemove', this.propagateMouseMove.bind(this));
             callback();
         }.bind(this);
-    }
-    /**
-     * Starts the engine.
-     */
-    start() {
-        this.layers.forEach(layer => {
-            layer.start();
-        });
-    }
-    /**
-     * Stops the engine.
-     */
-    stop() {
-        this.layers.forEach(layer => {
-            layer.stop();
-        });
     }
     /**
      * Propagates mouse down event.
@@ -2077,16 +2079,18 @@ class Layer {
      * @param {number} z - The z.
      * @param {number} width - The width.
      * @param {number} height - The height.
+     * @param {boolean} isAutoRefresh - Is auto refresh.
      * @param {Tileset} tileset - The tileset.
      * @return {Layer}
      */
-    constructor(id, x, y, z, width, height, tileset) {
+    constructor(id, x, y, z, width, height, isAutoRefresh, tileset) {
         this._id = id;
         this._x = x;
         this._y = y;
         this._z = z;
         this._width = width;
         this._height = height;
+        this._isAutoRefresh = isAutoRefresh;
         this._tileset = tileset;
         this._widthInTile = width / tileset.tileWidth;
         this._heightInTile = height / tileset.tileHeight;
@@ -2126,6 +2130,9 @@ class Layer {
     get height() {
         return this._height;
     }
+    get isAutoRefresh() {
+        return this._isAutoRefresh;
+    }
     get tileset() {
         return this._tileset;
     }
@@ -2157,7 +2164,12 @@ class Layer {
      * Starts the layer.
      */
     start() {
-        this.pid = requestAnimationFrame(this.update.bind(this));
+        if (this.isAutoRefresh) {
+            this.pid = requestAnimationFrame(this.update.bind(this));
+        }
+        else {
+            this.pid = requestAnimationFrame(this.tick.bind(this));
+        }
     }
     /**
      * Updates the layer.
@@ -2465,8 +2477,8 @@ var RaceEnum;
 /// <reference path="../Ruleset.ts"/>
 let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
 let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight);
-let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, tileset);
-let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, tileset);
+let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, false, tileset);
+let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, true, tileset);
 // ui layer
 for (let i = 1; i < uiLayer.widthInTile - 1; i++) {
     uiLayer.tiles[i][0] = new Tile(4, 12, 1);
@@ -2506,16 +2518,14 @@ for (let i = 0; i < squareFilled.length; i++) {
 }
 engine.layers.push(uiLayer);
 engine.layers.push(mapLayer);
-engine.init(function () {
-    engine.start();
-    // setInterval(function () {
-    //     mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
-    //     mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
-    //     mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
-    //     mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
-    //     mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
-    // }, 1000);
-});
+engine.start();
+setInterval(function () {
+    mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
+    mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
+    mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
+    mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
+    mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
+}, 1000);
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
 

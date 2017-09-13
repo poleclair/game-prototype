@@ -8,6 +8,7 @@ class Layer {
     private _z: number;
     private _width: number;
     private _height: number;
+    private _isAutoRefresh: boolean;
     private _tileset: Tileset;
 
     private _widthInTile: number;
@@ -26,16 +27,18 @@ class Layer {
      * @param {number} z - The z.
      * @param {number} width - The width.
      * @param {number} height - The height.
+     * @param {boolean} isAutoRefresh - Is auto refresh.
      * @param {Tileset} tileset - The tileset.
      * @return {Layer}
      */
-    public constructor(id: string, x: number, y: number, z: number, width: number, height: number, tileset: Tileset) {
+    public constructor(id: string, x: number, y: number, z: number, width: number, height: number, isAutoRefresh: boolean, tileset: Tileset) {
         this._id = id;
         this._x = x;
         this._y = y;
         this._z = z;
         this._width = width;
         this._height = height;
+        this._isAutoRefresh = isAutoRefresh;
         this._tileset = tileset;
 
         this._widthInTile = width / tileset.tileWidth;
@@ -87,6 +90,10 @@ class Layer {
         return this._height;
     }
 
+    public get isAutoRefresh() {
+        return this._isAutoRefresh;
+    }
+
     public get tileset() {
         return this._tileset;
     }
@@ -127,7 +134,11 @@ class Layer {
      * Starts the layer.
      */
     public start() {
-        this.pid = requestAnimationFrame(this.update.bind(this));
+        if (this.isAutoRefresh) {
+            this.pid = requestAnimationFrame(this.update.bind(this));
+        } else {
+            this.pid = requestAnimationFrame(this.tick.bind(this));
+        }
     }
 
     /**

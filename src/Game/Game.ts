@@ -16,8 +16,8 @@
 
 let tileset = new Tileset('./src/Engine/Tileset/Sprite/tileset.png', 16, 16);
 let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight);
-let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, tileset);
-let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, tileset);
+let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, false, tileset);
+let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, true, tileset);
 
 // ui layer
 for (let i = 1; i < uiLayer.widthInTile - 1; i++) {
@@ -72,17 +72,15 @@ for (let i = 0; i < squareFilled.length; i++) {
 engine.layers.push(uiLayer);
 engine.layers.push(mapLayer);
 
-engine.init(function () {
-    engine.start();
+engine.start();
 
-    // setInterval(function () {
-    //     mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
-    //     mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
-    //     mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
-    //     mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
-    //     mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
-    // }, 1000);
-});
+setInterval(function () {
+    mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
+    mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
+    mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
+    mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
+    mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
+}, 1000);
 
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
