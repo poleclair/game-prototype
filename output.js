@@ -1892,6 +1892,178 @@ class Engine {
     propagateKeyDown(event) {
         this.control.keyDown(event);
     }
+    /**
+     * Gets the x and y coordonates of a line.
+     * @param {number} x0 - The x0.
+     * @param {number} y0 - The y0.
+     * @param {number} x1 - The x1.
+     * @param {number} y1 - The y1.
+     * @return {Array<Object>}
+     */
+    static line(x0, y0, x1, y1) {
+        let result = [];
+        let dx = x1 - x0;
+        let dy = y1 - y0;
+        let nx = Math.abs(dx);
+        let ny = Math.abs(dy);
+        let signX = dx > 0 ? 1 : -1;
+        let signY = dy > 0 ? 1 : -1;
+        let cx = x0;
+        let cy = x0;
+        result.push({
+            x: cx,
+            y: cy
+        });
+        for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
+            if ((0.5 + ix) / nx == (0.5 + iy) / ny) {
+                cx += signX;
+                cy += signY;
+                ix++;
+                iy++;
+            }
+            else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
+                cx += signX;
+                ix++;
+            }
+            else {
+                cy += signY;
+                iy++;
+            }
+            result.push({
+                x: cx,
+                y: cy
+            });
+        }
+        return result;
+    }
+    /**
+     * Gets the x and y coordonates of a circle.
+     * @param {number} x0 - The x.
+     * @param {number} y0 - The y.
+     * @param {number} radius - The radius.
+     * @param {boolean} isFill - Is filled.
+     * @return {Array<Object>}
+     */
+    static circle(x0, y0, radius, isFill) {
+        let result = [];
+        let x = 0;
+        let y = radius;
+        let d = 1 - radius;
+        result.push({
+            x: x0,
+            y: y0 + y
+        });
+        result.push({
+            x: x0,
+            y: y0 - y
+        });
+        result.push({
+            x: x0 + y,
+            y: y0
+        });
+        result.push({
+            x: x0 - y,
+            y: y0
+        });
+        while (x < y - 1) {
+            x = x + 1;
+            if (d < 0) {
+                d = d + x + x + 1;
+            }
+            else {
+                y = y - 1;
+                let a = x - y + 1;
+                d = d + a + a;
+            }
+            result.push({
+                x: x + x0,
+                y: y + y0
+            });
+            result.push({
+                x: y + x0,
+                y: x + y0
+            });
+            result.push({
+                x: y + x0,
+                y: 0 - x + y0
+            });
+            result.push({
+                x: x + x0,
+                y: 0 - y + y0
+            });
+            result.push({
+                x: 0 - x + x0,
+                y: 0 - y + y0
+            });
+            result.push({
+                x: 0 - y + x0,
+                y: 0 - x + y0
+            });
+            result.push({
+                x: 0 - y + x0,
+                y: x + y0
+            });
+            result.push({
+                x: 0 - x + x0,
+                y: y + y0
+            });
+        }
+        if (isFill) {
+            for (let i = x0 - radius; i < x0 + radius; i++) {
+                for (let j = y0 - radius; j < y0 + radius; j++) {
+                    if (Math.sqrt(Math.pow(i - x0, 2) + Math.pow(j - y0, 2)) <= radius) {
+                        result.push({
+                            x: i,
+                            y: j
+                        });
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    /**
+     * Gets the x and y coordonates of a square.
+     * @param {number} x0 - The x.
+     * @param {number} y0 - The y.
+     * @param {number} radius - The radius.
+     * @param {boolean} isFill - Is filled.
+     * @return {Array<Object>}
+     */
+    static square(x0, y0, radius, isFill) {
+        let result = [];
+        for (let i = x0 - radius; i <= x0 + radius; i++) {
+            result.push({
+                x: i,
+                y: y0 + radius
+            });
+            result.push({
+                x: i,
+                y: y0 - radius
+            });
+        }
+        for (let i = y0 - radius + 1; i < y0 + radius; i++) {
+            result.push({
+                x: x0 + radius,
+                y: i,
+            });
+            result.push({
+                x: x0 - radius,
+                y: i
+            });
+        }
+        if (isFill) {
+            for (let i = x0 - radius + 1; i < x0 + radius; i++) {
+                for (let j = y0 - radius + 1; j < y0 + radius; j++) {
+                    result.push({
+                        x: i,
+                        y: j,
+                    });
+                }
+            }
+        }
+        return result;
+    }
 }
 /**
  * Class representing a layer.
@@ -2312,17 +2484,37 @@ uiLayer.tiles[uiLayer.widthInTile - 1][uiLayer.heightInTile - 1] = new Tile(9, 1
 uiLayer.tiles[45][0] = new Tile(2, 12, 1);
 uiLayer.tiles[45][uiLayer.heightInTile - 1] = new Tile(1, 12, 1);
 // map layer
+// let line = Engine.line(0, 0, 1, 11);
+// for (let i = 0; i < line.length; i++) {
+//     mapLayer.tiles[line[i].x][line[i].y] = new Tile(15, 15, 1);
+// }
+// let circle = Engine.circle(10, 10, 5, false);
+// for (let i = 0; i < circle.length; i++) {
+//     mapLayer.tiles[circle[i].x][circle[i].y] = new Tile(15, 15, 1);
+// }
+// let circleFilled = Engine.circle(20, 20, 4, true);
+// for (let i = 0; i < circleFilled.length; i++) {
+//     mapLayer.tiles[circleFilled[i].x][circleFilled[i].y] = new Tile(15, 15, 1);
+// }
+let square = Engine.square(10, 10, 2, false);
+for (let i = 0; i < square.length; i++) {
+    mapLayer.tiles[square[i].x][square[i].y] = new Tile(15, 15, 1);
+}
+let squareFilled = Engine.square(20, 20, 2, true);
+for (let i = 0; i < squareFilled.length; i++) {
+    mapLayer.tiles[squareFilled[i].x][squareFilled[i].y] = new Tile(15, 15, 1);
+}
 engine.layers.push(uiLayer);
 engine.layers.push(mapLayer);
 engine.init(function () {
     engine.start();
-    setInterval(function () {
-        mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
-        mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
-        mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
-        mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
-        mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
-    }, 1000);
+    // setInterval(function () {
+    //     mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
+    //     mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
+    //     mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
+    //     mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
+    //     mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
+    // }, 1000);
 });
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
