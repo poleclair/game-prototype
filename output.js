@@ -1755,7 +1755,7 @@ class Animator {
         let cy = x0;
         animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
         for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
-            if ((0.5 + ix) / nx == (0.5 + iy) / ny) {
+            if ((0.5 + ix) / nx === (0.5 + iy) / ny) {
                 cx += signX;
                 cy += signY;
                 ix++;
@@ -1921,11 +1921,11 @@ class Engine {
         this._height = height;
         this._layers = [];
         this._control = new Control();
-        this._container = document.createElement('div');
+        this._container = document.createElement("div");
         this._container.id = id;
-        this._container.style.width = width + 'px';
-        this._container.style.height = height + 'px';
-        this._container.style.position = 'relative';
+        this._container.style.width = width + "px";
+        this._container.style.height = height + "px";
+        this._container.style.position = "relative";
     }
     get id() {
         return this._id;
@@ -1972,11 +1972,11 @@ class Engine {
                 this.container.appendChild(layer.canvas);
             });
             document.body.appendChild(this.container);
-            document.addEventListener('keydown', this.propagateKeyDown.bind(this));
-            this.container.addEventListener('mousedown', this.propagateMouseDown.bind(this));
-            this.container.addEventListener('mouseup', this.propagateMouseUp.bind(this));
-            this.container.addEventListener('contextmenu', this.propagateContextMenu.bind(this));
-            this.container.addEventListener('mousemove', this.propagateMouseMove.bind(this));
+            document.addEventListener("keydown", this.propagateKeyDown.bind(this));
+            this.container.addEventListener("mousedown", this.propagateMouseDown.bind(this));
+            this.container.addEventListener("mouseup", this.propagateMouseUp.bind(this));
+            this.container.addEventListener("contextmenu", this.propagateContextMenu.bind(this));
+            this.container.addEventListener("mousemove", this.propagateMouseMove.bind(this));
             callback();
         }.bind(this);
     }
@@ -2034,7 +2034,7 @@ class Engine {
         let cy = x0;
         result.push(new Coordinate(cx, cy));
         for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
-            if ((0.5 + ix) / nx == (0.5 + iy) / ny) {
+            if ((0.5 + ix) / nx === (0.5 + iy) / ny) {
                 cx += signX;
                 cy += signY;
                 ix++;
@@ -2178,15 +2178,15 @@ class Layer {
                 this._tiles[x][y] = new Tile(0, 0, 1);
             }
         }
-        this._canvas = document.createElement('canvas');
+        this._canvas = document.createElement("canvas");
         this._canvas.id = id;
         this._canvas.width = width;
         this._canvas.height = height;
         this._canvas.style.zIndex = z.toString();
-        this._canvas.style.position = 'absolute';
-        this._canvas.style.left = x + 'px';
-        this._canvas.style.top = y + 'px';
-        this._context = this._canvas.getContext('2d');
+        this._canvas.style.position = "absolute";
+        this._canvas.style.left = x + "px";
+        this._canvas.style.top = y + "px";
+        this._context = this._canvas.getContext("2d");
     }
     get id() {
         return this._id;
