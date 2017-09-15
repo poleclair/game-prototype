@@ -19,15 +19,15 @@ class Tile {
         this._alpha = alpha;
     }
 
-    public get x() {
+    public get x(): number {
         return this._x;
     }
 
-    public get y() {
+    public get y(): number {
         return this._y;
     }
 
-    public get alpha() {
+    public get alpha(): number {
         return this._alpha;
     }
 }

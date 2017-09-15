@@ -46,83 +46,83 @@ class Layer {
         this._animator = new Animator();
         this._tiles = [];
 
-        for (let x = 0; x < width; x++) {
+        for (let x: number = 0; x < width; x++) {
             this._tiles[x] = [];
 
-            for (let y = 0; y < height; y++) {
+            for (let y: number = 0; y < height; y++) {
                 this._tiles[x][y] = new Tile(0, 0, 1);
             }
         }
 
-        this._canvas = document.createElement('canvas');
+        this._canvas = document.createElement("canvas");
         this._canvas.id = id;
         this._canvas.width = width;
         this._canvas.height = height;
         this._canvas.style.zIndex = z.toString();
-        this._canvas.style.position = 'absolute';
-        this._canvas.style.left = x + 'px';
-        this._canvas.style.top = y + 'px';
+        this._canvas.style.position = "absolute";
+        this._canvas.style.left = x + "px";
+        this._canvas.style.top = y + "px";
 
-        this._context = this._canvas.getContext('2d');
+        this._context = this._canvas.getContext("2d");
     }
 
-    public get id() {
+    public get id(): string {
         return this._id;
     }
 
-    public get x() {
+    public get x(): number {
         return this._x;
     }
 
-    public get y() {
+    public get y(): number {
         return this._y;
     }
 
-    public get z() {
+    public get z(): number {
         return this._z;
     }
 
-    public get width() {
+    public get width(): number {
         return this._width;
     }
 
-    public get height() {
+    public get height(): number {
         return this._height;
     }
 
-    public get isAutoRefresh() {
+    public get isAutoRefresh(): boolean {
         return this._isAutoRefresh;
     }
 
-    public get tileset() {
+    public get tileset(): Tileset {
         return this._tileset;
     }
 
-    public get widthInTile() {
+    public get widthInTile(): number {
         return this._widthInTile;
     }
 
-    public get heightInTile() {
+    public get heightInTile(): number {
         return this._heightInTile;
     }
 
-    public get animator() {
+    public get animator(): Animator {
         return this._animator;
     }
 
-    public get tiles() {
+    public get tiles(): Array<Array<Tile>> {
         return this._tiles;
     }
 
-    public get canvas() {
+    public get canvas(): HTMLCanvasElement {
         return this._canvas;
     }
 
-    public get context() {
+    public get context(): CanvasRenderingContext2D {
         return this._context;
     }
 
-    public get pid() {
+    public get pid(): number {
         return this._pid;
     }
 
@@ -133,7 +133,7 @@ class Layer {
     /**
      * Starts the layer.
      */
-    public start() {
+    public start(): void {
         if (this.isAutoRefresh) {
             this.pid = requestAnimationFrame(this.update.bind(this));
         } else {
@@ -144,7 +144,7 @@ class Layer {
     /**
      * Updates the layer.
      */
-    public update() {
+    public update(): void {
         this.tick();
         this.pid = requestAnimationFrame(this.update.bind(this));
     }
@@ -152,7 +152,7 @@ class Layer {
     /**
      * Ticks the layer.
      */
-    public tick() {
+    public tick(): void {
         this.clear();
         this.draw();
     }
@@ -160,23 +160,23 @@ class Layer {
     /**
      * Stops the layer.
      */
-    public stop() {
+    public stop(): void {
         cancelAnimationFrame(this.pid);
     }
 
     /**
      * Clears the engine.
      */
-    public clear() {
+    public clear(): void {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     /**
      * Draws the engine.
      */
-    public draw() {
-        for (let x = 0; x < this.widthInTile; x++) {
-            for (let y = 0; y < this.heightInTile; y++) {
+    public draw(): void {
+        for (let x: number = 0; x < this.widthInTile; x++) {
+            for (let y: number = 0; y < this.heightInTile; y++) {
                 this.context.globalAlpha = this.tiles[x][y].alpha;
                 this.context.drawImage(
                     this.tileset.image,
@@ -192,12 +192,12 @@ class Layer {
             }
         }
 
-        for (let i = this.animator.animations.length - 1; i >= 0; i--) {
+        for (let i: number = this.animator.animations.length - 1; i >= 0; i--) {
             if (this.animator.animations[i].frames.length > 0) {
-                let frame = this.animator.animations[i].frames.shift();
+                let frame: Frame = this.animator.animations[i].frames.shift();
 
-                for (let j = frame.targets.length; j > 0; j--) {
-                    let target = frame.targets.shift();
+                for (let j: number = frame.targets.length; j > 0; j--) {
+                    let target: Target = frame.targets.shift();
 
                     if (this.animator.animations[i].x + target.xOffset >= 0 &&
                         this.animator.animations[i].x + target.xOffset < this.width &&

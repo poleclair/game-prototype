@@ -19,15 +19,15 @@ class Animation {
         this._frames = frames;
     }
 
-    public get x() {
+    public get x(): number {
         return this._x;
     }
 
-    public get y() {
+    public get y(): number {
         return this._y;
     }
 
-    public get frames() {
+    public get frames(): Array<Frame> {
         return this._frames;
     }
 }

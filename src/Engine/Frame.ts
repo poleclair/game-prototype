@@ -13,7 +13,7 @@ class Frame {
         this._targets = targets;
     }
 
-    public get targets() {
+    public get targets(): Array<Target> {
         return this._targets;
     }
 }

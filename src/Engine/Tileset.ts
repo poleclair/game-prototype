@@ -21,15 +21,15 @@ class Tileset {
         this._image.src = source;
     }
 
-    public get tileWidth() {
+    public get tileWidth(): number {
         return this._tileWidth;
     }
 
-    public get tileHeight() {
+    public get tileHeight(): number {
         return this._tileHeight;
     }
 
-    public get image() {
+    public get image(): HTMLImageElement {
         return this._image;
     }
 }

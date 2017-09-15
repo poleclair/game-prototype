@@ -16,11 +16,11 @@ class Coordinate {
         this._y = y;
     }
 
-    public get x() {
+    public get x(): number {
         return this._x;
     }
 
-    public get y() {
+    public get y(): number {
         return this._y;
     }
 }

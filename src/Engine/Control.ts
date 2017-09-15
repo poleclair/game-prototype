@@ -28,7 +28,7 @@ class Control {
         this._kKeyDown = 0;
     }
 
-    public get x() {
+    public get x(): number {
         return this._x;
     }
 
@@ -36,7 +36,7 @@ class Control {
         this._x = value;
     }
 
-    public get y() {
+    public get y(): number {
         return this._y;
     }
 
@@ -44,7 +44,7 @@ class Control {
         this._y = value;
     }
 
-    public get xDown() {
+    public get xDown(): number {
         return this._xDown;
     }
 
@@ -52,7 +52,7 @@ class Control {
         this._xDown = value;
     }
 
-    public get yDown() {
+    public get yDown(): number {
         return this._yDown;
     }
 
@@ -60,7 +60,7 @@ class Control {
         this._yDown = value;
     }
 
-    public get xUp() {
+    public get xUp(): number {
         return this._xUp;
     }
 
@@ -68,7 +68,7 @@ class Control {
         this._xUp = value;
     }
 
-    public get yUp() {
+    public get yUp(): number {
         return this._yUp;
     }
 
@@ -76,7 +76,7 @@ class Control {
         this._yUp = value;
     }
 
-    public get xContextMenu() {
+    public get xContextMenu(): number {
         return this._xUp;
     }
 
@@ -84,7 +84,7 @@ class Control {
         this._xUp = value;
     }
 
-    public get yContextMenu() {
+    public get yContextMenu(): number {
         return this._yUp;
     }
 
@@ -92,7 +92,7 @@ class Control {
         this._yUp = value;
     }
 
-    public get kKeyDown() {
+    public get kKeyDown(): number {
         return this._kKeyDown;
     }
 
@@ -103,7 +103,7 @@ class Control {
     /**
      * Triggers mouse down.
      */
-    public mouseDown(event: MouseEvent) {
+    public mouseDown(event: MouseEvent): void {
         this.xDown = event.layerX;
         this.yDown = event.layerY;
     }
@@ -111,7 +111,7 @@ class Control {
     /**
      * Triggers mouse up.
      */
-    public mouseUp(event: MouseEvent) {
+    public mouseUp(event: MouseEvent): void {
         this.xUp = event.layerX;
         this.yUp = event.layerY;
     }
@@ -119,7 +119,7 @@ class Control {
     /**
      * Triggers mouse move.
      */
-    public mouseMove(event: MouseEvent) {
+    public mouseMove(event: MouseEvent): void {
         this.x = event.layerX;
         this.y = event.layerY;
     }
@@ -127,7 +127,7 @@ class Control {
     /**
      * Triggers context menu.
      */
-    public contextMenu(event: MouseEvent) {
+    public contextMenu(event: MouseEvent): void {
         this.xContextMenu = event.layerX;
         this.yContextMenu = event.layerY;
     }
@@ -135,7 +135,7 @@ class Control {
     /**
      * Triggers key down.
      */
-    public keyDown(event: KeyboardEvent) {
+    public keyDown(event: KeyboardEvent): void {
         this.kKeyDown = event.keyCode;
     }
 }

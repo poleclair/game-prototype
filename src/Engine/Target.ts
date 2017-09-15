@@ -19,15 +19,15 @@ class Target {
         this._tile = tile;
     }
 
-    public get xOffset() {
+    public get xOffset(): number {
         return this._xOffset;
     }
 
-    public get yOffset() {
+    public get yOffset(): number {
         return this._yOffset;
     }
 
-    public get tile() {
+    public get tile(): Tile {
         return this._tile;
     }
 }
