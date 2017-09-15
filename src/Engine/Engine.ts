@@ -80,7 +80,7 @@ class Engine {
     /**
      * Initializes the engine.
      */
-    private init(callback): void {
+    private init(callback: any): void {
         window.onload = function (): void {
 
             this.layers.forEach(layer => {

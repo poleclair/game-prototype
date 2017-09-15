@@ -2427,11 +2427,11 @@ var RaceEnum;
 /// <reference path="../Die.ts"/>
 /// <reference path="../Logger.ts"/>
 /// <reference path="../Ruleset.ts"/>
-let tileset = new Tileset('./src/Engine/Sprite/tileset.png', 16, 16);
-let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight);
-let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, false, tileset);
-let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, true, tileset);
-let miniMapLayer = new Layer('minimap', 46 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 17 * tileset.tileHeight, 17 * tileset.tileHeight, true, tileset);
+let tileset = new Tileset("./src/Engine/Sprite/tileset.png", 16, 16);
+let engine = new Engine("game", 64 * tileset.tileWidth, 36 * tileset.tileHeight);
+let uiLayer = new Layer("ui", 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, false, tileset);
+let mapLayer = new Layer("map", 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, true, tileset);
+let miniMapLayer = new Layer("minimap", 46 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 17 * tileset.tileHeight, 17 * tileset.tileHeight, true, tileset);
 // ui layer
 for (let i = 1; i < uiLayer.widthInTile - 1; i++) {
     uiLayer.tiles[i][0] = new Tile(4, 12, 1);
@@ -2541,7 +2541,7 @@ while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
     roundQueue.push(acting);
     let target = roundQueue[0];
     let d20Roll = Die.RollD(20);
-    let damages = [];
+    let damages = Array();
     let attackRollResult = Ruleset.AttackRollResult(d20Roll, acting.getAttackModifier(), target.getArmorClass());
     switch (attackRollResult) {
         case AttackRollResultEnum.CRITICAL:

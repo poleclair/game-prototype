@@ -15,24 +15,27 @@
 /// <reference path="../Logger.ts"/>
 /// <reference path="../Ruleset.ts"/>
 
-let tileset = new Tileset('./src/Engine/Sprite/tileset.png', 16, 16);
-let engine = new Engine('game', 64 * tileset.tileWidth, 36 * tileset.tileHeight);
+let tileset: Tileset = new Tileset("./src/Engine/Sprite/tileset.png", 16, 16);
+let engine: Engine = new Engine("game", 64 * tileset.tileWidth, 36 * tileset.tileHeight);
 
-let uiLayer = new Layer('ui', 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, false, tileset);
-let mapLayer = new Layer('map', 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, true, tileset);
-let miniMapLayer = new Layer('minimap', 46 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 17 * tileset.tileHeight, 17 * tileset.tileHeight, true, tileset);
+let uiLayer: Layer = new Layer(
+    "ui", 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, false, tileset);
+let mapLayer: Layer = new Layer(
+    "map", 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, true, tileset);
+let miniMapLayer: Layer = new Layer(
+    "minimap", 46 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 17 * tileset.tileHeight, 17 * tileset.tileHeight, true, tileset);
 
 // ui layer
-for (let i = 1; i < uiLayer.widthInTile - 1; i++) {
+for (let i: number = 1; i < uiLayer.widthInTile - 1; i++) {
     uiLayer.tiles[i][0] = new Tile(4, 12, 1);
     uiLayer.tiles[i][uiLayer.heightInTile - 1] = new Tile(4, 12, 1);
 }
 
-for (let i = 46; i < uiLayer.widthInTile - 1; i++) {
+for (let i: number = 46; i < uiLayer.widthInTile - 1; i++) {
     uiLayer.tiles[i][18] = new Tile(4, 12, 1);
 }
 
-for (let i = 1; i < uiLayer.heightInTile - 1; i++) {
+for (let i: number = 1; i < uiLayer.heightInTile - 1; i++) {
     uiLayer.tiles[0][i] = new Tile(3, 11, 1);
     uiLayer.tiles[45][i] = new Tile(3, 11, 1);
     uiLayer.tiles[uiLayer.widthInTile - 1][i] = new Tile(3, 11, 1);
@@ -49,33 +52,33 @@ uiLayer.tiles[45][18] = new Tile(3, 12, 1);
 uiLayer.tiles[uiLayer.widthInTile - 1][18] = new Tile(4, 11, 1);
 
 // map layer
-let line = Engine.line(0, 0, 1, 11);
+let line: Array<Coordinate> = Engine.line(0, 0, 1, 11);
 
-for (let i = 0; i < line.length; i++) {
+for (let i: number = 0; i < line.length; i++) {
     mapLayer.tiles[line[i].x][line[i].y] = new Tile(15, 15, 1);
 }
 
-let circle = Engine.circle(10, 10, 5, false);
+let circle: Array<Coordinate> = Engine.circle(10, 10, 5, false);
 
-for (let i = 0; i < circle.length; i++) {
+for (let i: number = 0; i < circle.length; i++) {
     mapLayer.tiles[circle[i].x][circle[i].y] = new Tile(15, 15, 1);
 }
 
-let circleFilled = Engine.circle(20, 20, 4, true);
+let circleFilled: Array<Coordinate> = Engine.circle(20, 20, 4, true);
 
-for (let i = 0; i < circleFilled.length; i++) {
+for (let i: number = 0; i < circleFilled.length; i++) {
     mapLayer.tiles[circleFilled[i].x][circleFilled[i].y] = new Tile(15, 15, 1);
 }
 
-let square = Engine.square(10, 10, 2, false);
+let square: Array<Coordinate> = Engine.square(10, 10, 2, false);
 
-for (let i = 0; i < square.length; i++) {
+for (let i: number = 0; i < square.length; i++) {
     mapLayer.tiles[square[i].x][square[i].y] = new Tile(15, 15, 1);
 }
 
-let squareFilled = Engine.square(20, 20, 2, true);
+let squareFilled: Array<Coordinate> = Engine.square(20, 20, 2, true);
 
-for (let i = 0; i < squareFilled.length; i++) {
+for (let i: number = 0; i < squareFilled.length; i++) {
     mapLayer.tiles[squareFilled[i].x][squareFilled[i].y] = new Tile(15, 15, 1);
 }
 
@@ -85,7 +88,7 @@ engine.layers.push(miniMapLayer);
 
 engine.start();
 
-setInterval(function () {
+setInterval(function (): void {
     mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
     mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
     mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
@@ -109,32 +112,32 @@ setInterval(function () {
 -- BASE DAMAGE => 1d4 [20, 40]
 */
 
-let abilityScores1 = [16, 14, 14, 10, 14, 11];
-let skillProficiencies1 = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
-let human = new Character("Human", 1, RaceEnum.HUMAN, ClassEnum.FIGHTER, abilityScores1, skillProficiencies1);
+let abilityScores1: Array<number> = [16, 14, 14, 10, 14, 11];
+let skillProficiencies1: Array<SkillEnum> = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
+let human: Character = new Character("Human", 1, RaceEnum.HUMAN, ClassEnum.FIGHTER, abilityScores1, skillProficiencies1);
 
 human.addItem(items.WEAPON_CLUB);
 human.addItem(items.ARMOR_LEATHER);
 human.equipItem(items.WEAPON_CLUB);
 human.equipItem(items.ARMOR_LEATHER);
 
-let abilityScores2 = [16, 14, 14, 10, 14, 11];
-let skillProficiencies2 = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
-let orc = new Character("Orc", 1, RaceEnum.HUMAN, ClassEnum.FIGHTER, abilityScores2, skillProficiencies2);
+let abilityScores2: Array<number> = [16, 14, 14, 10, 14, 11];
+let skillProficiencies2: Array<SkillEnum> = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
+let orc: Character = new Character("Orc", 1, RaceEnum.HUMAN, ClassEnum.FIGHTER, abilityScores2, skillProficiencies2);
 
 orc.addItem(items.WEAPON_CLUB);
 orc.addItem(items.ARMOR_PADDED);
 orc.equipItem(items.WEAPON_CLUB);
 orc.equipItem(items.ARMOR_PADDED);
 
-let humanInitiativeRoll = Die.RollD(20) + human.initiative;
+let humanInitiativeRoll: number = Die.RollD(20) + human.initiative;
 console.log("Human Initiative Roll: " + humanInitiativeRoll);
-let orcInitiativeRoll = Die.RollD(20) + orc.initiative;
+let orcInitiativeRoll: number = Die.RollD(20) + orc.initiative;
 console.log("Orc Initiative Roll: " + orcInitiativeRoll);
 
 console.log("");
 
-let roundQueue = Array<Character>();
+let roundQueue: Array<Character> = Array<Character>();
 
 if (humanInitiativeRoll > orcInitiativeRoll) {
     console.log("Rounds Queue: Human, Orc");
@@ -153,14 +156,14 @@ if (humanInitiativeRoll > orcInitiativeRoll) {
 console.log("");
 
 while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
-    let acting = roundQueue.shift();
+    let acting: Character = roundQueue.shift();
     roundQueue.push(acting);
-    let target = roundQueue[0];
+    let target: Character = roundQueue[0];
 
-    let d20Roll = Die.RollD(20);
-    let damages = [];
+    let d20Roll: number = Die.RollD(20);
+    let damages: Array<number> = Array<number>();
 
-    let attackRollResult = Ruleset.AttackRollResult(d20Roll, acting.getAttackModifier(), target.getArmorClass());
+    let attackRollResult: number = Ruleset.AttackRollResult(d20Roll, acting.getAttackModifier(), target.getArmorClass());
 
     switch (attackRollResult) {
         case AttackRollResultEnum.CRITICAL:
@@ -176,7 +179,8 @@ while (human.currentHitPoint > 0 && orc.currentHitPoint > 0) {
             break;
     }
 
-    Logger.AttackDamage(acting.name, attackRollResult, d20Roll, acting.getAttackModifier(), target.getArmorClass(), damages, acting.weapon.damageTypeId);
+    Logger.AttackDamage(
+        acting.name, attackRollResult, d20Roll, acting.getAttackModifier(), target.getArmorClass(), damages, acting.weapon.damageTypeId);
 
     console.log("");
 
