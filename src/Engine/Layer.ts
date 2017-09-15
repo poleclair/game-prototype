@@ -8,7 +8,7 @@ class Layer {
     private _z: number;
     private _width: number;
     private _height: number;
-    private _isAutoRefresh: boolean;
+    private _refresh: boolean;
     private _tileset: Tileset;
 
     private _widthInTile: number;
@@ -27,18 +27,18 @@ class Layer {
      * @param {number} z - The z.
      * @param {number} width - The width.
      * @param {number} height - The height.
-     * @param {boolean} isAutoRefresh - Is auto refresh.
+     * @param {boolean} refresh - Is auto refresh.
      * @param {Tileset} tileset - The tileset.
      * @return {Layer}
      */
-    public constructor(id: string, x: number, y: number, z: number, width: number, height: number, isAutoRefresh: boolean, tileset: Tileset) {
+    public constructor(id: string, x: number, y: number, z: number, width: number, height: number, refresh: boolean, tileset: Tileset) {
         this._id = id;
         this._x = x;
         this._y = y;
         this._z = z;
         this._width = width;
         this._height = height;
-        this._isAutoRefresh = isAutoRefresh;
+        this._refresh = refresh;
         this._tileset = tileset;
 
         this._widthInTile = width / tileset.tileWidth;
@@ -91,7 +91,7 @@ class Layer {
     }
 
     public get isAutoRefresh(): boolean {
-        return this._isAutoRefresh;
+        return this._refresh;
     }
 
     public get tileset(): Tileset {
