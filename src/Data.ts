@@ -8,7 +8,7 @@
 /// <reference path="Enum/WeaponPropertyEnum.ts"/>
 /// <reference path="Enum/WeaponTypeEnum.ts"/>
 
-let items: object = {
+let items: any = {
     ARMOR_PADDED: new Armor("padded", 500, 8, ItemTypeEnum.LIGHT_ARMOR, 11, 0, true, false, false, ArmorTypeEnum.PADDED),
     ARMOR_LEATHER: new Armor("leather", 1000, 10, ItemTypeEnum.LIGHT_ARMOR, 11, 0, true, false, true, ArmorTypeEnum.LEATHER),
     ARMOR_STUDDED_LEATHER: new Armor(
