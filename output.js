@@ -1936,6 +1936,7 @@ class Engine {
         this._container.style.width = width + "px";
         this._container.style.height = height + "px";
         this._container.style.position = "relative";
+        this._container.style.margin = "0px auto";
     }
     get id() {
         return this._id;
@@ -2437,64 +2438,68 @@ var RaceEnum;
 /// <reference path="../Die.ts"/>
 /// <reference path="../Logger.ts"/>
 /// <reference path="../Ruleset.ts"/>
+/**
+ * 16:9
+ * 1280x720
+ */
 let tileset = new Tileset("./src/Engine/Sprite/tileset.png", 16, 16);
-let engine = new Engine("game", 64 * tileset.tileWidth, 36 * tileset.tileHeight);
-let uiLayer = new Layer("ui", 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 64 * tileset.tileWidth, 36 * tileset.tileHeight, false, tileset);
-let mapLayer = new Layer("map", 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 44 * tileset.tileHeight, 34 * tileset.tileHeight, true, tileset);
-let miniMapLayer = new Layer("minimap", 46 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 17 * tileset.tileHeight, 17 * tileset.tileHeight, true, tileset);
+let engine = new Engine("game", 80 * tileset.tileWidth, 45 * tileset.tileHeight);
+let uiLayer = new Layer("ui", 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 80 * tileset.tileWidth, 45 * tileset.tileHeight, false, tileset);
+let mapLayer = new Layer("map", 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 60 * tileset.tileHeight, 43 * tileset.tileHeight, true, tileset);
+let miniMapLayer = new Layer("minimap", 62 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 17 * tileset.tileHeight, 17 * tileset.tileHeight, true, tileset);
 // ui layer
 for (let i = 1; i < uiLayer.widthInTile - 1; i++) {
     uiLayer.tiles[i][0] = new Tile(4, 12, 1);
     uiLayer.tiles[i][uiLayer.heightInTile - 1] = new Tile(4, 12, 1);
 }
-for (let i = 46; i < uiLayer.widthInTile - 1; i++) {
+for (let i = 62; i < uiLayer.widthInTile - 1; i++) {
     uiLayer.tiles[i][18] = new Tile(4, 12, 1);
 }
 for (let i = 1; i < uiLayer.heightInTile - 1; i++) {
     uiLayer.tiles[0][i] = new Tile(3, 11, 1);
-    uiLayer.tiles[45][i] = new Tile(3, 11, 1);
+    uiLayer.tiles[61][i] = new Tile(3, 11, 1);
     uiLayer.tiles[uiLayer.widthInTile - 1][i] = new Tile(3, 11, 1);
 }
 uiLayer.tiles[0][0] = new Tile(10, 13, 1);
 uiLayer.tiles[uiLayer.widthInTile - 1][0] = new Tile(15, 11, 1);
 uiLayer.tiles[0][uiLayer.heightInTile - 1] = new Tile(0, 12, 1);
 uiLayer.tiles[uiLayer.widthInTile - 1][uiLayer.heightInTile - 1] = new Tile(9, 13, 1);
-uiLayer.tiles[45][0] = new Tile(2, 12, 1);
-uiLayer.tiles[45][uiLayer.heightInTile - 1] = new Tile(1, 12, 1);
-uiLayer.tiles[45][18] = new Tile(3, 12, 1);
+uiLayer.tiles[61][0] = new Tile(2, 12, 1);
+uiLayer.tiles[61][uiLayer.heightInTile - 1] = new Tile(1, 12, 1);
+uiLayer.tiles[61][18] = new Tile(3, 12, 1);
 uiLayer.tiles[uiLayer.widthInTile - 1][18] = new Tile(4, 11, 1);
 // map layer
-let line = Engine.line(0, 0, 1, 11);
-for (let i = 0; i < line.length; i++) {
-    mapLayer.tiles[line[i].x][line[i].y] = new Tile(15, 15, 1);
-}
-let circle = Engine.circle(10, 10, 5, false);
-for (let i = 0; i < circle.length; i++) {
-    mapLayer.tiles[circle[i].x][circle[i].y] = new Tile(15, 15, 1);
-}
-let circleFilled = Engine.circle(20, 20, 4, true);
-for (let i = 0; i < circleFilled.length; i++) {
-    mapLayer.tiles[circleFilled[i].x][circleFilled[i].y] = new Tile(15, 15, 1);
-}
-let square = Engine.square(10, 10, 2, false);
-for (let i = 0; i < square.length; i++) {
-    mapLayer.tiles[square[i].x][square[i].y] = new Tile(15, 15, 1);
-}
-let squareFilled = Engine.square(20, 20, 2, true);
-for (let i = 0; i < squareFilled.length; i++) {
-    mapLayer.tiles[squareFilled[i].x][squareFilled[i].y] = new Tile(15, 15, 1);
-}
+// let line: Array<Coordinate> = Engine.line(0, 0, 1, 11);
+// for (let i: number = 0; i < line.length; i++) {
+//     mapLayer.tiles[line[i].x][line[i].y] = new Tile(15, 15, 1);
+// }
+// let circle: Array<Coordinate> = Engine.circle(10, 10, 5, false);
+// for (let i: number = 0; i < circle.length; i++) {
+//     mapLayer.tiles[circle[i].x][circle[i].y] = new Tile(15, 15, 1);
+// }
+// let circleFilled: Array<Coordinate> = Engine.circle(20, 20, 4, true);
+// for (let i: number = 0; i < circleFilled.length; i++) {
+//     mapLayer.tiles[circleFilled[i].x][circleFilled[i].y] = new Tile(15, 15, 1);
+// }
+// let square: Array<Coordinate> = Engine.square(10, 10, 2, false);
+// for (let i: number = 0; i < square.length; i++) {
+//     mapLayer.tiles[square[i].x][square[i].y] = new Tile(15, 15, 1);
+// }
+// let squareFilled: Array<Coordinate> = Engine.square(20, 20, 2, true);
+// for (let i: number = 0; i < squareFilled.length; i++) {
+//     mapLayer.tiles[squareFilled[i].x][squareFilled[i].y] = new Tile(15, 15, 1);
+// }
 engine.layers.push(uiLayer);
 engine.layers.push(mapLayer);
 engine.layers.push(miniMapLayer);
 engine.start();
-setInterval(function () {
-    mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
-    mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
-    mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
-    mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
-    mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
-}, 1000);
+// setInterval(function (): void {
+//     mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
+//     mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
+//     mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
+//     mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
+//     mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
+// }, 1000);
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
 

@@ -31,6 +31,7 @@ class Engine {
         this._container.style.width = width + "px";
         this._container.style.height = height + "px";
         this._container.style.position = "relative";
+        this._container.style.margin = "0px auto";
     }
 
     public get id(): string {
