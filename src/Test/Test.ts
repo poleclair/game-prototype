@@ -4,10 +4,10 @@
 /**
  * Test Setup
  */
-let abilityScores = [15, 14, 13, 12, 10, 8];
-let SkillEnumProficiencies = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
+let abilityScores: Array<number> = [15, 14, 13, 12, 10, 8];
+let SkillEnumProficiencies: Array<SkillEnum> = [SkillEnum.ANIMAL_HANDLING, SkillEnum.ATHLETICS, SkillEnum.PERCEPTION, SkillEnum.SURVIVAL];
 
-let character = new Character("Human", 1, RaceEnum.HUMAN, ClassEnum.FIGHTER, abilityScores, SkillEnumProficiencies);
+let character: Character = new Character("Human", 1, RaceEnum.HUMAN, ClassEnum.FIGHTER, abilityScores, SkillEnumProficiencies);
 
 /**
  * Test Armor, Shield and Weapon with Inventory

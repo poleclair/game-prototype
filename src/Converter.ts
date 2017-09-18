@@ -5,9 +5,9 @@ class Converter {
     /**
      * Gets the string value of an ability id.
      * @param {AbilityEnum} abilityId - The ability id.
-     * @return {number}
+     * @return {string}
      */
-    static AbilityEnumToString(abilityId: AbilityEnum) {
+    static AbilityEnumToString(abilityId: AbilityEnum): string {
         switch (abilityId) {
             case AbilityEnum.STRENGTH:
                 return "strength";
@@ -29,9 +29,9 @@ class Converter {
     /**
      * Gets the string value of an armor type id.
      * @param {ArmorTypeEnum} armorTypeId - The armor type id.
-     * @return {number}
+     * @return {string}
      */
-    static ArmorTypeEnumToString(armorTypeId: ArmorTypeEnum) {
+    static ArmorTypeEnumToString(armorTypeId: ArmorTypeEnum): string {
         switch (armorTypeId) {
             case ArmorTypeEnum.PADDED:
                 return "padded";
@@ -67,9 +67,9 @@ class Converter {
     /**
      * Gets the string value of an attack roll result id.
      * @param {AttackRollResultEnum} attackRollResultId - The attack roll result id.
-     * @return {number}
+     * @return {string}
      */
-    static AttackRollResultEnumToString(attackRollResultId: AttackRollResultEnum) {
+    static AttackRollResultEnumToString(attackRollResultId: AttackRollResultEnum): string {
         switch (attackRollResultId) {
             case AttackRollResultEnum.CRITICAL:
                 return "critital hits";
@@ -85,9 +85,9 @@ class Converter {
     /**
      * Gets the string value of a class id.
      * @param {ClassEnum} classId - The class id.
-     * @return {number}
+     * @return {string}
      */
-    static ClassEnumToString(classId: ClassEnum) {
+    static ClassEnumToString(classId: ClassEnum): string {
         switch (classId) {
             case ClassEnum.CLERIC:
                 return "cleric";
@@ -105,9 +105,9 @@ class Converter {
     /**
      * Gets the string value of a damage type id.
      * @param {DamageTypeEnum} damageTypeId - The damage type id.
-     * @return {number}
+     * @return {string}
      */
-    static DamageTypeEnumToString(damageTypeId: DamageTypeEnum) {
+    static DamageTypeEnumToString(damageTypeId: DamageTypeEnum): string {
         switch (damageTypeId) {
             case DamageTypeEnum.ACID:
                 return "acid";
@@ -143,9 +143,9 @@ class Converter {
     /**
      * Gets the string value of an item type id.
      * @param {ItemTypeEnum} itemTypeId - The item type id.
-     * @return {number}
+     * @return {string}
      */
-    static ItemTypeEnumToString(itemTypeId: ItemTypeEnum) {
+    static ItemTypeEnumToString(itemTypeId: ItemTypeEnum): string {
         switch (itemTypeId) {
             case ItemTypeEnum.SIMPLE_MELEE_WEAPON:
                 return "simple melee weapon";
@@ -173,9 +173,9 @@ class Converter {
     /**
      * Gets the string value of a race id.
      * @param {RaceEnum} raceId - The race id.
-     * @return {number}
+     * @return {string}
      */
-    static RaceEnumToString(raceId: RaceEnum) {
+    static RaceEnumToString(raceId: RaceEnum): string {
         switch (raceId) {
             case RaceEnum.DWARF_HILL:
                 return "hill dwarf";
@@ -199,9 +199,9 @@ class Converter {
     /**
      * Gets the string value of a skill id.
      * @param {SkillEnum} skillId - The skill id.
-     * @return {number}
+     * @return {string}
      */
-    static SkillEnumToString(skillId: SkillEnum) {
+    static SkillEnumToString(skillId: SkillEnum): string {
         switch (skillId) {
             case SkillEnum.ACROBATICS:
                 return "acrobatics";
@@ -247,9 +247,9 @@ class Converter {
     /**
      * Gets the string value of a weapon property id.
      * @param {WeaponPropertyEnum} weaponPropertyId - The weapon property id.
-     * @return {number}
+     * @return {string}
      */
-    static WeaponPropertyEnumToString(weaponPropertyId: WeaponPropertyEnum) {
+    static WeaponPropertyEnumToString(weaponPropertyId: WeaponPropertyEnum): string {
         switch (weaponPropertyId) {
             case WeaponPropertyEnum.AMMUNITION:
                 return "ammunition";
@@ -281,9 +281,9 @@ class Converter {
     /**
      * Gets the string value of a weapon type id.
      * @param {WeaponTypeEnum} weaponTypeId - The weapon type id.
-     * @return {number}
+     * @return {string}
      */
-    static WeaponTypeEnumToString(weaponTypeId: WeaponTypeEnum) {
+    static WeaponTypeEnumToString(weaponTypeId: WeaponTypeEnum): string {
         switch (weaponTypeId) {
             case WeaponTypeEnum.CLUB:
                 return "club";

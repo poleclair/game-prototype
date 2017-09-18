@@ -2,7 +2,6 @@
  * Enum representing a weapon type.
  */
 enum WeaponTypeEnum {
-    // SIMPLE MELEE WEAPON
     CLUB,
     DAGGER,
     GREATCLUB,
@@ -13,12 +12,10 @@ enum WeaponTypeEnum {
     QUARTERSTAFF,
     SICKLE,
     SPEAR,
-    // SIMPLE RANGED WEAPON
     LIGHT_CROSSBOW,
     DART,
     SHORTBOW,
     SLING,
-    // MARTIAL MELEE WEAPON
     BATTLEAXE,
     FLAIL,
     GLAIVE,
@@ -37,7 +34,6 @@ enum WeaponTypeEnum {
     WAR_PICK,
     WARHAMMER,
     WHIP,
-    // MARTIAL RANGED WEAPON
     BLOWGUN,
     HAND_CROSSBOW,
     HEAVY_CROSSBOW,

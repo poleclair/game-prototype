@@ -5,7 +5,7 @@ class Converter {
     /**
      * Gets the string value of an ability id.
      * @param {AbilityEnum} abilityId - The ability id.
-     * @return {number}
+     * @return {string}
      */
     static AbilityEnumToString(abilityId) {
         switch (abilityId) {
@@ -28,7 +28,7 @@ class Converter {
     /**
      * Gets the string value of an armor type id.
      * @param {ArmorTypeEnum} armorTypeId - The armor type id.
-     * @return {number}
+     * @return {string}
      */
     static ArmorTypeEnumToString(armorTypeId) {
         switch (armorTypeId) {
@@ -65,7 +65,7 @@ class Converter {
     /**
      * Gets the string value of an attack roll result id.
      * @param {AttackRollResultEnum} attackRollResultId - The attack roll result id.
-     * @return {number}
+     * @return {string}
      */
     static AttackRollResultEnumToString(attackRollResultId) {
         switch (attackRollResultId) {
@@ -82,7 +82,7 @@ class Converter {
     /**
      * Gets the string value of a class id.
      * @param {ClassEnum} classId - The class id.
-     * @return {number}
+     * @return {string}
      */
     static ClassEnumToString(classId) {
         switch (classId) {
@@ -101,7 +101,7 @@ class Converter {
     /**
      * Gets the string value of a damage type id.
      * @param {DamageTypeEnum} damageTypeId - The damage type id.
-     * @return {number}
+     * @return {string}
      */
     static DamageTypeEnumToString(damageTypeId) {
         switch (damageTypeId) {
@@ -138,7 +138,7 @@ class Converter {
     /**
      * Gets the string value of an item type id.
      * @param {ItemTypeEnum} itemTypeId - The item type id.
-     * @return {number}
+     * @return {string}
      */
     static ItemTypeEnumToString(itemTypeId) {
         switch (itemTypeId) {
@@ -167,7 +167,7 @@ class Converter {
     /**
      * Gets the string value of a race id.
      * @param {RaceEnum} raceId - The race id.
-     * @return {number}
+     * @return {string}
      */
     static RaceEnumToString(raceId) {
         switch (raceId) {
@@ -192,7 +192,7 @@ class Converter {
     /**
      * Gets the string value of a skill id.
      * @param {SkillEnum} skillId - The skill id.
-     * @return {number}
+     * @return {string}
      */
     static SkillEnumToString(skillId) {
         switch (skillId) {
@@ -239,7 +239,7 @@ class Converter {
     /**
      * Gets the string value of a weapon property id.
      * @param {WeaponPropertyEnum} weaponPropertyId - The weapon property id.
-     * @return {number}
+     * @return {string}
      */
     static WeaponPropertyEnumToString(weaponPropertyId) {
         switch (weaponPropertyId) {
@@ -272,7 +272,7 @@ class Converter {
     /**
      * Gets the string value of a weapon type id.
      * @param {WeaponTypeEnum} weaponTypeId - The weapon type id.
-     * @return {number}
+     * @return {string}
      */
     static WeaponTypeEnumToString(weaponTypeId) {
         switch (weaponTypeId) {
@@ -520,22 +520,18 @@ class WeaponRange {
  */
 var ArmorTypeEnum;
 (function (ArmorTypeEnum) {
-    // LIGHT ARMOR
     ArmorTypeEnum[ArmorTypeEnum["PADDED"] = 0] = "PADDED";
     ArmorTypeEnum[ArmorTypeEnum["LEATHER"] = 1] = "LEATHER";
     ArmorTypeEnum[ArmorTypeEnum["STUDDED_LEATHER"] = 2] = "STUDDED_LEATHER";
     ArmorTypeEnum[ArmorTypeEnum["HIDE"] = 3] = "HIDE";
-    // MEDIUM ARMOR
     ArmorTypeEnum[ArmorTypeEnum["CHAIN_SHIRT"] = 4] = "CHAIN_SHIRT";
     ArmorTypeEnum[ArmorTypeEnum["SCALE_MAIL"] = 5] = "SCALE_MAIL";
     ArmorTypeEnum[ArmorTypeEnum["BREASTPLATE"] = 6] = "BREASTPLATE";
     ArmorTypeEnum[ArmorTypeEnum["HALF_PLATE"] = 7] = "HALF_PLATE";
-    // HEAVY ARMOR
     ArmorTypeEnum[ArmorTypeEnum["RING_MAIL"] = 8] = "RING_MAIL";
     ArmorTypeEnum[ArmorTypeEnum["CHAIN_MAIL"] = 9] = "CHAIN_MAIL";
     ArmorTypeEnum[ArmorTypeEnum["SPLINT"] = 10] = "SPLINT";
     ArmorTypeEnum[ArmorTypeEnum["PLATE"] = 11] = "PLATE";
-    // SHIELD
     ArmorTypeEnum[ArmorTypeEnum["SHIELD"] = 12] = "SHIELD";
 })(ArmorTypeEnum || (ArmorTypeEnum = {}));
 /**
@@ -594,7 +590,6 @@ var WeaponPropertyEnum;
  */
 var WeaponTypeEnum;
 (function (WeaponTypeEnum) {
-    // SIMPLE MELEE WEAPON
     WeaponTypeEnum[WeaponTypeEnum["CLUB"] = 0] = "CLUB";
     WeaponTypeEnum[WeaponTypeEnum["DAGGER"] = 1] = "DAGGER";
     WeaponTypeEnum[WeaponTypeEnum["GREATCLUB"] = 2] = "GREATCLUB";
@@ -605,12 +600,10 @@ var WeaponTypeEnum;
     WeaponTypeEnum[WeaponTypeEnum["QUARTERSTAFF"] = 7] = "QUARTERSTAFF";
     WeaponTypeEnum[WeaponTypeEnum["SICKLE"] = 8] = "SICKLE";
     WeaponTypeEnum[WeaponTypeEnum["SPEAR"] = 9] = "SPEAR";
-    // SIMPLE RANGED WEAPON
     WeaponTypeEnum[WeaponTypeEnum["LIGHT_CROSSBOW"] = 10] = "LIGHT_CROSSBOW";
     WeaponTypeEnum[WeaponTypeEnum["DART"] = 11] = "DART";
     WeaponTypeEnum[WeaponTypeEnum["SHORTBOW"] = 12] = "SHORTBOW";
     WeaponTypeEnum[WeaponTypeEnum["SLING"] = 13] = "SLING";
-    // MARTIAL MELEE WEAPON
     WeaponTypeEnum[WeaponTypeEnum["BATTLEAXE"] = 14] = "BATTLEAXE";
     WeaponTypeEnum[WeaponTypeEnum["FLAIL"] = 15] = "FLAIL";
     WeaponTypeEnum[WeaponTypeEnum["GLAIVE"] = 16] = "GLAIVE";
@@ -629,7 +622,6 @@ var WeaponTypeEnum;
     WeaponTypeEnum[WeaponTypeEnum["WAR_PICK"] = 29] = "WAR_PICK";
     WeaponTypeEnum[WeaponTypeEnum["WARHAMMER"] = 30] = "WARHAMMER";
     WeaponTypeEnum[WeaponTypeEnum["WHIP"] = 31] = "WHIP";
-    // MARTIAL RANGED WEAPON
     WeaponTypeEnum[WeaponTypeEnum["BLOWGUN"] = 32] = "BLOWGUN";
     WeaponTypeEnum[WeaponTypeEnum["HAND_CROSSBOW"] = 33] = "HAND_CROSSBOW";
     WeaponTypeEnum[WeaponTypeEnum["HEAVY_CROSSBOW"] = 34] = "HEAVY_CROSSBOW";
@@ -645,24 +637,19 @@ var WeaponTypeEnum;
 /// <reference path="Enum/WeaponPropertyEnum.ts"/>
 /// <reference path="Enum/WeaponTypeEnum.ts"/>
 let items = {
-    // LIGHT ARMOR
     ARMOR_PADDED: new Armor("padded", 500, 8, ItemTypeEnum.LIGHT_ARMOR, 11, 0, true, false, false, ArmorTypeEnum.PADDED),
     ARMOR_LEATHER: new Armor("leather", 1000, 10, ItemTypeEnum.LIGHT_ARMOR, 11, 0, true, false, true, ArmorTypeEnum.LEATHER),
     ARMOR_STUDDED_LEATHER: new Armor("studded leather", 4500, 13, ItemTypeEnum.LIGHT_ARMOR, 12, 0, true, false, true, ArmorTypeEnum.STUDDED_LEATHER),
-    // MEDIUM ARMOR
     ARMOR_HIDE: new Armor("hide", 1000, 12, ItemTypeEnum.MEDIUM_ARMOR, 12, 0, true, true, false, ArmorTypeEnum.HIDE),
     ARMOR_CHAIN_SHIRT: new Armor("chain shirt", 5000, 20, ItemTypeEnum.MEDIUM_ARMOR, 13, 0, true, true, false, ArmorTypeEnum.CHAIN_SHIRT),
     ARMOR_SCALE_MAIL: new Armor("scale mail", 5000, 45, ItemTypeEnum.MEDIUM_ARMOR, 14, 0, true, true, true, ArmorTypeEnum.SCALE_MAIL),
     ARMOR_BREASTPLATE: new Armor("breastplate", 40000, 20, ItemTypeEnum.MEDIUM_ARMOR, 14, 0, true, true, false, ArmorTypeEnum.BREASTPLATE),
     ARMOR_HALF_PLATE: new Armor("half plate", 75000, 40, ItemTypeEnum.MEDIUM_ARMOR, 15, 0, true, true, true, ArmorTypeEnum.HALF_PLATE),
-    // HEAVY ARMOR
     ARMOR_RING_MAIL: new Armor("ring mail", 3000, 40, ItemTypeEnum.HEAVY_ARMOR, 14, 0, false, false, true, ArmorTypeEnum.RING_MAIL),
     ARMOR_CHAIN_MAIL: new Armor("chain mail", 7500, 55, ItemTypeEnum.HEAVY_ARMOR, 16, 13, false, false, true, ArmorTypeEnum.CHAIN_MAIL),
     ARMOR_SPLINT: new Armor("splint", 20000, 60, ItemTypeEnum.HEAVY_ARMOR, 17, 15, false, false, true, ArmorTypeEnum.SPLINT),
     ARMOR_PLATE: new Armor("plate", 150000, 65, ItemTypeEnum.HEAVY_ARMOR, 18, 15, false, false, true, ArmorTypeEnum.PLATE),
-    // SHIELD
     SHIELD_SHIELD: new Armor("shield", 1000, 6, ItemTypeEnum.SHIELD, 2, 0, false, false, false, ArmorTypeEnum.SHIELD),
-    // SIMPLE MELEE WEAPON
     WEAPON_CLUB: new Weapon("club", 10, 2, ItemTypeEnum.SIMPLE_MELEE_WEAPON, [4], [4], DamageTypeEnum.BLUDGEONING, [WeaponPropertyEnum.LIGHT], new WeaponRange(20, 60), WeaponTypeEnum.CLUB),
     WEAPON_DAGGER: new Weapon("dagger", 200, 2, ItemTypeEnum.SIMPLE_MELEE_WEAPON, [4], [4], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.FINESSE, WeaponPropertyEnum.LIGHT, WeaponPropertyEnum.THROWN, WeaponPropertyEnum.RANGE], new WeaponRange(20, 60), WeaponTypeEnum.DAGGER),
     WEAPON_GREATCLUB: new Weapon("greatclub", 20, 10, ItemTypeEnum.SIMPLE_MELEE_WEAPON, [8], [8], DamageTypeEnum.BLUDGEONING, [WeaponPropertyEnum.TWO_HANDED], new WeaponRange(20, 60), WeaponTypeEnum.GREATCLUB),
@@ -673,12 +660,10 @@ let items = {
     WEAPON_QUARTERSTAFF: new Weapon("quarterstaff", 20, 4, ItemTypeEnum.SIMPLE_MELEE_WEAPON, [6], [8], DamageTypeEnum.BLUDGEONING, [WeaponPropertyEnum.VERSATILE], new WeaponRange(20, 60), WeaponTypeEnum.QUARTERSTAFF),
     WEAPON_SICKLE: new Weapon("sickle", 100, 2, ItemTypeEnum.SIMPLE_MELEE_WEAPON, [4], [4], DamageTypeEnum.SLASHING, [WeaponPropertyEnum.LIGHT], new WeaponRange(20, 60), WeaponTypeEnum.SICKLE),
     WEAPON_SPEAR: new Weapon("spear", 100, 3, ItemTypeEnum.SIMPLE_MELEE_WEAPON, [6], [8], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.VERSATILE, WeaponPropertyEnum.THROWN, WeaponPropertyEnum.RANGE], new WeaponRange(20, 60), WeaponTypeEnum.SPEAR),
-    // SIMPLE RANGE WEAPON
     WEAPON_LIGHT_CROSSBOW: new Weapon("light crossbow", 2500, 5, ItemTypeEnum.SIMPLE_RANGE_WEAPON, [8], [8], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE, WeaponPropertyEnum.LOADING, WeaponPropertyEnum.TWO_HANDED], new WeaponRange(80, 320), WeaponTypeEnum.LIGHT_CROSSBOW),
     WEAPON_DART: new Weapon("dart", 5, 0.25, ItemTypeEnum.SIMPLE_RANGE_WEAPON, [4], [4], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.FINESSE, WeaponPropertyEnum.THROWN, WeaponPropertyEnum.RANGE], new WeaponRange(20, 60), WeaponTypeEnum.DART),
     WEAPON_SHORTBOW: new Weapon("shortbow", 2500, 2, ItemTypeEnum.SIMPLE_RANGE_WEAPON, [6], [6], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE, WeaponPropertyEnum.TWO_HANDED], new WeaponRange(80, 320), WeaponTypeEnum.SHORTBOW),
     WEAPON_SLING: new Weapon("sling", 10, 0, ItemTypeEnum.SIMPLE_RANGE_WEAPON, [4], [4], DamageTypeEnum.BLUDGEONING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE], new WeaponRange(30, 120), WeaponTypeEnum.SLING),
-    // MARTIAL MELEE WEAPON
     WEAPON_BATTLEAXE: new Weapon("battleaxe", 1000, 4, ItemTypeEnum.MARTIAL_MELEE_WEAPON, [8], [10], DamageTypeEnum.SLASHING, [WeaponPropertyEnum.VERSATILE], new WeaponRange(20, 60), WeaponTypeEnum.BATTLEAXE),
     WEAPON_FLAIL: new Weapon("flail", 1000, 2, ItemTypeEnum.MARTIAL_MELEE_WEAPON, [8], [8], DamageTypeEnum.BLUDGEONING, [], new WeaponRange(20, 60), WeaponTypeEnum.FLAIL),
     WEAPON_GLAIVE: new Weapon("glaive", 2000, 6, ItemTypeEnum.MARTIAL_MELEE_WEAPON, [10], [10], DamageTypeEnum.SLASHING, [WeaponPropertyEnum.HEAVY, WeaponPropertyEnum.REACH, WeaponPropertyEnum.TWO_HANDED], new WeaponRange(20, 60), WeaponTypeEnum.GLAIVE),
@@ -697,11 +682,13 @@ let items = {
     WEAPON_WAR_PICK: new Weapon("war pick", 500, 2, ItemTypeEnum.MARTIAL_MELEE_WEAPON, [8], [8], DamageTypeEnum.PIERCING, [], new WeaponRange(20, 60), WeaponTypeEnum.WAR_PICK),
     WEAPON_WARHAMMER: new Weapon("warhammer", 1500, 2, ItemTypeEnum.MARTIAL_MELEE_WEAPON, [8], [10], DamageTypeEnum.BLUDGEONING, [WeaponPropertyEnum.VERSATILE], new WeaponRange(20, 60), WeaponTypeEnum.WARHAMMER),
     WEAPON_WHIP: new Weapon("whip", 200, 3, ItemTypeEnum.MARTIAL_MELEE_WEAPON, [4], [4], DamageTypeEnum.SLASHING, [WeaponPropertyEnum.FINESSE, WeaponPropertyEnum.REACH], new WeaponRange(20, 60), WeaponTypeEnum.WHIP),
-    // MARTIAL RANGE WEAPON
     WEAPON_BLOWGUN: new Weapon("blowgun", 1000, 1, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [1], [1], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE, WeaponPropertyEnum.LOADING], new WeaponRange(25, 100), WeaponTypeEnum.BLOWGUN),
-    WEAPON_HAND_CROSSBOW: new Weapon("hand crossbow", 7500, 3, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [6], [6], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE, WeaponPropertyEnum.LIGHT, WeaponPropertyEnum.LOADING], new WeaponRange(30, 120), WeaponTypeEnum.HAND_CROSSBOW),
-    WEAPON_HEAVY_CROSSBOW: new Weapon("heavy crossbow", 5000, 18, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [10], [10], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE, WeaponPropertyEnum.HEAVY, WeaponPropertyEnum.LOADING, WeaponPropertyEnum.TWO_HANDED], new WeaponRange(100, 400), WeaponTypeEnum.HEAVY_CROSSBOW),
-    WEAPON_LONGBOW: new Weapon("longbow", 5000, 2, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [8], [8], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE, WeaponPropertyEnum.HEAVY, WeaponPropertyEnum.TWO_HANDED], new WeaponRange(150, 600), WeaponTypeEnum.LONGBOW),
+    WEAPON_HAND_CROSSBOW: new Weapon("hand crossbow", 7500, 3, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [6], [6], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE,
+        WeaponPropertyEnum.LIGHT, WeaponPropertyEnum.LOADING], new WeaponRange(30, 120), WeaponTypeEnum.HAND_CROSSBOW),
+    WEAPON_HEAVY_CROSSBOW: new Weapon("heavy crossbow", 5000, 18, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [10], [10], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE,
+        WeaponPropertyEnum.HEAVY, WeaponPropertyEnum.LOADING, WeaponPropertyEnum.TWO_HANDED], new WeaponRange(100, 400), WeaponTypeEnum.HEAVY_CROSSBOW),
+    WEAPON_LONGBOW: new Weapon("longbow", 5000, 2, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [8], [8], DamageTypeEnum.PIERCING, [WeaponPropertyEnum.AMMUNITION, WeaponPropertyEnum.RANGE, WeaponPropertyEnum.HEAVY,
+        WeaponPropertyEnum.TWO_HANDED], new WeaponRange(150, 600), WeaponTypeEnum.LONGBOW),
     WEAPON_NET: new Weapon("net", 100, 3, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [0], [0], DamageTypeEnum.BLUDGEONING, [WeaponPropertyEnum.SPECIAL, WeaponPropertyEnum.THROWN, WeaponPropertyEnum.RANGE], new WeaponRange(5, 15), WeaponTypeEnum.NET)
 };
 /**
@@ -1161,9 +1148,14 @@ class Ruleset {
     static ArmorProficiencies(classId) {
         switch (classId) {
             case ClassEnum.CLERIC:
-                return [ArmorTypeEnum.PADDED, ArmorTypeEnum.LEATHER, ArmorTypeEnum.STUDDED_LEATHER, ArmorTypeEnum.HIDE, ArmorTypeEnum.CHAIN_SHIRT, ArmorTypeEnum.SCALE_MAIL, ArmorTypeEnum.BREASTPLATE, ArmorTypeEnum.HALF_PLATE, ArmorTypeEnum.SHIELD];
+                return [ArmorTypeEnum.PADDED, ArmorTypeEnum.LEATHER, ArmorTypeEnum.STUDDED_LEATHER,
+                    ArmorTypeEnum.HIDE, ArmorTypeEnum.CHAIN_SHIRT, ArmorTypeEnum.SCALE_MAIL,
+                    ArmorTypeEnum.BREASTPLATE, ArmorTypeEnum.HALF_PLATE, ArmorTypeEnum.SHIELD];
             case ClassEnum.FIGHTER:
-                return [ArmorTypeEnum.PADDED, ArmorTypeEnum.LEATHER, ArmorTypeEnum.STUDDED_LEATHER, ArmorTypeEnum.HIDE, ArmorTypeEnum.CHAIN_SHIRT, ArmorTypeEnum.SCALE_MAIL, ArmorTypeEnum.BREASTPLATE, ArmorTypeEnum.HALF_PLATE, ArmorTypeEnum.RING_MAIL, ArmorTypeEnum.CHAIN_MAIL, ArmorTypeEnum.SPLINT, ArmorTypeEnum.PLATE, ArmorTypeEnum.SHIELD];
+                return [ArmorTypeEnum.PADDED, ArmorTypeEnum.LEATHER, ArmorTypeEnum.STUDDED_LEATHER,
+                    ArmorTypeEnum.HIDE, ArmorTypeEnum.CHAIN_SHIRT, ArmorTypeEnum.SCALE_MAIL,
+                    ArmorTypeEnum.BREASTPLATE, ArmorTypeEnum.HALF_PLATE, ArmorTypeEnum.RING_MAIL,
+                    ArmorTypeEnum.CHAIN_MAIL, ArmorTypeEnum.SPLINT, ArmorTypeEnum.PLATE, ArmorTypeEnum.SHIELD];
             case ClassEnum.ROGUE:
                 return [ArmorTypeEnum.PADDED, ArmorTypeEnum.LEATHER, ArmorTypeEnum.STUDDED_LEATHER, ArmorTypeEnum.HIDE];
             case ClassEnum.WIZARD:
@@ -1180,13 +1172,30 @@ class Ruleset {
     static WeaponProficiencies(classId) {
         switch (classId) {
             case ClassEnum.CLERIC:
-                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE, WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART, WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING];
+                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE,
+                    WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF,
+                    WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART,
+                    WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING];
             case ClassEnum.FIGHTER:
-                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE, WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART, WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING, WeaponTypeEnum.BATTLEAXE, WeaponTypeEnum.FLAIL, WeaponTypeEnum.GLAIVE, WeaponTypeEnum.GREATAXE, WeaponTypeEnum.GREATSWORD, WeaponTypeEnum.HALBERD, WeaponTypeEnum.LANCE, WeaponTypeEnum.LONGSWORD, WeaponTypeEnum.MAUL, WeaponTypeEnum.MORNINGSTAR, WeaponTypeEnum.PIKE, WeaponTypeEnum.RAPIER, WeaponTypeEnum.SCIMITAR, WeaponTypeEnum.SHORTSWORD, WeaponTypeEnum.TRIDENT, WeaponTypeEnum.WAR_PICK, WeaponTypeEnum.WARHAMMER, WeaponTypeEnum.WHIP, WeaponTypeEnum.BLOWGUN, WeaponTypeEnum.HAND_CROSSBOW, WeaponTypeEnum.HEAVY_CROSSBOW, WeaponTypeEnum.LONGBOW, WeaponTypeEnum.NET];
+                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE,
+                    WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF,
+                    WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART,
+                    WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING, WeaponTypeEnum.BATTLEAXE, WeaponTypeEnum.FLAIL,
+                    WeaponTypeEnum.GLAIVE, WeaponTypeEnum.GREATAXE, WeaponTypeEnum.GREATSWORD, WeaponTypeEnum.HALBERD,
+                    WeaponTypeEnum.LANCE, WeaponTypeEnum.LONGSWORD, WeaponTypeEnum.MAUL, WeaponTypeEnum.MORNINGSTAR,
+                    WeaponTypeEnum.PIKE, WeaponTypeEnum.RAPIER, WeaponTypeEnum.SCIMITAR, WeaponTypeEnum.SHORTSWORD,
+                    WeaponTypeEnum.TRIDENT, WeaponTypeEnum.WAR_PICK, WeaponTypeEnum.WARHAMMER, WeaponTypeEnum.WHIP,
+                    WeaponTypeEnum.BLOWGUN, WeaponTypeEnum.HAND_CROSSBOW, WeaponTypeEnum.HEAVY_CROSSBOW,
+                    WeaponTypeEnum.LONGBOW, WeaponTypeEnum.NET];
             case ClassEnum.ROGUE:
-                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE, WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART, WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING, WeaponTypeEnum.HAND_CROSSBOW, WeaponTypeEnum.LONGSWORD, WeaponTypeEnum.RAPIER, WeaponTypeEnum.SHORTSWORD];
+                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE,
+                    WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF,
+                    WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART,
+                    WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING, WeaponTypeEnum.HAND_CROSSBOW, WeaponTypeEnum.LONGSWORD,
+                    WeaponTypeEnum.RAPIER, WeaponTypeEnum.SHORTSWORD];
             case ClassEnum.WIZARD:
-                return [WeaponTypeEnum.DAGGER, WeaponTypeEnum.DART, WeaponTypeEnum.SLING, WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.LIGHT_CROSSBOW];
+                return [WeaponTypeEnum.DAGGER, WeaponTypeEnum.DART, WeaponTypeEnum.SLING,
+                    WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.LIGHT_CROSSBOW];
             default:
                 throw new Error("Parameter 'classId' must be in the 'ClassEnum' range.");
         }
@@ -1567,7 +1576,8 @@ class Character {
      * @return {number}
      */
     getAttackModifier() {
-        return this.getAbilityModifier(Ruleset.WeaponAbility(this._weapon.weaponType)) + (this.isWeaponProficient(this._weapon.weaponType) ? this.proficiencyBonus : 0);
+        return this.getAbilityModifier(Ruleset.WeaponAbility(this._weapon.weaponType)) + (this.isWeaponProficient(this._weapon.weaponType) ?
+            this.proficiencyBonus : 0);
     }
     /**
      * Get the damage modifier.

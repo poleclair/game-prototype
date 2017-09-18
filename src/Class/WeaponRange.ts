@@ -17,11 +17,11 @@ class WeaponRange {
         this._maximum = maximum;
     }
 
-    get minimum() {
+    get minimum(): number {
         return this._minimum;
     }
 
-    get maximum() {
+    get maximum(): number {
         return this._maximum;
     }
 }

@@ -44,13 +44,14 @@ class Character {
      * @param {Array<number>} skillProficiencies - The skill proficiencies.
      * @return {Character}
      */
-    constructor(name: string, level: number, raceId: number, classId: number, abilityScores: Array<number>, skillProficiencies: Array<number>) {
+    constructor(
+        name: string, level: number, raceId: number, classId: number, abilityScores: Array<number>, skillProficiencies: Array<number>) {
         if (!name) {
             throw new Error("Parameter 'name' cannot be null or empty.");
         }
 
         if (level < 1 || level > 20) {
-            throw new Error("Parameter 'level' must be a number between 1 and 20 inclusively.")
+            throw new Error("Parameter 'level' must be a number between 1 and 20 inclusively.");
         }
 
         this._name = name;
@@ -67,8 +68,10 @@ class Character {
         this._abilityScores[AbilityEnum.CHARISMA] += Ruleset.RaceCharisma(raceId);
         this._speed = Ruleset.RaceSpeed(raceId);
 
-        this._maximumHitPoint = Ruleset.MaximumHitPoint(this._level, this._raceId, this._classId, this._abilityScores[AbilityEnum.CONSTITUTION]);
-        this._currentHitPoint = Ruleset.MaximumHitPoint(this._level, this._raceId, this._classId, this._abilityScores[AbilityEnum.CONSTITUTION]);
+        this._maximumHitPoint = Ruleset.MaximumHitPoint(
+            this._level, this._raceId, this._classId, this._abilityScores[AbilityEnum.CONSTITUTION]);
+        this._currentHitPoint = Ruleset.MaximumHitPoint(
+            this._level, this._raceId, this._classId, this._abilityScores[AbilityEnum.CONSTITUTION]);
         this._armorProficiencies = Ruleset.ArmorProficiencies(classId);
         this._weaponProficiencies = Ruleset.WeaponProficiencies(classId);
         this._toolProficiencies = Ruleset.ToolProficiencies(classId);
@@ -87,59 +90,59 @@ class Character {
         this._inventory = new Inventory();
     }
 
-    get name() {
+    get name(): string {
         return this._name;
     }
 
-    get level() {
+    get level(): number {
         return this._level;
     }
 
-    get raceId() {
+    get raceId(): number {
         return this._raceId;
     }
 
-    get classId() {
+    get classId(): number {
         return this._classId;
     }
 
-    get passivePerception() {
+    get passivePerception(): number {
         return this._passivePerception;
     }
 
-    get initiative() {
+    get initiative(): number {
         return this._initiative;
     }
 
-    get encumberment() {
+    get encumberment(): number {
         return this._encumberment;
     }
 
-    get speed() {
+    get speed(): number {
         return this._speed;
     }
 
-    get proficiencyBonus() {
+    get proficiencyBonus(): number {
         return this._proficiencyBonus;
     }
 
-    get armor() {
+    get armor(): Armor {
         return this._armor;
     }
 
-    get shield() {
+    get shield(): Armor {
         return this._shield;
     }
 
-    get weapon() {
+    get weapon(): Weapon {
         return this._weapon;
     }
 
-    get maximumHitPoint() {
+    get maximumHitPoint(): number {
         return this._maximumHitPoint;
     }
 
-    get currentHitPoint() {
+    get currentHitPoint(): number {
         return this._currentHitPoint;
     }
 
@@ -152,7 +155,7 @@ class Character {
      * @param {number} abilityId - The ability id.
      * @return {number}
      */
-    getAbilityScore(abilityId: number) {
+    getAbilityScore(abilityId: number): number {
         switch (abilityId) {
             case AbilityEnum.STRENGTH:
             case AbilityEnum.DEXTERITY:
@@ -171,7 +174,7 @@ class Character {
      * @param {number} abilityId - The ability id.
      * @return {number}
      */
-    getAbilityModifier(abilityId: number) {
+    getAbilityModifier(abilityId: number): number {
         return Ruleset.AbilityModifier(this.getAbilityScore(abilityId));
     }
 
@@ -179,8 +182,8 @@ class Character {
      * Get the armor class.
      * @return {number}
      */
-    getArmorClass() {
-        let armorClass = 0;
+    getArmorClass(): number {
+        let armorClass: number = 0;
 
         if (this._armor !== null) {
             armorClass += this._armor.armorClass;
@@ -206,7 +209,7 @@ class Character {
      * @param {number} abilityId - The ability id.
      * @return {number}
      */
-    getSavingThrow(abilityId: number) {
+    getSavingThrow(abilityId: number): number {
         return this.getAbilityModifier(abilityId) + (this.isAbilityProficient(abilityId) ? this.proficiencyBonus : 0);
     }
 
@@ -215,7 +218,7 @@ class Character {
      * @param {number} skillId - The skill id.
      * @return {number}
      */
-    getSkill(skillId: number) {
+    getSkill(skillId: number): number {
         return this.getAbilityModifier(Ruleset.SkillAbility(skillId)) + (this.isSkillProficient(skillId) ? this.proficiencyBonus : 0);
     }
 
@@ -224,7 +227,7 @@ class Character {
      * @param {number} abilityId - The ability id.
      * @return {boolean}
      */
-    isAbilityProficient(abilityId: number) {
+    isAbilityProficient(abilityId: number): boolean {
         return this._abilityProficiencies.indexOf(abilityId) > -1;
     }
 
@@ -233,7 +236,7 @@ class Character {
      * @param {number} skillId - The skill id.
      * @return {boolean}
      */
-    isSkillProficient(skillId: number) {
+    isSkillProficient(skillId: number): boolean {
         return this._skillProficiencies.indexOf(skillId) > -1;
     }
 
@@ -242,7 +245,7 @@ class Character {
      * @param {number} armorId - The armor id.
      * @return {boolean}
      */
-    isArmorProficient(armorId: number) {
+    isArmorProficient(armorId: number): boolean {
         return this._armorProficiencies.indexOf(armorId) > -1;
     }
 
@@ -251,7 +254,7 @@ class Character {
      * @param {number} weaponId - The weapon id.
      * @return {boolean}
      */
-    isWeaponProficient(weaponId: number) {
+    isWeaponProficient(weaponId: number): boolean {
         return this._weaponProficiencies.indexOf(weaponId) > -1;
     }
 
@@ -259,15 +262,17 @@ class Character {
      * Get the attack modifier.
      * @return {number}
      */
-    getAttackModifier() {
-        return this.getAbilityModifier(Ruleset.WeaponAbility(this._weapon.weaponType)) + (this.isWeaponProficient(this._weapon.weaponType) ? this.proficiencyBonus : 0);
+    getAttackModifier(): number {
+        return this.getAbilityModifier(
+            Ruleset.WeaponAbility(this._weapon.weaponType)) + (this.isWeaponProficient(this._weapon.weaponType) ?
+                this.proficiencyBonus : 0);
     }
 
     /**
      * Get the damage modifier.
      * @return {number}
      */
-    getDamageModifier() {
+    getDamageModifier(): number {
         return this.getAbilityModifier(Ruleset.WeaponAbility(this._weapon.weaponType));
     }
 
@@ -275,7 +280,7 @@ class Character {
      * Gets a roll for attack.
      * @return {number}
      */
-    rollAttack() {
+    rollAttack(): number {
         return this._weapon.getDamageRoll();
     }
 
@@ -283,7 +288,7 @@ class Character {
      * Gets a roll for damage.
      * @return {number}
      */
-    rollDamage() {
+    rollDamage(): number {
         return this._weapon.getDamageRoll();
     }
 
@@ -292,8 +297,8 @@ class Character {
      * @param {Item} item - The item.
      * @return {boolean}
      */
-    addItem(item: Item) {
-        let result = false;
+    addItem(item: Item): boolean {
+        let result: boolean = false;
 
         if (this._inventory.weight + item.weight <= this.encumberment) {
             this._inventory.addItem(item);
@@ -309,8 +314,8 @@ class Character {
      * @param {Item} item - The item.
      * @return {boolean}
      */
-    removeItem(item: Item) {
-        let result = false;
+    removeItem(item: Item): boolean {
+        let result: boolean = false;
 
         if (this._inventory.hasItem(item)) {
             this._inventory.removeItem(item);
@@ -326,8 +331,8 @@ class Character {
      * @param {Item} item - The item.
      * @return {boolean}
      */
-    equipItem(item: Item) {
-        let result = true;
+    equipItem(item: Item): boolean {
+        let result: boolean = true;
 
         if (this._inventory.hasItem(item)) {
             this._inventory.removeItem(item);
@@ -362,8 +367,8 @@ class Character {
      * @param {Item} item - The item.
      * @return {boolean}
      */
-    unequipItem(item: Item) {
-        let result = true;
+    unequipItem(item: Item): boolean {
+        let result: boolean = true;
 
         if (this._armor !== null && this._armor.name === item.name) {
             this._inventory.addItem(this._armor);

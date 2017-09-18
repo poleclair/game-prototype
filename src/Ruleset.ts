@@ -7,7 +7,7 @@ class Ruleset {
      * @param {number} abilityScore - The ability score.
      * @return {number}
      */
-    static AbilityModifier(abilityScore: number) {
+    static AbilityModifier(abilityScore: number): number {
         return Math.floor((abilityScore - 10) / 2);
     }
 
@@ -16,7 +16,7 @@ class Ruleset {
      * @param {SkillEnum} skillId - The skill id.
      * @return {AbilityEnum}
      */
-    static SkillAbility(skillId: SkillEnum) {
+    static SkillAbility(skillId: SkillEnum): AbilityEnum {
         switch (skillId) {
             case SkillEnum.ATHLETICS:
                 return AbilityEnum.STRENGTH;
@@ -51,7 +51,7 @@ class Ruleset {
      * @param {WeaponTypeEnum} weaponTypeId - The weapon type id.
      * @return {AbilityEnum}
      */
-    static WeaponAbility(weaponTypeId: WeaponTypeEnum) {
+    static WeaponAbility(weaponTypeId: WeaponTypeEnum): AbilityEnum {
         switch (weaponTypeId) {
             case WeaponTypeEnum.CLUB:
             case WeaponTypeEnum.DAGGER:
@@ -102,7 +102,7 @@ class Ruleset {
      * @param {number} level - The level.
      * @return {number}
      */
-    static ProficiencyBonus(level: number) {
+    static ProficiencyBonus(level: number): number {
         if (level > 16) {
             return 6;
         } else if (level > 12) {
@@ -121,7 +121,7 @@ class Ruleset {
      * @param {number} strengthScore - The strength score.
      * @return {number}
      */
-    static Encumberment(strengthScore: number) {
+    static Encumberment(strengthScore: number): number {
         return 15 * (strengthScore + this.AbilityModifier(strengthScore));
     }
 
@@ -130,7 +130,7 @@ class Ruleset {
      * @param {number} perceptionScore - The perception score.
      * @return {number}
      */
-    static PassivePerception(perceptionScore: number) {
+    static PassivePerception(perceptionScore: number): number {
         return 10 + perceptionScore;
     }
 
@@ -139,7 +139,7 @@ class Ruleset {
      * @param {number} dexterityScore - The dexterity score.
      * @return {number}
      */
-    static Initiative(dexterityScore: number) {
+    static Initiative(dexterityScore: number): number {
         return this.AbilityModifier(dexterityScore);
     }
 
@@ -148,7 +148,7 @@ class Ruleset {
      * @param {RaceEnum} raceId - The race id.
      * @return {number}
      */
-    static RaceStrength(raceId: RaceEnum) {
+    static RaceStrength(raceId: RaceEnum): number {
         switch (raceId) {
             case RaceEnum.DWARF_HILL:
                 return 0;
@@ -172,7 +172,7 @@ class Ruleset {
      * @param {RaceEnum} raceId - The race id.
      * @return {number}
      */
-    static RaceDexterity(raceId: RaceEnum) {
+    static RaceDexterity(raceId: RaceEnum): number {
         switch (raceId) {
             case RaceEnum.DWARF_HILL:
             case RaceEnum.DWARF_MOUNTAIN:
@@ -195,7 +195,7 @@ class Ruleset {
      * @param {RaceEnum} raceId - The race id.
      * @return {number}
      */
-    static RaceConstitution(raceId: RaceEnum) {
+    static RaceConstitution(raceId: RaceEnum): number {
         switch (raceId) {
             case RaceEnum.DWARF_HILL:
             case RaceEnum.DWARF_MOUNTAIN:
@@ -219,7 +219,7 @@ class Ruleset {
      * @param {RaceEnum} raceId - The race id.
      * @return {number}
      */
-    static RaceIntelligence(raceId: RaceEnum) {
+    static RaceIntelligence(raceId: RaceEnum): number {
         switch (raceId) {
             case RaceEnum.DWARF_HILL:
             case RaceEnum.DWARF_MOUNTAIN:
@@ -243,7 +243,7 @@ class Ruleset {
      * @param {RaceEnum} raceId - The race id.
      * @return {number}
      */
-    static RaceWisdom(raceId: RaceEnum) {
+    static RaceWisdom(raceId: RaceEnum): number {
         switch (raceId) {
             case RaceEnum.DWARF_HILL:
                 return 1;
@@ -268,7 +268,7 @@ class Ruleset {
      * @param {RaceEnum} raceId - The race id.
      * @return {number}
      */
-    static RaceCharisma(raceId: RaceEnum) {
+    static RaceCharisma(raceId: RaceEnum): number {
         switch (raceId) {
             case RaceEnum.DWARF_HILL:
             case RaceEnum.DWARF_MOUNTAIN:
@@ -292,7 +292,7 @@ class Ruleset {
      * @param {RaceEnum} raceId - The race id.
      * @return {number}
      */
-    static RaceSpeed(raceId: RaceEnum) {
+    static RaceSpeed(raceId: RaceEnum): number {
         switch (raceId) {
             case RaceEnum.DWARF_HILL:
             case RaceEnum.DWARF_MOUNTAIN:
@@ -319,8 +319,8 @@ class Ruleset {
      * @param {number} constitutionScore - The constitution score.
      * @return {number}
      */
-    static MaximumHitPoint(level: number, raceId: RaceEnum, classId: ClassEnum, constitutionScore: number) {
-        let result = 0;
+    static MaximumHitPoint(level: number, raceId: RaceEnum, classId: ClassEnum, constitutionScore: number): number {
+        let result: number = 0;
 
         switch (raceId) {
             case RaceEnum.DWARF_HILL:
@@ -361,12 +361,17 @@ class Ruleset {
      * @param {ClassEnum} classId - The class id.
      * @return {Array<ArmorTypeEnum>}
      */
-    static ArmorProficiencies(classId: ClassEnum) {
+    static ArmorProficiencies(classId: ClassEnum): Array<ArmorTypeEnum> {
         switch (classId) {
             case ClassEnum.CLERIC:
-                return [ArmorTypeEnum.PADDED, ArmorTypeEnum.LEATHER, ArmorTypeEnum.STUDDED_LEATHER, ArmorTypeEnum.HIDE, ArmorTypeEnum.CHAIN_SHIRT, ArmorTypeEnum.SCALE_MAIL, ArmorTypeEnum.BREASTPLATE, ArmorTypeEnum.HALF_PLATE, ArmorTypeEnum.SHIELD];
+                return [ArmorTypeEnum.PADDED, ArmorTypeEnum.LEATHER, ArmorTypeEnum.STUDDED_LEATHER,
+                ArmorTypeEnum.HIDE, ArmorTypeEnum.CHAIN_SHIRT, ArmorTypeEnum.SCALE_MAIL,
+                ArmorTypeEnum.BREASTPLATE, ArmorTypeEnum.HALF_PLATE, ArmorTypeEnum.SHIELD];
             case ClassEnum.FIGHTER:
-                return [ArmorTypeEnum.PADDED, ArmorTypeEnum.LEATHER, ArmorTypeEnum.STUDDED_LEATHER, ArmorTypeEnum.HIDE, ArmorTypeEnum.CHAIN_SHIRT, ArmorTypeEnum.SCALE_MAIL, ArmorTypeEnum.BREASTPLATE, ArmorTypeEnum.HALF_PLATE, ArmorTypeEnum.RING_MAIL, ArmorTypeEnum.CHAIN_MAIL, ArmorTypeEnum.SPLINT, ArmorTypeEnum.PLATE, ArmorTypeEnum.SHIELD];
+                return [ArmorTypeEnum.PADDED, ArmorTypeEnum.LEATHER, ArmorTypeEnum.STUDDED_LEATHER,
+                ArmorTypeEnum.HIDE, ArmorTypeEnum.CHAIN_SHIRT, ArmorTypeEnum.SCALE_MAIL,
+                ArmorTypeEnum.BREASTPLATE, ArmorTypeEnum.HALF_PLATE, ArmorTypeEnum.RING_MAIL,
+                ArmorTypeEnum.CHAIN_MAIL, ArmorTypeEnum.SPLINT, ArmorTypeEnum.PLATE, ArmorTypeEnum.SHIELD];
             case ClassEnum.ROGUE:
                 return [ArmorTypeEnum.PADDED, ArmorTypeEnum.LEATHER, ArmorTypeEnum.STUDDED_LEATHER, ArmorTypeEnum.HIDE];
             case ClassEnum.WIZARD:
@@ -381,16 +386,33 @@ class Ruleset {
      * @param {ClassEnum} classId - The class id.
      * @return {Array<WeaponTypeEnum>}
      */
-    static WeaponProficiencies(classId: ClassEnum) {
+    static WeaponProficiencies(classId: ClassEnum): Array<WeaponTypeEnum> {
         switch (classId) {
             case ClassEnum.CLERIC:
-                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE, WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART, WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING];
+                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE,
+                WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF,
+                WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART,
+                WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING];
             case ClassEnum.FIGHTER:
-                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE, WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART, WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING, WeaponTypeEnum.BATTLEAXE, WeaponTypeEnum.FLAIL, WeaponTypeEnum.GLAIVE, WeaponTypeEnum.GREATAXE, WeaponTypeEnum.GREATSWORD, WeaponTypeEnum.HALBERD, WeaponTypeEnum.LANCE, WeaponTypeEnum.LONGSWORD, WeaponTypeEnum.MAUL, WeaponTypeEnum.MORNINGSTAR, WeaponTypeEnum.PIKE, WeaponTypeEnum.RAPIER, WeaponTypeEnum.SCIMITAR, WeaponTypeEnum.SHORTSWORD, WeaponTypeEnum.TRIDENT, WeaponTypeEnum.WAR_PICK, WeaponTypeEnum.WARHAMMER, WeaponTypeEnum.WHIP, WeaponTypeEnum.BLOWGUN, WeaponTypeEnum.HAND_CROSSBOW, WeaponTypeEnum.HEAVY_CROSSBOW, WeaponTypeEnum.LONGBOW, WeaponTypeEnum.NET];
+                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE,
+                WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF,
+                WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART,
+                WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING, WeaponTypeEnum.BATTLEAXE, WeaponTypeEnum.FLAIL,
+                WeaponTypeEnum.GLAIVE, WeaponTypeEnum.GREATAXE, WeaponTypeEnum.GREATSWORD, WeaponTypeEnum.HALBERD,
+                WeaponTypeEnum.LANCE, WeaponTypeEnum.LONGSWORD, WeaponTypeEnum.MAUL, WeaponTypeEnum.MORNINGSTAR,
+                WeaponTypeEnum.PIKE, WeaponTypeEnum.RAPIER, WeaponTypeEnum.SCIMITAR, WeaponTypeEnum.SHORTSWORD,
+                WeaponTypeEnum.TRIDENT, WeaponTypeEnum.WAR_PICK, WeaponTypeEnum.WARHAMMER, WeaponTypeEnum.WHIP,
+                WeaponTypeEnum.BLOWGUN, WeaponTypeEnum.HAND_CROSSBOW, WeaponTypeEnum.HEAVY_CROSSBOW,
+                WeaponTypeEnum.LONGBOW, WeaponTypeEnum.NET];
             case ClassEnum.ROGUE:
-                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE, WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART, WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING, WeaponTypeEnum.HAND_CROSSBOW, WeaponTypeEnum.LONGSWORD, WeaponTypeEnum.RAPIER, WeaponTypeEnum.SHORTSWORD];
+                return [WeaponTypeEnum.CLUB, WeaponTypeEnum.DAGGER, WeaponTypeEnum.GREATCLUB, WeaponTypeEnum.HANDAXE,
+                WeaponTypeEnum.JAVELIN, WeaponTypeEnum.LIGHT_HAMMER, WeaponTypeEnum.MACE, WeaponTypeEnum.QUARTERSTAFF,
+                WeaponTypeEnum.SICKLE, WeaponTypeEnum.SPEAR, WeaponTypeEnum.LIGHT_CROSSBOW, WeaponTypeEnum.DART,
+                WeaponTypeEnum.SHORTBOW, WeaponTypeEnum.SLING, WeaponTypeEnum.HAND_CROSSBOW, WeaponTypeEnum.LONGSWORD,
+                WeaponTypeEnum.RAPIER, WeaponTypeEnum.SHORTSWORD];
             case ClassEnum.WIZARD:
-                return [WeaponTypeEnum.DAGGER, WeaponTypeEnum.DART, WeaponTypeEnum.SLING, WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.LIGHT_CROSSBOW];
+                return [WeaponTypeEnum.DAGGER, WeaponTypeEnum.DART, WeaponTypeEnum.SLING,
+                WeaponTypeEnum.QUARTERSTAFF, WeaponTypeEnum.LIGHT_CROSSBOW];
             default:
                 throw new Error("Parameter 'classId' must be in the 'ClassEnum' range.");
         }
@@ -401,7 +423,7 @@ class Ruleset {
      * @param {ClassEnum} classId - The class id.
      * @return {Array<WeaponTypeEnum>}
      */
-    static ToolProficiencies(classId: ClassEnum) {
+    static ToolProficiencies(classId: ClassEnum): Array<WeaponTypeEnum> {
         switch (classId) {
             case ClassEnum.CLERIC:
                 return [];
@@ -421,7 +443,7 @@ class Ruleset {
      * @param {ClassEnum} classId - The class id.
      * @return {Array<AbilityEnum>}
      */
-    static AbilityProficiencies(classId: ClassEnum) {
+    static AbilityProficiencies(classId: ClassEnum): Array<AbilityEnum> {
         switch (classId) {
             case ClassEnum.CLERIC:
                 return [AbilityEnum.WISDOM, AbilityEnum.CHARISMA];
@@ -441,7 +463,7 @@ class Ruleset {
      * @param {ClassEnum} classId - The class id.
      * @return {Array<SkillEnum>}
      */
-    static SkillProficiencies(classId: ClassEnum) {
+    static SkillProficiencies(classId: ClassEnum): Array<SkillEnum> {
         switch (classId) {
             case ClassEnum.CLERIC:
                 return [];
@@ -461,7 +483,7 @@ class Ruleset {
      * @param {ClassEnum} classId - The class id.
      * @return {number}
      */
-    static MaximumStartingFunds(classId: ClassEnum) {
+    static MaximumStartingFunds(classId: ClassEnum): number {
         switch (classId) {
             case ClassEnum.CLERIC:
             case ClassEnum.FIGHTER:
@@ -481,7 +503,7 @@ class Ruleset {
      * @param {number} armorClass - The armor class.
      * @return {AttackRollResultEnum}
      */
-    static AttackRollResult(d20Roll: number, abilityModifierScore: number, armorClass: number) {
+    static AttackRollResult(d20Roll: number, abilityModifierScore: number, armorClass: number): AttackRollResultEnum {
         if (d20Roll === 20) {
             return AttackRollResultEnum.CRITICAL;
         } else if (d20Roll + abilityModifierScore >= armorClass) {

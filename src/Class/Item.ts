@@ -23,19 +23,19 @@ class Item {
         this._itemTypeId = itemTypeId;
     }
 
-    get name() {
+    get name(): string {
         return this._name;
     }
 
-    get cost() {
+    get cost(): number {
         return this._cost;
     }
 
-    get weight() {
+    get weight(): number {
         return this._weight;
     }
 
-    get itemTypeId() {
+    get itemTypeId(): number {
         return this._itemTypeId;
     }
 }

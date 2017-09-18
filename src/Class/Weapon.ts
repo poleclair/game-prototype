@@ -24,7 +24,9 @@ class Weapon extends Item {
      * @param {WeaponTypeEnum} weaponType - The weapon type.
      * @return {Weapon}
      */
-    constructor(name: string, cost: number, weight: number, itemType: ItemTypeEnum, damages: Array<number>, secondaryDamages: Array<number>, damageType: DamageTypeEnum, properties: Array<WeaponPropertyEnum>, weaponRange: WeaponRange, weaponType: WeaponTypeEnum) {
+    constructor(name: string, cost: number, weight: number, itemType: ItemTypeEnum, damages: Array<number>,
+        secondaryDamages: Array<number>, damageType: DamageTypeEnum, properties: Array<WeaponPropertyEnum>,
+        weaponRange: WeaponRange, weaponType: WeaponTypeEnum) {
         super(name, cost, weight, itemType);
 
         this._damages = damages;
@@ -35,27 +37,27 @@ class Weapon extends Item {
         this._weaponType = weaponType;
     }
 
-    get damages() {
+    get damages(): Array<number> {
         return this._damages;
     }
 
-    get secondaryDamages() {
+    get secondaryDamages(): Array<number> {
         return this._secondaryDamages;
     }
 
-    get damageTypeId() {
+    get damageTypeId(): number {
         return this._damageType;
     }
 
-    get properties() {
+    get properties(): Array<number> {
         return this._properties;
     }
 
-    get weaponRange() {
+    get weaponRange(): WeaponRange {
         return this._weaponRange;
     }
 
-    get weaponType() {
+    get weaponType(): number {
         return this._weaponType;
     }
 

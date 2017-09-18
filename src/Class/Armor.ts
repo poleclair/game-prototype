@@ -26,7 +26,8 @@ class Armor extends Item {
      * @param {number} armorType - The armor type.
      * @return {Armor}
      */
-    constructor(name: string, cost: number, weight: number, itemType: number, armorClass: number, strengthRequired: number, isDexterityModified: boolean, isDexterityCap: boolean, isStealthy: boolean, armorType: number) {
+    constructor(name: string, cost: number, weight: number, itemType: number, armorClass: number,
+        strengthRequired: number, isDexterityModified: boolean, isDexterityCap: boolean, isStealthy: boolean, armorType: number) {
         super(name, cost, weight, itemType);
 
         this._armorClass = armorClass;
@@ -37,27 +38,27 @@ class Armor extends Item {
         this._armorType = armorType;
     }
 
-    get armorClass() {
+    get armorClass(): number {
         return this._armorClass;
     }
 
-    get strengthRequired() {
+    get strengthRequired(): number {
         return this._strengthRequired;
     }
 
-    get isDexterityModified() {
+    get isDexterityModified(): boolean {
         return this._isDexterityModified;
     }
 
-    get isDexterityCap() {
+    get isDexterityCap(): boolean {
         return this._isDexterityCap;
     }
 
-    get isStealthy() {
+    get isStealthy(): boolean {
         return this._isStealthy;
     }
 
-    get armorType() {
+    get armorType(): number {
         return this._armorType;
     }
 }
