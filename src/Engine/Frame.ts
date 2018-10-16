@@ -1,19 +1,24 @@
-/**
- * Class representing a frame.
- */
-class Frame {
-    private _targets: Array<Target>;
+/// <reference path="./Target.ts" />
+
+namespace Engine {
 
     /**
-     * Creates a frame.
-     * @param {Array<Target>} targets - The targets
-     * @return {Frame}
+     * Class representing a frame.
      */
-    public constructor(targets: Array<Target>) {
-        this._targets = targets;
-    }
+    export class Frame {
+        private _targets: Array<Target>;
 
-    public get targets(): Array<Target> {
-        return this._targets;
+        /**
+         * Creates a frame.
+         * @param {Array<Target>} targets - The targets
+         * @return {Frame}
+         */
+        public constructor(targets: Array<Target>) {
+            this._targets = targets;
+        }
+
+        public get targets(): Array<Target> {
+            return this._targets;
+        }
     }
 }

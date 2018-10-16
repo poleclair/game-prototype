@@ -1,33 +1,38 @@
-/**
- * Class representing a target.
- */
-class Target {
-    private _xOffset: number;
-    private _yOffset: number;
-    private _tile: Tile;
+/// <reference path="./Tile.ts" />
+
+namespace Engine {
 
     /**
-     * Creates a target.
-     * @param  {number} xOffset - The x offset.
-     * @param  {number} yOffset - The y offset.
-     * @param  {Tile} tile - The tile.
-     * @return {Target}
+     * Class representing a target.
      */
-    public constructor(xOffset: number, yOffset: number, tile: Tile) {
-        this._xOffset = xOffset;
-        this._yOffset = yOffset;
-        this._tile = tile;
-    }
+    export class Target {
+        private _xOffset: number;
+        private _yOffset: number;
+        private _tile: Tile;
 
-    public get xOffset(): number {
-        return this._xOffset;
-    }
+        /**
+         * Creates a target.
+         * @param  {number} xOffset - The x offset.
+         * @param  {number} yOffset - The y offset.
+         * @param  {Tile} tile - The tile.
+         * @return {Target}
+         */
+        public constructor(xOffset: number, yOffset: number, tile: Tile) {
+            this._xOffset = xOffset;
+            this._yOffset = yOffset;
+            this._tile = tile;
+        }
 
-    public get yOffset(): number {
-        return this._yOffset;
-    }
+        public get xOffset(): number {
+            return this._xOffset;
+        }
 
-    public get tile(): Tile {
-        return this._tile;
+        public get yOffset(): number {
+            return this._yOffset;
+        }
+
+        public get tile(): Tile {
+            return this._tile;
+        }
     }
 }

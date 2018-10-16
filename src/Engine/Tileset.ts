@@ -1,35 +1,38 @@
-/**
- * Class representing a tileset.
- */
-class Tileset {
-    private _tileWidth: number;
-    private _tileHeight: number;
-    private _image: HTMLImageElement;
+namespace Engine {
 
     /**
-     * Creates a tileset.
-     * @param  {string} source - The source.
-     * @param  {number} tileWidth - The tile width.
-     * @param  {number} tileHeight - The tile height.
-     * @return {Tileset}
+     * Class representing a tileset.
      */
-    public constructor(source: string, tileWidth: number, tileHeight: number) {
-        this._tileWidth = tileWidth;
-        this._tileHeight = tileHeight;
+    export class Tileset {
+        private _tileWidth: number;
+        private _tileHeight: number;
+        private _image: HTMLImageElement;
 
-        this._image = new Image();
-        this._image.src = source;
-    }
+        /**
+         * Creates a tileset.
+         * @param  {string} source - The source.
+         * @param  {number} tileWidth - The tile width.
+         * @param  {number} tileHeight - The tile height.
+         * @return {Tileset}
+         */
+        public constructor(source: string, tileWidth: number, tileHeight: number) {
+            this._tileWidth = tileWidth;
+            this._tileHeight = tileHeight;
 
-    public get tileWidth(): number {
-        return this._tileWidth;
-    }
+            this._image = new Image();
+            this._image.src = source;
+        }
 
-    public get tileHeight(): number {
-        return this._tileHeight;
-    }
+        public get tileWidth(): number {
+            return this._tileWidth;
+        }
 
-    public get image(): HTMLImageElement {
-        return this._image;
+        public get tileHeight(): number {
+            return this._tileHeight;
+        }
+
+        public get image(): HTMLImageElement {
+            return this._image;
+        }
     }
 }

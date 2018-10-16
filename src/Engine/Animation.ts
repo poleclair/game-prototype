@@ -1,33 +1,38 @@
-/**
- * Class representing an animation.
- */
-class Animation {
-    private _x: number;
-    private _y: number;
-    private _frames: Array<Frame>;
+/// <reference path="./Frame.ts" />
+
+namespace Engine {
 
     /**
-     * Creates an animation.
-     * @param {number} x - The x.
-     * @param {number} y - The y.
-     * @param {Array<Frame>} frames - The frames.
-     * @return {Animation}
+     * Class representing a animation.
      */
-    public constructor(x: number, y: number, frames: Array<Frame>) {
-        this._x = x;
-        this._y = y;
-        this._frames = frames;
-    }
+    export class Animation {
+        private _x: number;
+        private _y: number;
+        private _frames: Array<Frame>;
 
-    public get x(): number {
-        return this._x;
-    }
+        /**
+         * Creates an animation.
+         * @param {number} x - The x.
+         * @param {number} y - The y.
+         * @param {Array<Frame>} frames - The frames.
+         * @return {Animation}
+         */
+        public constructor(x: number, y: number, frames: Array<Frame>) {
+            this._x = x;
+            this._y = y;
+            this._frames = frames;
+        }
 
-    public get y(): number {
-        return this._y;
-    }
+        public get x(): number {
+            return this._x;
+        }
 
-    public get frames(): Array<Frame> {
-        return this._frames;
+        public get y(): number {
+            return this._y;
+        }
+
+        public get frames(): Array<Frame> {
+            return this._frames;
+        }
     }
 }

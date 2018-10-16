@@ -1,26 +1,29 @@
-/**
- * Class representing a coordinate.
- */
-class Coordinate {
-    private _x: number;
-    private _y: number;
+namespace Engine {
 
     /**
-     * Creates a coordinate.
-     * @param {number} x - The x;
-     * @param {number} y - The y;
-     * @return {Coordinate}
+     * Class representing a coordinate.
      */
-    public constructor(x: number, y: number) {
-        this._x = x;
-        this._y = y;
-    }
+    export class Coordinate {
+        private _x: number;
+        private _y: number;
 
-    public get x(): number {
-        return this._x;
-    }
+        /**
+         * Creates a coordinate.
+         * @param {number} x - The x;
+         * @param {number} y - The y;
+         * @return {Coordinate}
+         */
+        public constructor(x: number, y: number) {
+            this._x = x;
+            this._y = y;
+        }
 
-    public get y(): number {
-        return this._y;
+        public get x(): number {
+            return this._x;
+        }
+
+        public get y(): number {
+            return this._y;
+        }
     }
 }

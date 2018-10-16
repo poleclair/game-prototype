@@ -1,3 +1,813 @@
+var Engine;
+(function (Engine) {
+    /**
+     * Class representing a tile.
+     */
+    class Tile {
+        /**
+         * Creates a tile.
+         * @param {number} x - The x;
+         * @param {number} y - The y;
+         * @param {number} alpha - The alpha.
+         * @return {Tile}
+         */
+        constructor(x, y, alpha) {
+            this._x = x;
+            this._y = y;
+            this._alpha = alpha;
+        }
+        get x() {
+            return this._x;
+        }
+        get y() {
+            return this._y;
+        }
+        get alpha() {
+            return this._alpha;
+        }
+    }
+    Engine.Tile = Tile;
+})(Engine || (Engine = {}));
+/// <reference path="./Tile.ts" />
+var Engine;
+(function (Engine) {
+    /**
+     * Class representing a target.
+     */
+    class Target {
+        /**
+         * Creates a target.
+         * @param  {number} xOffset - The x offset.
+         * @param  {number} yOffset - The y offset.
+         * @param  {Tile} tile - The tile.
+         * @return {Target}
+         */
+        constructor(xOffset, yOffset, tile) {
+            this._xOffset = xOffset;
+            this._yOffset = yOffset;
+            this._tile = tile;
+        }
+        get xOffset() {
+            return this._xOffset;
+        }
+        get yOffset() {
+            return this._yOffset;
+        }
+        get tile() {
+            return this._tile;
+        }
+    }
+    Engine.Target = Target;
+})(Engine || (Engine = {}));
+/// <reference path="./Target.ts" />
+var Engine;
+(function (Engine) {
+    /**
+     * Class representing a frame.
+     */
+    class Frame {
+        /**
+         * Creates a frame.
+         * @param {Array<Target>} targets - The targets
+         * @return {Frame}
+         */
+        constructor(targets) {
+            this._targets = targets;
+        }
+        get targets() {
+            return this._targets;
+        }
+    }
+    Engine.Frame = Frame;
+})(Engine || (Engine = {}));
+/// <reference path="./Frame.ts" />
+var Engine;
+(function (Engine) {
+    /**
+     * Class representing a animation.
+     */
+    class Animation {
+        /**
+         * Creates an animation.
+         * @param {number} x - The x.
+         * @param {number} y - The y.
+         * @param {Array<Frame>} frames - The frames.
+         * @return {Animation}
+         */
+        constructor(x, y, frames) {
+            this._x = x;
+            this._y = y;
+            this._frames = frames;
+        }
+        get x() {
+            return this._x;
+        }
+        get y() {
+            return this._y;
+        }
+        get frames() {
+            return this._frames;
+        }
+    }
+    Engine.Animation = Animation;
+})(Engine || (Engine = {}));
+/// <reference path="./Animation.ts" />
+/// <reference path="./Frame.ts" />
+/// <reference path="./Target.ts" />
+/// <reference path="./Tile.ts" />
+var Engine;
+(function (Engine) {
+    /**
+     * Class representing an animator.
+     */
+    class Animator {
+        /**
+         * Creates an animator.
+         * @return {Animator}
+         */
+        constructor() {
+            this._animations = [];
+        }
+        get animations() {
+            return this._animations;
+        }
+        /**
+         * Adds a circle fade out animation to the queue.
+         * @param {number} x - The x;
+         * @param {number} y - The y;
+         * @param {number} length - The length;
+         * @param {number} size - The size;
+         */
+        addCircleFadeOut(x, y, length, size) {
+            let animation = new Engine.Animation(x, y, []);
+            let alpha = 1 / length;
+            for (let i = 0; i < length; i++) {
+                let frame = new Engine.Frame([new Engine.Target(0, 0, new Engine.Tile(15, 15, 1 - (alpha * i)))]);
+                for (let j = 1; j < size; j++) {
+                    frame.targets.push(new Engine.Target(0, 0 + j, new Engine.Tile(15, 15, 1 - (alpha * i))));
+                    frame.targets.push(new Engine.Target(0, 0 - j, new Engine.Tile(15, 15, 1 - (alpha * i))));
+                    frame.targets.push(new Engine.Target(0 + j, 0, new Engine.Tile(15, 15, 1 - (alpha * i))));
+                    frame.targets.push(new Engine.Target(0 - j, 0, new Engine.Tile(15, 15, 1 - (alpha * i))));
+                }
+                animation.frames.push(frame);
+            }
+            this._animations.push(animation);
+        }
+        /**
+         * Adds a projectile animation to the queue.
+         * @param {number} x0 - The x0;
+         * @param {number} y0 - The y0;
+         * @param {number} x1 - The x1;
+         * @param {number} y1 - The y1;
+         */
+        addProjectile(x0, y0, x1, y1) {
+            let animation = new Engine.Animation(x0, y0, []);
+            let dx = x1 - x0;
+            let dy = y1 - y0;
+            let nx = Math.abs(dx);
+            let ny = Math.abs(dy);
+            let signX = dx > 0 ? 1 : -1;
+            let signY = dy > 0 ? 1 : -1;
+            let cx = x0;
+            let cy = x0;
+            animation.frames.push(new Engine.Frame([new Engine.Target(cx, cy, new Engine.Tile(15, 15, 1))]));
+            for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
+                if ((0.5 + ix) / nx === (0.5 + iy) / ny) {
+                    cx += signX;
+                    cy += signY;
+                    ix++;
+                    iy++;
+                }
+                else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
+                    cx += signX;
+                    ix++;
+                }
+                else {
+                    cy += signY;
+                    iy++;
+                }
+                animation.frames.push(new Engine.Frame([new Engine.Target(cx, cy, new Engine.Tile(15, 15, 1))]));
+            }
+            this._animations.push(animation);
+        }
+        /**
+         * Adds a projectile test animation to the queue.
+         * @param {number} x0 - The x0;
+         * @param {number} y0 - The y0;
+         * @param {number} x1 - The x1;
+         * @param {number} y1 - The y1;
+         * @param {number} speed - The speed;
+         */
+        addProjectileTest(x0, y0, x1, y1, speed) {
+            let animation = new Engine.Animation(x0, y0, []);
+            let dx = x1 - x0;
+            let dy = y1 - y0;
+            let nx = Math.abs(dx);
+            let ny = Math.abs(dy);
+            let signX = dx > 0 ? 1 : -1;
+            let signY = dy > 0 ? 1 : -1;
+            let cx = x0;
+            let cy = x0;
+            animation.frames.push(new Engine.Frame([new Engine.Target(cx, cy, new Engine.Tile(15, 15, 1))]));
+            for (let ix = 0, iy = 0, s = 0; ix < nx || iy < ny; s++) {
+                if (s < 0) {
+                    animation.frames.push(new Engine.Frame([new Engine.Target(cx, cy, new Engine.Tile(15, 15, 1))]));
+                }
+                else {
+                    if ((0.5 + ix) / nx === (0.5 + iy) / ny) {
+                        cx += signX;
+                        cy += signY;
+                        ix++;
+                        iy++;
+                    }
+                    else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
+                        cx += signX;
+                        ix++;
+                    }
+                    else {
+                        cy += signY;
+                        iy++;
+                    }
+                    if (s === speed) {
+                        s = 0;
+                        animation.frames.push(new Engine.Frame([new Engine.Target(cx, cy, new Engine.Tile(15, 15, 1))]));
+                    }
+                }
+            }
+            this._animations.push(animation);
+        }
+    }
+    Animator.VERY_SLOW = -2;
+    Animator.SLOW = -1;
+    Animator.NORMAL = 0;
+    Animator.FAST = 1;
+    Animator.VERY_FAST = 2;
+    Engine.Animator = Animator;
+})(Engine || (Engine = {}));
+var Engine;
+(function (Engine) {
+    /**
+     * Class representing a control.
+     */
+    class Control {
+        /**
+         * Creates a control.
+         * @return {Control}
+         */
+        constructor() {
+            this._x = 0;
+            this._y = 0;
+            this._xDown = 0;
+            this._yDown = 0;
+            this._xUp = 0;
+            this._yUp = 0;
+            this._xContextMenu = 0;
+            this._yContextMenu = 0;
+            this._kKeyDown = 0;
+        }
+        get x() {
+            return this._x;
+        }
+        set x(value) {
+            this._x = value;
+        }
+        get y() {
+            return this._y;
+        }
+        set y(value) {
+            this._y = value;
+        }
+        get xDown() {
+            return this._xDown;
+        }
+        set xDown(value) {
+            this._xDown = value;
+        }
+        get yDown() {
+            return this._yDown;
+        }
+        set yDown(value) {
+            this._yDown = value;
+        }
+        get xUp() {
+            return this._xUp;
+        }
+        set xUp(value) {
+            this._xUp = value;
+        }
+        get yUp() {
+            return this._yUp;
+        }
+        set yUp(value) {
+            this._yUp = value;
+        }
+        get xContextMenu() {
+            return this._xUp;
+        }
+        set xContextMenu(value) {
+            this._xUp = value;
+        }
+        get yContextMenu() {
+            return this._yUp;
+        }
+        set yContextMenu(value) {
+            this._yUp = value;
+        }
+        get kKeyDown() {
+            return this._kKeyDown;
+        }
+        set kKeyDown(value) {
+            this._kKeyDown = value;
+        }
+        /**
+         * Triggers mouse down.
+         */
+        mouseDown(event) {
+            this.xDown = event.layerX;
+            this.yDown = event.layerY;
+        }
+        /**
+         * Triggers mouse up.
+         */
+        mouseUp(event) {
+            this.xUp = event.layerX;
+            this.yUp = event.layerY;
+        }
+        /**
+         * Triggers mouse move.
+         */
+        mouseMove(event) {
+            this.x = event.layerX;
+            this.y = event.layerY;
+        }
+        /**
+         * Triggers context menu.
+         */
+        contextMenu(event) {
+            this.xContextMenu = event.layerX;
+            this.yContextMenu = event.layerY;
+        }
+        /**
+         * Triggers key down.
+         */
+        keyDown(event) {
+            this.kKeyDown = event.keyCode;
+        }
+    }
+    Engine.Control = Control;
+})(Engine || (Engine = {}));
+var Engine;
+(function (Engine) {
+    /**
+     * Class representing a coordinate.
+     */
+    class Coordinate {
+        /**
+         * Creates a coordinate.
+         * @param {number} x - The x;
+         * @param {number} y - The y;
+         * @return {Coordinate}
+         */
+        constructor(x, y) {
+            this._x = x;
+            this._y = y;
+        }
+        get x() {
+            return this._x;
+        }
+        get y() {
+            return this._y;
+        }
+    }
+    Engine.Coordinate = Coordinate;
+})(Engine || (Engine = {}));
+var Engine;
+(function (Engine) {
+    /**
+     * Class representing a tileset.
+     */
+    class Tileset {
+        /**
+         * Creates a tileset.
+         * @param  {string} source - The source.
+         * @param  {number} tileWidth - The tile width.
+         * @param  {number} tileHeight - The tile height.
+         * @return {Tileset}
+         */
+        constructor(source, tileWidth, tileHeight) {
+            this._tileWidth = tileWidth;
+            this._tileHeight = tileHeight;
+            this._image = new Image();
+            this._image.src = source;
+        }
+        get tileWidth() {
+            return this._tileWidth;
+        }
+        get tileHeight() {
+            return this._tileHeight;
+        }
+        get image() {
+            return this._image;
+        }
+    }
+    Engine.Tileset = Tileset;
+})(Engine || (Engine = {}));
+/// <reference path="./Tileset.ts" />
+var Engine;
+(function (Engine) {
+    /**
+     * Class representing a layer.
+     */
+    class Layer {
+        /**
+         * Creates a layer.
+         * @param {string} id - The id.
+         * @param {number} x - The x.
+         * @param {number} y - The y.
+         * @param {number} z - The z.
+         * @param {number} width - The width.
+         * @param {number} height - The height.
+         * @param {boolean} refresh - Is auto refresh.
+         * @param {Tileset} tileset - The tileset.
+         * @return {Layer}
+         */
+        constructor(id, x, y, z, width, height, refresh, tileset) {
+            this._id = id;
+            this._x = x;
+            this._y = y;
+            this._z = z;
+            this._width = width;
+            this._height = height;
+            this._refresh = refresh;
+            this._tileset = tileset;
+            this._widthInTile = width / tileset.tileWidth;
+            this._heightInTile = height / tileset.tileHeight;
+            this._animator = new Engine.Animator();
+            this._tiles = [];
+            for (let x = 0; x < width; x++) {
+                this._tiles[x] = [];
+                for (let y = 0; y < height; y++) {
+                    this._tiles[x][y] = new Engine.Tile(0, 0, 1);
+                }
+            }
+            this._canvas = document.createElement("canvas");
+            this._canvas.id = id;
+            this._canvas.width = width;
+            this._canvas.height = height;
+            this._canvas.style.zIndex = z.toString();
+            this._canvas.style.position = "absolute";
+            this._canvas.style.left = x + "px";
+            this._canvas.style.top = y + "px";
+            this._context = this._canvas.getContext("2d");
+        }
+        get id() {
+            return this._id;
+        }
+        get x() {
+            return this._x;
+        }
+        get y() {
+            return this._y;
+        }
+        get z() {
+            return this._z;
+        }
+        get width() {
+            return this._width;
+        }
+        get height() {
+            return this._height;
+        }
+        get isAutoRefresh() {
+            return this._refresh;
+        }
+        get tileset() {
+            return this._tileset;
+        }
+        get widthInTile() {
+            return this._widthInTile;
+        }
+        get heightInTile() {
+            return this._heightInTile;
+        }
+        get animator() {
+            return this._animator;
+        }
+        get tiles() {
+            return this._tiles;
+        }
+        get canvas() {
+            return this._canvas;
+        }
+        get context() {
+            return this._context;
+        }
+        get pid() {
+            return this._pid;
+        }
+        set pid(value) {
+            this._pid = value;
+        }
+        /**
+         * Starts the layer.
+         */
+        start() {
+            if (this.isAutoRefresh) {
+                this.pid = requestAnimationFrame(this.update.bind(this));
+            }
+            else {
+                this.pid = requestAnimationFrame(this.tick.bind(this));
+            }
+        }
+        /**
+         * Updates the layer.
+         */
+        update() {
+            this.tick();
+            this.pid = requestAnimationFrame(this.update.bind(this));
+        }
+        /**
+         * Ticks the layer.
+         */
+        tick() {
+            this.clear();
+            this.draw();
+        }
+        /**
+         * Stops the layer.
+         */
+        stop() {
+            cancelAnimationFrame(this.pid);
+        }
+        /**
+         * Clears the engine.
+         */
+        clear() {
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+        /**
+         * Draws the engine.
+         */
+        draw() {
+            for (let x = 0; x < this.widthInTile; x++) {
+                for (let y = 0; y < this.heightInTile; y++) {
+                    this.context.globalAlpha = this.tiles[x][y].alpha;
+                    this.context.drawImage(this.tileset.image, this.tileset.tileWidth * this.tiles[x][y].x, this.tileset.tileHeight * this.tiles[x][y].y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * x, this.tileset.tileHeight * y, this.tileset.tileWidth, this.tileset.tileHeight);
+                }
+            }
+            for (let i = this.animator.animations.length - 1; i >= 0; i--) {
+                if (this.animator.animations[i].frames.length > 0) {
+                    let frame = this.animator.animations[i].frames.shift();
+                    for (let j = frame.targets.length; j > 0; j--) {
+                        let target = frame.targets.shift();
+                        if (this.animator.animations[i].x + target.xOffset >= 0 &&
+                            this.animator.animations[i].x + target.xOffset < this.width &&
+                            this.animator.animations[i].y + target.yOffset >= 0 &&
+                            this.animator.animations[i].y + target.yOffset < this.height) {
+                            this._context.globalAlpha = target.tile.alpha;
+                            this._context.drawImage(this.tileset.image, this.tileset.tileWidth * target.tile.x, this.tileset.tileHeight * target.tile.y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset), this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset), this.tileset.tileWidth, this.tileset.tileHeight);
+                        }
+                    }
+                }
+                else {
+                    this.animator.animations.splice(i, 1);
+                }
+            }
+        }
+    }
+    Engine.Layer = Layer;
+})(Engine || (Engine = {}));
+/// <reference path="./Control.ts" />
+/// <reference path="./Layer.ts" />
+var Engine;
+(function (Engine_1) {
+    /**
+     * Class representing an engine.
+     */
+    class Engine {
+        /**
+         * Creates an engine.
+         * @constructor
+         * @param {string} id - The id.
+         * @param {number} width - The width.
+         * @param {number} height - The width.
+         * @return {Engine}
+         */
+        constructor(id, width, height) {
+            this._id = id;
+            this._width = width;
+            this._height = height;
+            this._layers = [];
+            this._control = new Engine_1.Control();
+            this._container = document.createElement("div");
+            this._container.id = id;
+            this._container.style.width = width + "px";
+            this._container.style.height = height + "px";
+            this._container.style.position = "relative";
+            this._container.style.margin = "0px auto";
+        }
+        get id() {
+            return this._id;
+        }
+        get width() {
+            return this._width;
+        }
+        get height() {
+            return this._height;
+        }
+        get container() {
+            return this._container;
+        }
+        get control() {
+            return this._control;
+        }
+        get layers() {
+            return this._layers;
+        }
+        /**
+         * Starts the engine.
+         */
+        start() {
+            this.init(function () {
+                this.layers.forEach(layer => {
+                    layer.start();
+                });
+            }.bind(this));
+        }
+        /**
+         * Stops the engine.
+         */
+        stop() {
+            this.layers.forEach(layer => {
+                layer.stop();
+            });
+        }
+        /**
+         * Initializes the engine.
+         */
+        init(callback) {
+            window.onload = function () {
+                this.layers.forEach(layer => {
+                    this.container.appendChild(layer.canvas);
+                });
+                document.body.appendChild(this.container);
+                document.addEventListener("keydown", this.propagateKeyDown.bind(this));
+                this.container.addEventListener("mousedown", this.propagateMouseDown.bind(this));
+                this.container.addEventListener("mouseup", this.propagateMouseUp.bind(this));
+                this.container.addEventListener("contextmenu", this.propagateContextMenu.bind(this));
+                this.container.addEventListener("mousemove", this.propagateMouseMove.bind(this));
+                callback();
+            }.bind(this);
+        }
+        /**
+         * Propagates mouse down event.
+         */
+        propagateMouseDown(event) {
+            event.preventDefault();
+            this.control.mouseDown(event);
+        }
+        /**
+         * Propagates mouse up event.
+         */
+        propagateMouseUp(event) {
+            event.preventDefault();
+            this.control.mouseUp(event);
+        }
+        /**
+         * Propagates context menu event.
+         */
+        propagateContextMenu(event) {
+            event.preventDefault();
+            this.control.contextMenu(event);
+        }
+        /**
+         * Propagates mouse move event.
+         */
+        propagateMouseMove(event) {
+            event.preventDefault();
+            this.control.mouseMove(event);
+        }
+        /**
+         * Propagates key down event.
+         */
+        propagateKeyDown(event) {
+            this.control.keyDown(event);
+        }
+        /**
+         * Gets the x and y coordonates of a line.
+         * @param {number} x0 - The x0.
+         * @param {number} y0 - The y0.
+         * @param {number} x1 - The x1.
+         * @param {number} y1 - The y1.
+         * @return {Array<Coordinate>}
+         */
+        static line(x0, y0, x1, y1) {
+            let result = new Array();
+            let dx = x1 - x0;
+            let dy = y1 - y0;
+            let nx = Math.abs(dx);
+            let ny = Math.abs(dy);
+            let signX = dx > 0 ? 1 : -1;
+            let signY = dy > 0 ? 1 : -1;
+            let cx = x0;
+            let cy = x0;
+            result.push(new Engine_1.Coordinate(cx, cy));
+            for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
+                if ((0.5 + ix) / nx === (0.5 + iy) / ny) {
+                    cx += signX;
+                    cy += signY;
+                    ix++;
+                    iy++;
+                }
+                else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
+                    cx += signX;
+                    ix++;
+                }
+                else {
+                    cy += signY;
+                    iy++;
+                }
+                result.push(new Engine_1.Coordinate(cx, cy));
+            }
+            return result;
+        }
+        /**
+         * Gets the x and y coordonates of a circle.
+         * @param {number} x0 - The x.
+         * @param {number} y0 - The y.
+         * @param {number} radius - The radius.
+         * @param {boolean} isFill - Is filled.
+         * @return {Array<Coordinate>}
+         */
+        static circle(x0, y0, radius, isFill) {
+            let result = new Array();
+            let x = 0;
+            let y = radius;
+            let d = 1 - radius;
+            result.push(new Engine_1.Coordinate(x0, y0 + y));
+            result.push(new Engine_1.Coordinate(x0, y0 - y));
+            result.push(new Engine_1.Coordinate(x0 + y, y0));
+            result.push(new Engine_1.Coordinate(x0 - y, y0));
+            while (x < y - 1) {
+                x = x + 1;
+                if (d < 0) {
+                    d = d + x + x + 1;
+                }
+                else {
+                    y = y - 1;
+                    let a = x - y + 1;
+                    d = d + a + a;
+                }
+                result.push(new Engine_1.Coordinate(x + x0, y + y0));
+                result.push(new Engine_1.Coordinate(y + x0, x + y0));
+                result.push(new Engine_1.Coordinate(y + x0, 0 - x + y0));
+                result.push(new Engine_1.Coordinate(x + x0, 0 - y + y0));
+                result.push(new Engine_1.Coordinate(0 - x + x0, 0 - y + y0));
+                result.push(new Engine_1.Coordinate(0 - y + x0, 0 - x + y0));
+                result.push(new Engine_1.Coordinate(0 - y + x0, x + y0));
+                result.push(new Engine_1.Coordinate(0 - x + x0, y + y0));
+            }
+            if (isFill) {
+                for (let i = x0 - radius; i < x0 + radius; i++) {
+                    for (let j = y0 - radius; j < y0 + radius; j++) {
+                        if (Math.sqrt(Math.pow(i - x0, 2) + Math.pow(j - y0, 2)) <= radius) {
+                            result.push(new Engine_1.Coordinate(i, j));
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        /**
+         * Gets the x and y coordonates of a square.
+         * @param {number} x0 - The x.
+         * @param {number} y0 - The y.
+         * @param {number} radius - The radius.
+         * @param {boolean} isFill - Is filled.
+         * @return {Array<Coordinate>}
+         */
+        static square(x0, y0, radius, isFill) {
+            let result = new Array();
+            for (let i = x0 - radius; i <= x0 + radius; i++) {
+                result.push(new Engine_1.Coordinate(i, y0 + radius));
+                result.push(new Engine_1.Coordinate(i, y0 - radius));
+            }
+            for (let i = y0 - radius + 1; i < y0 + radius; i++) {
+                result.push(new Engine_1.Coordinate(x0 + radius, i));
+                result.push(new Engine_1.Coordinate(x0 - radius, i));
+            }
+            if (isFill) {
+                for (let i = x0 - radius + 1; i < x0 + radius; i++) {
+                    for (let j = y0 - radius + 1; j < y0 + radius; j++) {
+                        result.push(new Engine_1.Coordinate(i, j));
+                    }
+                }
+            }
+            return result;
+        }
+    }
+    Engine_1.Engine = Engine;
+})(Engine || (Engine = {}));
 /**
  * Class representing a converter.
  */
@@ -691,6 +1501,429 @@ let items = {
         WeaponPropertyEnum.TWO_HANDED], new WeaponRange(150, 600), WeaponTypeEnum.LONGBOW),
     WEAPON_NET: new Weapon("net", 100, 3, ItemTypeEnum.MARTIAL_RANGE_WEAPON, [0], [0], DamageTypeEnum.BLUDGEONING, [WeaponPropertyEnum.SPECIAL, WeaponPropertyEnum.THROWN, WeaponPropertyEnum.RANGE], new WeaponRange(5, 15), WeaponTypeEnum.NET)
 };
+/// <reference path="Item.ts"/>
+/**
+ * Class representing an inventory.
+ */
+class Inventory {
+    /**
+     * Create an inventory.
+     * @constructor
+     * @return {Inventory}
+     */
+    constructor() {
+        this._items = new Array();
+        this._weight = 0;
+    }
+    get items() {
+        return this._items;
+    }
+    get weight() {
+        return this._weight;
+    }
+    /**
+     * Has an item.
+     * @param {Item} item - The item.
+     * @return {boolean}
+     */
+    hasItem(item) {
+        return this.items.findIndex(x => x.name === item.name) > -1;
+    }
+    /**
+     * Add an item.
+     * @param {Item} item - The item.
+     */
+    addItem(item) {
+        this._items.push(item);
+        this._weight += item.weight;
+    }
+    /**
+     * Remove an item.
+     * @param {Item} item - The item.
+     */
+    removeItem(item) {
+        let index = this.items.findIndex(x => x.name === item.name);
+        if (index > -1) {
+            this._items.splice(index, 1);
+            this._weight -= item.weight;
+        }
+    }
+}
+/**
+ * Enum representing an ability.
+ */
+var AbilityEnum;
+(function (AbilityEnum) {
+    AbilityEnum[AbilityEnum["STRENGTH"] = 0] = "STRENGTH";
+    AbilityEnum[AbilityEnum["DEXTERITY"] = 1] = "DEXTERITY";
+    AbilityEnum[AbilityEnum["CONSTITUTION"] = 2] = "CONSTITUTION";
+    AbilityEnum[AbilityEnum["INTELLIGENCE"] = 3] = "INTELLIGENCE";
+    AbilityEnum[AbilityEnum["WISDOM"] = 4] = "WISDOM";
+    AbilityEnum[AbilityEnum["CHARISMA"] = 5] = "CHARISMA";
+})(AbilityEnum || (AbilityEnum = {}));
+/**
+ * Enum representing a skill.
+ */
+var SkillEnum;
+(function (SkillEnum) {
+    SkillEnum[SkillEnum["ACROBATICS"] = 0] = "ACROBATICS";
+    SkillEnum[SkillEnum["ANIMAL_HANDLING"] = 1] = "ANIMAL_HANDLING";
+    SkillEnum[SkillEnum["ARCANA"] = 2] = "ARCANA";
+    SkillEnum[SkillEnum["ATHLETICS"] = 3] = "ATHLETICS";
+    SkillEnum[SkillEnum["DECEPTION"] = 4] = "DECEPTION";
+    SkillEnum[SkillEnum["HISTORY"] = 5] = "HISTORY";
+    SkillEnum[SkillEnum["INSIGHT"] = 6] = "INSIGHT";
+    SkillEnum[SkillEnum["INTIMIDATION"] = 7] = "INTIMIDATION";
+    SkillEnum[SkillEnum["INVESTIGATION"] = 8] = "INVESTIGATION";
+    SkillEnum[SkillEnum["MEDICINE"] = 9] = "MEDICINE";
+    SkillEnum[SkillEnum["NATURE"] = 10] = "NATURE";
+    SkillEnum[SkillEnum["PERCEPTION"] = 11] = "PERCEPTION";
+    SkillEnum[SkillEnum["PERFORMANCE"] = 12] = "PERFORMANCE";
+    SkillEnum[SkillEnum["PERSUASION"] = 13] = "PERSUASION";
+    SkillEnum[SkillEnum["RELIGION"] = 14] = "RELIGION";
+    SkillEnum[SkillEnum["SLEIGHT_OF_HAND"] = 15] = "SLEIGHT_OF_HAND";
+    SkillEnum[SkillEnum["STEALTH"] = 16] = "STEALTH";
+    SkillEnum[SkillEnum["SURVIVAL"] = 17] = "SURVIVAL";
+})(SkillEnum || (SkillEnum = {}));
+/// <reference path="Inventory.ts"/>
+/// <reference path="../Enum/AbilityEnum.ts"/>
+/// <reference path="../Enum/SkillEnum.ts"/>
+/**
+ * Class representing a character.
+ */
+class Character {
+    /**
+     * Create a character.
+     * @param {string} name - The name.
+     * @param {number} level - The level.
+     * @param {number} raceId - The race id.
+     * @param {number} classId - The class id.
+     * @param {Array<number>} abilityScores - The ability scores.
+     * @param {Array<number>} skillProficiencies - The skill proficiencies.
+     * @return {Character}
+     */
+    constructor(name, level, raceId, classId, abilityScores, skillProficiencies) {
+        if (!name) {
+            throw new Error("Parameter 'name' cannot be null or empty.");
+        }
+        if (level < 1 || level > 20) {
+            throw new Error("Parameter 'level' must be a number between 1 and 20 inclusively.");
+        }
+        this._name = name;
+        this._level = level;
+        this._raceId = raceId;
+        this._classId = classId;
+        this._abilityScores = abilityScores;
+        this._abilityScores[AbilityEnum.STRENGTH] += Ruleset.RaceStrength(raceId);
+        this._abilityScores[AbilityEnum.DEXTERITY] += Ruleset.RaceDexterity(raceId);
+        this._abilityScores[AbilityEnum.CONSTITUTION] += Ruleset.RaceConstitution(raceId);
+        this._abilityScores[AbilityEnum.INTELLIGENCE] += Ruleset.RaceIntelligence(raceId);
+        this._abilityScores[AbilityEnum.WISDOM] += Ruleset.RaceWisdom(raceId);
+        this._abilityScores[AbilityEnum.CHARISMA] += Ruleset.RaceCharisma(raceId);
+        this._speed = Ruleset.RaceSpeed(raceId);
+        this._maximumHitPoint = Ruleset.MaximumHitPoint(this._level, this._raceId, this._classId, this._abilityScores[AbilityEnum.CONSTITUTION]);
+        this._currentHitPoint = Ruleset.MaximumHitPoint(this._level, this._raceId, this._classId, this._abilityScores[AbilityEnum.CONSTITUTION]);
+        this._armorProficiencies = Ruleset.ArmorProficiencies(classId);
+        this._weaponProficiencies = Ruleset.WeaponProficiencies(classId);
+        this._toolProficiencies = Ruleset.ToolProficiencies(classId);
+        this._abilityProficiencies = Ruleset.AbilityProficiencies(classId);
+        this._skillProficiencies = Ruleset.SkillProficiencies(classId); // skillProficiencies
+        this._funds = Ruleset.MaximumStartingFunds(classId);
+        this._armor = null;
+        this._shield = null;
+        this._weapon = null;
+        this._proficiencyBonus = Ruleset.ProficiencyBonus(this._level);
+        this._initiative = Ruleset.Initiative(this._abilityScores[AbilityEnum.DEXTERITY]);
+        this._passivePerception = Ruleset.PassivePerception(this.getSkill(SkillEnum.PERCEPTION));
+        this._encumberment = Ruleset.Encumberment(this._abilityScores[AbilityEnum.STRENGTH]);
+        this._inventory = new Inventory();
+    }
+    get name() {
+        return this._name;
+    }
+    get level() {
+        return this._level;
+    }
+    get raceId() {
+        return this._raceId;
+    }
+    get classId() {
+        return this._classId;
+    }
+    get passivePerception() {
+        return this._passivePerception;
+    }
+    get initiative() {
+        return this._initiative;
+    }
+    get encumberment() {
+        return this._encumberment;
+    }
+    get speed() {
+        return this._speed;
+    }
+    get proficiencyBonus() {
+        return this._proficiencyBonus;
+    }
+    get armor() {
+        return this._armor;
+    }
+    get shield() {
+        return this._shield;
+    }
+    get weapon() {
+        return this._weapon;
+    }
+    get maximumHitPoint() {
+        return this._maximumHitPoint;
+    }
+    get currentHitPoint() {
+        return this._currentHitPoint;
+    }
+    set currentHitPoint(currentHitPoint) {
+        this._currentHitPoint = currentHitPoint < this.maximumHitPoint ? currentHitPoint : this.maximumHitPoint;
+    }
+    /**
+     * Get the ability score.
+     * @param {number} abilityId - The ability id.
+     * @return {number}
+     */
+    getAbilityScore(abilityId) {
+        switch (abilityId) {
+            case AbilityEnum.STRENGTH:
+            case AbilityEnum.DEXTERITY:
+            case AbilityEnum.CONSTITUTION:
+            case AbilityEnum.INTELLIGENCE:
+            case AbilityEnum.WISDOM:
+            case AbilityEnum.CHARISMA:
+                return this._abilityScores[abilityId];
+            default:
+                throw new RangeError();
+        }
+    }
+    /**
+     * Get the ability modifier.
+     * @param {number} abilityId - The ability id.
+     * @return {number}
+     */
+    getAbilityModifier(abilityId) {
+        return Ruleset.AbilityModifier(this.getAbilityScore(abilityId));
+    }
+    /**
+     * Get the armor class.
+     * @return {number}
+     */
+    getArmorClass() {
+        let armorClass = 0;
+        if (this._armor !== null) {
+            armorClass += this._armor.armorClass;
+            if (this._armor.isDexterityModified) {
+                if (this._armor.isDexterityCap && this.getAbilityModifier(AbilityEnum.DEXTERITY) > 2) {
+                    armorClass += 2;
+                }
+                else {
+                    armorClass += this.getAbilityModifier(AbilityEnum.DEXTERITY);
+                }
+            }
+        }
+        if (this._shield !== null) {
+            armorClass += this._shield.armorClass;
+        }
+        return armorClass;
+    }
+    /**
+     * Get the saving throw.
+     * @param {number} abilityId - The ability id.
+     * @return {number}
+     */
+    getSavingThrow(abilityId) {
+        return this.getAbilityModifier(abilityId) + (this.isAbilityProficient(abilityId) ? this.proficiencyBonus : 0);
+    }
+    /**
+     * Get the skill.
+     * @param {number} skillId - The skill id.
+     * @return {number}
+     */
+    getSkill(skillId) {
+        return this.getAbilityModifier(Ruleset.SkillAbility(skillId)) + (this.isSkillProficient(skillId) ? this.proficiencyBonus : 0);
+    }
+    /**
+     * Is ability proficient.
+     * @param {number} abilityId - The ability id.
+     * @return {boolean}
+     */
+    isAbilityProficient(abilityId) {
+        return this._abilityProficiencies.indexOf(abilityId) > -1;
+    }
+    /**
+     * Is skill proficient.
+     * @param {number} skillId - The skill id.
+     * @return {boolean}
+     */
+    isSkillProficient(skillId) {
+        return this._skillProficiencies.indexOf(skillId) > -1;
+    }
+    /**
+     * Is armor proficient.
+     * @param {number} armorId - The armor id.
+     * @return {boolean}
+     */
+    isArmorProficient(armorId) {
+        return this._armorProficiencies.indexOf(armorId) > -1;
+    }
+    /**
+     * Is weapon proficient.
+     * @param {number} weaponId - The weapon id.
+     * @return {boolean}
+     */
+    isWeaponProficient(weaponId) {
+        return this._weaponProficiencies.indexOf(weaponId) > -1;
+    }
+    /**
+     * Get the attack modifier.
+     * @return {number}
+     */
+    getAttackModifier() {
+        return this.getAbilityModifier(Ruleset.WeaponAbility(this._weapon.weaponType)) + (this.isWeaponProficient(this._weapon.weaponType) ?
+            this.proficiencyBonus : 0);
+    }
+    /**
+     * Get the damage modifier.
+     * @return {number}
+     */
+    getDamageModifier() {
+        return this.getAbilityModifier(Ruleset.WeaponAbility(this._weapon.weaponType));
+    }
+    /**
+     * Gets a roll for attack.
+     * @return {number}
+     */
+    rollAttack() {
+        return this._weapon.getDamageRoll();
+    }
+    /**
+     * Gets a roll for damage.
+     * @return {number}
+     */
+    rollDamage() {
+        return this._weapon.getDamageRoll();
+    }
+    /**
+     * Add an item.
+     * @param {Item} item - The item.
+     * @return {boolean}
+     */
+    addItem(item) {
+        let result = false;
+        if (this._inventory.weight + item.weight <= this.encumberment) {
+            this._inventory.addItem(item);
+            result = true;
+        }
+        return result;
+    }
+    /**
+     * Remove an item.
+     * @param {Item} item - The item.
+     * @return {boolean}
+     */
+    removeItem(item) {
+        let result = false;
+        if (this._inventory.hasItem(item)) {
+            this._inventory.removeItem(item);
+            result = true;
+        }
+        return result;
+    }
+    /**
+     * Equip an item.
+     * @param {Item} item - The item.
+     * @return {boolean}
+     */
+    equipItem(item) {
+        let result = true;
+        if (this._inventory.hasItem(item)) {
+            this._inventory.removeItem(item);
+            switch (item.itemTypeId) {
+                case ItemTypeEnum.LIGHT_ARMOR:
+                case ItemTypeEnum.MEDIUM_ARMOR:
+                case ItemTypeEnum.HEAVY_ARMOR:
+                    this._armor = item;
+                    break;
+                case ItemTypeEnum.SHIELD:
+                    this._shield = item;
+                    break;
+                case ItemTypeEnum.SIMPLE_MELEE_WEAPON:
+                case ItemTypeEnum.SIMPLE_RANGE_WEAPON:
+                case ItemTypeEnum.MARTIAL_MELEE_WEAPON:
+                case ItemTypeEnum.MARTIAL_RANGE_WEAPON:
+                    this._weapon = item;
+                    break;
+                default:
+                    result = false;
+            }
+        }
+        else {
+            result = false;
+        }
+        return result;
+    }
+    /**
+     * Unequip an item.
+     * @param {Item} item - The item.
+     * @return {boolean}
+     */
+    unequipItem(item) {
+        let result = true;
+        if (this._armor !== null && this._armor.name === item.name) {
+            this._inventory.addItem(this._armor);
+            this._armor = null;
+        }
+        else if (this._shield !== null && this._shield.name === item.name) {
+            this._inventory.addItem(this._shield);
+            this._shield = null;
+        }
+        else if (this._weapon !== null && this._weapon.name === item.name) {
+            this._inventory.addItem(this._weapon);
+            this._weapon = null;
+        }
+        else {
+            result = false;
+        }
+        return result;
+    }
+}
+/**
+ * Enum representing an attack roll result.
+ */
+var AttackRollResultEnum;
+(function (AttackRollResultEnum) {
+    AttackRollResultEnum[AttackRollResultEnum["CRITICAL"] = 0] = "CRITICAL";
+    AttackRollResultEnum[AttackRollResultEnum["HIT"] = 1] = "HIT";
+    AttackRollResultEnum[AttackRollResultEnum["MISS"] = 2] = "MISS";
+})(AttackRollResultEnum || (AttackRollResultEnum = {}));
+/**
+ * Enum representing a class.
+ */
+var ClassEnum;
+(function (ClassEnum) {
+    ClassEnum[ClassEnum["CLERIC"] = 0] = "CLERIC";
+    ClassEnum[ClassEnum["FIGHTER"] = 1] = "FIGHTER";
+    ClassEnum[ClassEnum["ROGUE"] = 2] = "ROGUE";
+    ClassEnum[ClassEnum["WIZARD"] = 3] = "WIZARD";
+})(ClassEnum || (ClassEnum = {}));
+/**
+ * Enum representing a race.
+ */
+var RaceEnum;
+(function (RaceEnum) {
+    RaceEnum[RaceEnum["DWARF_HILL"] = 0] = "DWARF_HILL";
+    RaceEnum[RaceEnum["DWARF_MOUNTAIN"] = 1] = "DWARF_MOUNTAIN";
+    RaceEnum[RaceEnum["ELF_HIGH"] = 2] = "ELF_HIGH";
+    RaceEnum[RaceEnum["ELF_WOOD"] = 3] = "ELF_WOOD";
+    RaceEnum[RaceEnum["HALFLING_LIGHTFOOT"] = 4] = "HALFLING_LIGHTFOOT";
+    RaceEnum[RaceEnum["HALFLING_STOUT"] = 5] = "HALFLING_STOUT";
+    RaceEnum[RaceEnum["HUMAN"] = 6] = "HUMAN";
+})(RaceEnum || (RaceEnum = {}));
 /**
  * Class representing a die.
  */
@@ -1293,1213 +2526,88 @@ class Ruleset {
         }
     }
 }
-/// <reference path="Item.ts"/>
-/**
- * Class representing an inventory.
- */
-class Inventory {
-    /**
-     * Create an inventory.
-     * @constructor
-     * @return {Inventory}
-     */
-    constructor() {
-        this._items = new Array();
-        this._weight = 0;
-    }
-    get items() {
-        return this._items;
-    }
-    get weight() {
-        return this._weight;
-    }
-    /**
-     * Has an item.
-     * @param {Item} item - The item.
-     * @return {boolean}
-     */
-    hasItem(item) {
-        return this.items.findIndex(x => x.name === item.name) > -1;
-    }
-    /**
-     * Add an item.
-     * @param {Item} item - The item.
-     */
-    addItem(item) {
-        this._items.push(item);
-        this._weight += item.weight;
-    }
-    /**
-     * Remove an item.
-     * @param {Item} item - The item.
-     */
-    removeItem(item) {
-        let index = this.items.findIndex(x => x.name === item.name);
-        if (index > -1) {
-            this._items.splice(index, 1);
-            this._weight -= item.weight;
-        }
-    }
-}
-/**
- * Enum representing an ability.
- */
-var AbilityEnum;
-(function (AbilityEnum) {
-    AbilityEnum[AbilityEnum["STRENGTH"] = 0] = "STRENGTH";
-    AbilityEnum[AbilityEnum["DEXTERITY"] = 1] = "DEXTERITY";
-    AbilityEnum[AbilityEnum["CONSTITUTION"] = 2] = "CONSTITUTION";
-    AbilityEnum[AbilityEnum["INTELLIGENCE"] = 3] = "INTELLIGENCE";
-    AbilityEnum[AbilityEnum["WISDOM"] = 4] = "WISDOM";
-    AbilityEnum[AbilityEnum["CHARISMA"] = 5] = "CHARISMA";
-})(AbilityEnum || (AbilityEnum = {}));
-/**
- * Enum representing a skill.
- */
-var SkillEnum;
-(function (SkillEnum) {
-    SkillEnum[SkillEnum["ACROBATICS"] = 0] = "ACROBATICS";
-    SkillEnum[SkillEnum["ANIMAL_HANDLING"] = 1] = "ANIMAL_HANDLING";
-    SkillEnum[SkillEnum["ARCANA"] = 2] = "ARCANA";
-    SkillEnum[SkillEnum["ATHLETICS"] = 3] = "ATHLETICS";
-    SkillEnum[SkillEnum["DECEPTION"] = 4] = "DECEPTION";
-    SkillEnum[SkillEnum["HISTORY"] = 5] = "HISTORY";
-    SkillEnum[SkillEnum["INSIGHT"] = 6] = "INSIGHT";
-    SkillEnum[SkillEnum["INTIMIDATION"] = 7] = "INTIMIDATION";
-    SkillEnum[SkillEnum["INVESTIGATION"] = 8] = "INVESTIGATION";
-    SkillEnum[SkillEnum["MEDICINE"] = 9] = "MEDICINE";
-    SkillEnum[SkillEnum["NATURE"] = 10] = "NATURE";
-    SkillEnum[SkillEnum["PERCEPTION"] = 11] = "PERCEPTION";
-    SkillEnum[SkillEnum["PERFORMANCE"] = 12] = "PERFORMANCE";
-    SkillEnum[SkillEnum["PERSUASION"] = 13] = "PERSUASION";
-    SkillEnum[SkillEnum["RELIGION"] = 14] = "RELIGION";
-    SkillEnum[SkillEnum["SLEIGHT_OF_HAND"] = 15] = "SLEIGHT_OF_HAND";
-    SkillEnum[SkillEnum["STEALTH"] = 16] = "STEALTH";
-    SkillEnum[SkillEnum["SURVIVAL"] = 17] = "SURVIVAL";
-})(SkillEnum || (SkillEnum = {}));
-/// <reference path="Inventory.ts"/>
-/// <reference path="../Enum/AbilityEnum.ts"/>
-/// <reference path="../Enum/SkillEnum.ts"/>
-/**
- * Class representing a character.
- */
-class Character {
-    /**
-     * Create a character.
-     * @param {string} name - The name.
-     * @param {number} level - The level.
-     * @param {number} raceId - The race id.
-     * @param {number} classId - The class id.
-     * @param {Array<number>} abilityScores - The ability scores.
-     * @param {Array<number>} skillProficiencies - The skill proficiencies.
-     * @return {Character}
-     */
-    constructor(name, level, raceId, classId, abilityScores, skillProficiencies) {
-        if (!name) {
-            throw new Error("Parameter 'name' cannot be null or empty.");
-        }
-        if (level < 1 || level > 20) {
-            throw new Error("Parameter 'level' must be a number between 1 and 20 inclusively.");
-        }
-        this._name = name;
-        this._level = level;
-        this._raceId = raceId;
-        this._classId = classId;
-        this._abilityScores = abilityScores;
-        this._abilityScores[AbilityEnum.STRENGTH] += Ruleset.RaceStrength(raceId);
-        this._abilityScores[AbilityEnum.DEXTERITY] += Ruleset.RaceDexterity(raceId);
-        this._abilityScores[AbilityEnum.CONSTITUTION] += Ruleset.RaceConstitution(raceId);
-        this._abilityScores[AbilityEnum.INTELLIGENCE] += Ruleset.RaceIntelligence(raceId);
-        this._abilityScores[AbilityEnum.WISDOM] += Ruleset.RaceWisdom(raceId);
-        this._abilityScores[AbilityEnum.CHARISMA] += Ruleset.RaceCharisma(raceId);
-        this._speed = Ruleset.RaceSpeed(raceId);
-        this._maximumHitPoint = Ruleset.MaximumHitPoint(this._level, this._raceId, this._classId, this._abilityScores[AbilityEnum.CONSTITUTION]);
-        this._currentHitPoint = Ruleset.MaximumHitPoint(this._level, this._raceId, this._classId, this._abilityScores[AbilityEnum.CONSTITUTION]);
-        this._armorProficiencies = Ruleset.ArmorProficiencies(classId);
-        this._weaponProficiencies = Ruleset.WeaponProficiencies(classId);
-        this._toolProficiencies = Ruleset.ToolProficiencies(classId);
-        this._abilityProficiencies = Ruleset.AbilityProficiencies(classId);
-        this._skillProficiencies = Ruleset.SkillProficiencies(classId); // skillProficiencies
-        this._funds = Ruleset.MaximumStartingFunds(classId);
-        this._armor = null;
-        this._shield = null;
-        this._weapon = null;
-        this._proficiencyBonus = Ruleset.ProficiencyBonus(this._level);
-        this._initiative = Ruleset.Initiative(this._abilityScores[AbilityEnum.DEXTERITY]);
-        this._passivePerception = Ruleset.PassivePerception(this.getSkill(SkillEnum.PERCEPTION));
-        this._encumberment = Ruleset.Encumberment(this._abilityScores[AbilityEnum.STRENGTH]);
-        this._inventory = new Inventory();
-    }
-    get name() {
-        return this._name;
-    }
-    get level() {
-        return this._level;
-    }
-    get raceId() {
-        return this._raceId;
-    }
-    get classId() {
-        return this._classId;
-    }
-    get passivePerception() {
-        return this._passivePerception;
-    }
-    get initiative() {
-        return this._initiative;
-    }
-    get encumberment() {
-        return this._encumberment;
-    }
-    get speed() {
-        return this._speed;
-    }
-    get proficiencyBonus() {
-        return this._proficiencyBonus;
-    }
-    get armor() {
-        return this._armor;
-    }
-    get shield() {
-        return this._shield;
-    }
-    get weapon() {
-        return this._weapon;
-    }
-    get maximumHitPoint() {
-        return this._maximumHitPoint;
-    }
-    get currentHitPoint() {
-        return this._currentHitPoint;
-    }
-    set currentHitPoint(currentHitPoint) {
-        this._currentHitPoint = currentHitPoint < this.maximumHitPoint ? currentHitPoint : this.maximumHitPoint;
-    }
-    /**
-     * Get the ability score.
-     * @param {number} abilityId - The ability id.
-     * @return {number}
-     */
-    getAbilityScore(abilityId) {
-        switch (abilityId) {
-            case AbilityEnum.STRENGTH:
-            case AbilityEnum.DEXTERITY:
-            case AbilityEnum.CONSTITUTION:
-            case AbilityEnum.INTELLIGENCE:
-            case AbilityEnum.WISDOM:
-            case AbilityEnum.CHARISMA:
-                return this._abilityScores[abilityId];
-            default:
-                throw new RangeError();
-        }
-    }
-    /**
-     * Get the ability modifier.
-     * @param {number} abilityId - The ability id.
-     * @return {number}
-     */
-    getAbilityModifier(abilityId) {
-        return Ruleset.AbilityModifier(this.getAbilityScore(abilityId));
-    }
-    /**
-     * Get the armor class.
-     * @return {number}
-     */
-    getArmorClass() {
-        let armorClass = 0;
-        if (this._armor !== null) {
-            armorClass += this._armor.armorClass;
-            if (this._armor.isDexterityModified) {
-                if (this._armor.isDexterityCap && this.getAbilityModifier(AbilityEnum.DEXTERITY) > 2) {
-                    armorClass += 2;
-                }
-                else {
-                    armorClass += this.getAbilityModifier(AbilityEnum.DEXTERITY);
-                }
-            }
-        }
-        if (this._shield !== null) {
-            armorClass += this._shield.armorClass;
-        }
-        return armorClass;
-    }
-    /**
-     * Get the saving throw.
-     * @param {number} abilityId - The ability id.
-     * @return {number}
-     */
-    getSavingThrow(abilityId) {
-        return this.getAbilityModifier(abilityId) + (this.isAbilityProficient(abilityId) ? this.proficiencyBonus : 0);
-    }
-    /**
-     * Get the skill.
-     * @param {number} skillId - The skill id.
-     * @return {number}
-     */
-    getSkill(skillId) {
-        return this.getAbilityModifier(Ruleset.SkillAbility(skillId)) + (this.isSkillProficient(skillId) ? this.proficiencyBonus : 0);
-    }
-    /**
-     * Is ability proficient.
-     * @param {number} abilityId - The ability id.
-     * @return {boolean}
-     */
-    isAbilityProficient(abilityId) {
-        return this._abilityProficiencies.indexOf(abilityId) > -1;
-    }
-    /**
-     * Is skill proficient.
-     * @param {number} skillId - The skill id.
-     * @return {boolean}
-     */
-    isSkillProficient(skillId) {
-        return this._skillProficiencies.indexOf(skillId) > -1;
-    }
-    /**
-     * Is armor proficient.
-     * @param {number} armorId - The armor id.
-     * @return {boolean}
-     */
-    isArmorProficient(armorId) {
-        return this._armorProficiencies.indexOf(armorId) > -1;
-    }
-    /**
-     * Is weapon proficient.
-     * @param {number} weaponId - The weapon id.
-     * @return {boolean}
-     */
-    isWeaponProficient(weaponId) {
-        return this._weaponProficiencies.indexOf(weaponId) > -1;
-    }
-    /**
-     * Get the attack modifier.
-     * @return {number}
-     */
-    getAttackModifier() {
-        return this.getAbilityModifier(Ruleset.WeaponAbility(this._weapon.weaponType)) + (this.isWeaponProficient(this._weapon.weaponType) ?
-            this.proficiencyBonus : 0);
-    }
-    /**
-     * Get the damage modifier.
-     * @return {number}
-     */
-    getDamageModifier() {
-        return this.getAbilityModifier(Ruleset.WeaponAbility(this._weapon.weaponType));
-    }
-    /**
-     * Gets a roll for attack.
-     * @return {number}
-     */
-    rollAttack() {
-        return this._weapon.getDamageRoll();
-    }
-    /**
-     * Gets a roll for damage.
-     * @return {number}
-     */
-    rollDamage() {
-        return this._weapon.getDamageRoll();
-    }
-    /**
-     * Add an item.
-     * @param {Item} item - The item.
-     * @return {boolean}
-     */
-    addItem(item) {
-        let result = false;
-        if (this._inventory.weight + item.weight <= this.encumberment) {
-            this._inventory.addItem(item);
-            result = true;
-        }
-        return result;
-    }
-    /**
-     * Remove an item.
-     * @param {Item} item - The item.
-     * @return {boolean}
-     */
-    removeItem(item) {
-        let result = false;
-        if (this._inventory.hasItem(item)) {
-            this._inventory.removeItem(item);
-            result = true;
-        }
-        return result;
-    }
-    /**
-     * Equip an item.
-     * @param {Item} item - The item.
-     * @return {boolean}
-     */
-    equipItem(item) {
-        let result = true;
-        if (this._inventory.hasItem(item)) {
-            this._inventory.removeItem(item);
-            switch (item.itemTypeId) {
-                case ItemTypeEnum.LIGHT_ARMOR:
-                case ItemTypeEnum.MEDIUM_ARMOR:
-                case ItemTypeEnum.HEAVY_ARMOR:
-                    this._armor = item;
-                    break;
-                case ItemTypeEnum.SHIELD:
-                    this._shield = item;
-                    break;
-                case ItemTypeEnum.SIMPLE_MELEE_WEAPON:
-                case ItemTypeEnum.SIMPLE_RANGE_WEAPON:
-                case ItemTypeEnum.MARTIAL_MELEE_WEAPON:
-                case ItemTypeEnum.MARTIAL_RANGE_WEAPON:
-                    this._weapon = item;
-                    break;
-                default:
-                    result = false;
-            }
-        }
-        else {
-            result = false;
-        }
-        return result;
-    }
-    /**
-     * Unequip an item.
-     * @param {Item} item - The item.
-     * @return {boolean}
-     */
-    unequipItem(item) {
-        let result = true;
-        if (this._armor !== null && this._armor.name === item.name) {
-            this._inventory.addItem(this._armor);
-            this._armor = null;
-        }
-        else if (this._shield !== null && this._shield.name === item.name) {
-            this._inventory.addItem(this._shield);
-            this._shield = null;
-        }
-        else if (this._weapon !== null && this._weapon.name === item.name) {
-            this._inventory.addItem(this._weapon);
-            this._weapon = null;
-        }
-        else {
-            result = false;
-        }
-        return result;
-    }
-}
-/**
- * Class representing an animation.
- */
-class Animation {
-    /**
-     * Creates an animation.
-     * @param {number} x - The x.
-     * @param {number} y - The y.
-     * @param {Array<Frame>} frames - The frames.
-     * @return {Animation}
-     */
-    constructor(x, y, frames) {
-        this._x = x;
-        this._y = y;
-        this._frames = frames;
-    }
-    get x() {
-        return this._x;
-    }
-    get y() {
-        return this._y;
-    }
-    get frames() {
-        return this._frames;
-    }
-}
-/**
- * Class representing an animator.
- */
-class Animator {
-    /**
-     * Creates an animator.
-     * @return {Animator}
-     */
-    constructor() {
-        this._animations = [];
-    }
-    get animations() {
-        return this._animations;
-    }
-    /**
-     * Adds a circle fade out animation to the queue.
-     * @param {number} x - The x;
-     * @param {number} y - The y;
-     * @param {number} length - The length;
-     * @param {number} size - The size;
-     */
-    addCircleFadeOut(x, y, length, size) {
-        let animation = new Animation(x, y, []);
-        let alpha = 1 / length;
-        for (let i = 0; i < length; i++) {
-            let frame = new Frame([new Target(0, 0, new Tile(15, 15, 1 - (alpha * i)))]);
-            for (let j = 1; j < size; j++) {
-                frame.targets.push(new Target(0, 0 + j, new Tile(15, 15, 1 - (alpha * i))));
-                frame.targets.push(new Target(0, 0 - j, new Tile(15, 15, 1 - (alpha * i))));
-                frame.targets.push(new Target(0 + j, 0, new Tile(15, 15, 1 - (alpha * i))));
-                frame.targets.push(new Target(0 - j, 0, new Tile(15, 15, 1 - (alpha * i))));
-            }
-            animation.frames.push(frame);
-        }
-        this._animations.push(animation);
-    }
-    /**
-     * Adds a circle fade out animation to the queue.
-     * @param {number} x0 - The x0;
-     * @param {number} y0 - The y0;
-     * @param {number} x1 - The x1;
-     * @param {number} y1 - The y1;
-     */
-    addProjectile(x0, y0, x1, y1) {
-        let animation = new Animation(x0, y0, []);
-        let dx = x1 - x0;
-        let dy = y1 - y0;
-        let nx = Math.abs(dx);
-        let ny = Math.abs(dy);
-        let signX = dx > 0 ? 1 : -1;
-        let signY = dy > 0 ? 1 : -1;
-        let cx = x0;
-        let cy = x0;
-        animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
-        for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
-            if ((0.5 + ix) / nx === (0.5 + iy) / ny) {
-                cx += signX;
-                cy += signY;
-                ix++;
-                iy++;
-            }
-            else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
-                cx += signX;
-                ix++;
-            }
-            else {
-                cy += signY;
-                iy++;
-            }
-            animation.frames.push(new Frame([new Target(cx, cy, new Tile(15, 15, 1))]));
-        }
-        this._animations.push(animation);
-    }
-}
-/**
- * Class representing a control.
- */
-class Control {
-    /**
-     * Creates a control.
-     * @return {Control}
-     */
-    constructor() {
-        this._x = 0;
-        this._y = 0;
-        this._xDown = 0;
-        this._yDown = 0;
-        this._xUp = 0;
-        this._yUp = 0;
-        this._xContextMenu = 0;
-        this._yContextMenu = 0;
-        this._kKeyDown = 0;
-    }
-    get x() {
-        return this._x;
-    }
-    set x(value) {
-        this._x = value;
-    }
-    get y() {
-        return this._y;
-    }
-    set y(value) {
-        this._y = value;
-    }
-    get xDown() {
-        return this._xDown;
-    }
-    set xDown(value) {
-        this._xDown = value;
-    }
-    get yDown() {
-        return this._yDown;
-    }
-    set yDown(value) {
-        this._yDown = value;
-    }
-    get xUp() {
-        return this._xUp;
-    }
-    set xUp(value) {
-        this._xUp = value;
-    }
-    get yUp() {
-        return this._yUp;
-    }
-    set yUp(value) {
-        this._yUp = value;
-    }
-    get xContextMenu() {
-        return this._xUp;
-    }
-    set xContextMenu(value) {
-        this._xUp = value;
-    }
-    get yContextMenu() {
-        return this._yUp;
-    }
-    set yContextMenu(value) {
-        this._yUp = value;
-    }
-    get kKeyDown() {
-        return this._kKeyDown;
-    }
-    set kKeyDown(value) {
-        this._kKeyDown = value;
-    }
-    /**
-     * Triggers mouse down.
-     */
-    mouseDown(event) {
-        this.xDown = event.layerX;
-        this.yDown = event.layerY;
-    }
-    /**
-     * Triggers mouse up.
-     */
-    mouseUp(event) {
-        this.xUp = event.layerX;
-        this.yUp = event.layerY;
-    }
-    /**
-     * Triggers mouse move.
-     */
-    mouseMove(event) {
-        this.x = event.layerX;
-        this.y = event.layerY;
-    }
-    /**
-     * Triggers context menu.
-     */
-    contextMenu(event) {
-        this.xContextMenu = event.layerX;
-        this.yContextMenu = event.layerY;
-    }
-    /**
-     * Triggers key down.
-     */
-    keyDown(event) {
-        this.kKeyDown = event.keyCode;
-    }
-}
-/**
- * Class representing a coordinate.
- */
-class Coordinate {
-    /**
-     * Creates a coordinate.
-     * @param {number} x - The x;
-     * @param {number} y - The y;
-     * @return {Coordinate}
-     */
-    constructor(x, y) {
-        this._x = x;
-        this._y = y;
-    }
-    get x() {
-        return this._x;
-    }
-    get y() {
-        return this._y;
-    }
-}
-/**
- * Class representing an engine.
- */
-class Engine {
-    /**
-     * Creates an engine.
-     * @constructor
-     * @param {string} id - The id.
-     * @param {number} width - The width.
-     * @param {number} height - The width.
-     * @return {Engine}
-     */
-    constructor(id, width, height) {
-        this._id = id;
-        this._width = width;
-        this._height = height;
-        this._layers = [];
-        this._control = new Control();
-        this._container = document.createElement("div");
-        this._container.id = id;
-        this._container.style.width = width + "px";
-        this._container.style.height = height + "px";
-        this._container.style.position = "relative";
-        this._container.style.margin = "0px auto";
-    }
-    get id() {
-        return this._id;
-    }
-    get width() {
-        return this._width;
-    }
-    get height() {
-        return this._height;
-    }
-    get container() {
-        return this._container;
-    }
-    get control() {
-        return this._control;
-    }
-    get layers() {
-        return this._layers;
-    }
-    /**
-     * Starts the engine.
-     */
-    start() {
-        this.init(function () {
-            this.layers.forEach(layer => {
-                layer.start();
-            });
-        }.bind(this));
-    }
-    /**
-     * Stops the engine.
-     */
-    stop() {
-        this.layers.forEach(layer => {
-            layer.stop();
-        });
-    }
-    /**
-     * Initializes the engine.
-     */
-    init(callback) {
-        window.onload = function () {
-            this.layers.forEach(layer => {
-                this.container.appendChild(layer.canvas);
-            });
-            document.body.appendChild(this.container);
-            document.addEventListener("keydown", this.propagateKeyDown.bind(this));
-            this.container.addEventListener("mousedown", this.propagateMouseDown.bind(this));
-            this.container.addEventListener("mouseup", this.propagateMouseUp.bind(this));
-            this.container.addEventListener("contextmenu", this.propagateContextMenu.bind(this));
-            this.container.addEventListener("mousemove", this.propagateMouseMove.bind(this));
-            callback();
-        }.bind(this);
-    }
-    /**
-     * Propagates mouse down event.
-     */
-    propagateMouseDown(event) {
-        event.preventDefault();
-        this.control.mouseDown(event);
-    }
-    /**
-     * Propagates mouse up event.
-     */
-    propagateMouseUp(event) {
-        event.preventDefault();
-        this.control.mouseUp(event);
-    }
-    /**
-     * Propagates context menu event.
-     */
-    propagateContextMenu(event) {
-        event.preventDefault();
-        this.control.contextMenu(event);
-    }
-    /**
-     * Propagates mouse move event.
-     */
-    propagateMouseMove(event) {
-        event.preventDefault();
-        this.control.mouseMove(event);
-    }
-    /**
-     * Propagates key down event.
-     */
-    propagateKeyDown(event) {
-        this.control.keyDown(event);
-    }
-    /**
-     * Gets the x and y coordonates of a line.
-     * @param {number} x0 - The x0.
-     * @param {number} y0 - The y0.
-     * @param {number} x1 - The x1.
-     * @param {number} y1 - The y1.
-     * @return {Array<Coordinate>}
-     */
-    static line(x0, y0, x1, y1) {
-        let result = new Array();
-        let dx = x1 - x0;
-        let dy = y1 - y0;
-        let nx = Math.abs(dx);
-        let ny = Math.abs(dy);
-        let signX = dx > 0 ? 1 : -1;
-        let signY = dy > 0 ? 1 : -1;
-        let cx = x0;
-        let cy = x0;
-        result.push(new Coordinate(cx, cy));
-        for (let ix = 0, iy = 0; ix < nx || iy < ny;) {
-            if ((0.5 + ix) / nx === (0.5 + iy) / ny) {
-                cx += signX;
-                cy += signY;
-                ix++;
-                iy++;
-            }
-            else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
-                cx += signX;
-                ix++;
-            }
-            else {
-                cy += signY;
-                iy++;
-            }
-            result.push(new Coordinate(cx, cy));
-        }
-        return result;
-    }
-    /**
-     * Gets the x and y coordonates of a circle.
-     * @param {number} x0 - The x.
-     * @param {number} y0 - The y.
-     * @param {number} radius - The radius.
-     * @param {boolean} isFill - Is filled.
-     * @return {Array<Coordinate>}
-     */
-    static circle(x0, y0, radius, isFill) {
-        let result = new Array();
-        let x = 0;
-        let y = radius;
-        let d = 1 - radius;
-        result.push(new Coordinate(x0, y0 + y));
-        result.push(new Coordinate(x0, y0 - y));
-        result.push(new Coordinate(x0 + y, y0));
-        result.push(new Coordinate(x0 - y, y0));
-        while (x < y - 1) {
-            x = x + 1;
-            if (d < 0) {
-                d = d + x + x + 1;
-            }
-            else {
-                y = y - 1;
-                let a = x - y + 1;
-                d = d + a + a;
-            }
-            result.push(new Coordinate(x + x0, y + y0));
-            result.push(new Coordinate(y + x0, x + y0));
-            result.push(new Coordinate(y + x0, 0 - x + y0));
-            result.push(new Coordinate(x + x0, 0 - y + y0));
-            result.push(new Coordinate(0 - x + x0, 0 - y + y0));
-            result.push(new Coordinate(0 - y + x0, 0 - x + y0));
-            result.push(new Coordinate(0 - y + x0, x + y0));
-            result.push(new Coordinate(0 - x + x0, y + y0));
-        }
-        if (isFill) {
-            for (let i = x0 - radius; i < x0 + radius; i++) {
-                for (let j = y0 - radius; j < y0 + radius; j++) {
-                    if (Math.sqrt(Math.pow(i - x0, 2) + Math.pow(j - y0, 2)) <= radius) {
-                        result.push(new Coordinate(i, j));
-                    }
-                }
-            }
-        }
-        return result;
-    }
-    /**
-     * Gets the x and y coordonates of a square.
-     * @param {number} x0 - The x.
-     * @param {number} y0 - The y.
-     * @param {number} radius - The radius.
-     * @param {boolean} isFill - Is filled.
-     * @return {Array<Coordinate>}
-     */
-    static square(x0, y0, radius, isFill) {
-        let result = new Array();
-        for (let i = x0 - radius; i <= x0 + radius; i++) {
-            result.push(new Coordinate(i, y0 + radius));
-            result.push(new Coordinate(i, y0 - radius));
-        }
-        for (let i = y0 - radius + 1; i < y0 + radius; i++) {
-            result.push(new Coordinate(x0 + radius, i));
-            result.push(new Coordinate(x0 - radius, i));
-        }
-        if (isFill) {
-            for (let i = x0 - radius + 1; i < x0 + radius; i++) {
-                for (let j = y0 - radius + 1; j < y0 + radius; j++) {
-                    result.push(new Coordinate(i, j));
-                }
-            }
-        }
-        return result;
-    }
-}
-/**
- * Class representing a frame.
- */
-class Frame {
-    /**
-     * Creates a frame.
-     * @param {Array<Target>} targets - The targets
-     * @return {Frame}
-     */
-    constructor(targets) {
-        this._targets = targets;
-    }
-    get targets() {
-        return this._targets;
-    }
-}
-/**
- * Class representing a layer.
- */
-class Layer {
-    /**
-     * Creates a layer.
-     * @param {string} id - The id.
-     * @param {number} x - The x.
-     * @param {number} y - The y.
-     * @param {number} z - The z.
-     * @param {number} width - The width.
-     * @param {number} height - The height.
-     * @param {boolean} refresh - Is auto refresh.
-     * @param {Tileset} tileset - The tileset.
-     * @return {Layer}
-     */
-    constructor(id, x, y, z, width, height, refresh, tileset) {
-        this._id = id;
-        this._x = x;
-        this._y = y;
-        this._z = z;
-        this._width = width;
-        this._height = height;
-        this._refresh = refresh;
-        this._tileset = tileset;
-        this._widthInTile = width / tileset.tileWidth;
-        this._heightInTile = height / tileset.tileHeight;
-        this._animator = new Animator();
-        this._tiles = [];
-        for (let x = 0; x < width; x++) {
-            this._tiles[x] = [];
-            for (let y = 0; y < height; y++) {
-                this._tiles[x][y] = new Tile(0, 0, 1);
-            }
-        }
-        this._canvas = document.createElement("canvas");
-        this._canvas.id = id;
-        this._canvas.width = width;
-        this._canvas.height = height;
-        this._canvas.style.zIndex = z.toString();
-        this._canvas.style.position = "absolute";
-        this._canvas.style.left = x + "px";
-        this._canvas.style.top = y + "px";
-        this._context = this._canvas.getContext("2d");
-    }
-    get id() {
-        return this._id;
-    }
-    get x() {
-        return this._x;
-    }
-    get y() {
-        return this._y;
-    }
-    get z() {
-        return this._z;
-    }
-    get width() {
-        return this._width;
-    }
-    get height() {
-        return this._height;
-    }
-    get isAutoRefresh() {
-        return this._refresh;
-    }
-    get tileset() {
-        return this._tileset;
-    }
-    get widthInTile() {
-        return this._widthInTile;
-    }
-    get heightInTile() {
-        return this._heightInTile;
-    }
-    get animator() {
-        return this._animator;
-    }
-    get tiles() {
-        return this._tiles;
-    }
-    get canvas() {
-        return this._canvas;
-    }
-    get context() {
-        return this._context;
-    }
-    get pid() {
-        return this._pid;
-    }
-    set pid(value) {
-        this._pid = value;
-    }
-    /**
-     * Starts the layer.
-     */
-    start() {
-        if (this.isAutoRefresh) {
-            this.pid = requestAnimationFrame(this.update.bind(this));
-        }
-        else {
-            this.pid = requestAnimationFrame(this.tick.bind(this));
-        }
-    }
-    /**
-     * Updates the layer.
-     */
-    update() {
-        this.tick();
-        this.pid = requestAnimationFrame(this.update.bind(this));
-    }
-    /**
-     * Ticks the layer.
-     */
-    tick() {
-        this.clear();
-        this.draw();
-    }
-    /**
-     * Stops the layer.
-     */
-    stop() {
-        cancelAnimationFrame(this.pid);
-    }
-    /**
-     * Clears the engine.
-     */
-    clear() {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-    /**
-     * Draws the engine.
-     */
-    draw() {
-        for (let x = 0; x < this.widthInTile; x++) {
-            for (let y = 0; y < this.heightInTile; y++) {
-                this.context.globalAlpha = this.tiles[x][y].alpha;
-                this.context.drawImage(this.tileset.image, this.tileset.tileWidth * this.tiles[x][y].x, this.tileset.tileHeight * this.tiles[x][y].y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * x, this.tileset.tileHeight * y, this.tileset.tileWidth, this.tileset.tileHeight);
-            }
-        }
-        for (let i = this.animator.animations.length - 1; i >= 0; i--) {
-            if (this.animator.animations[i].frames.length > 0) {
-                let frame = this.animator.animations[i].frames.shift();
-                for (let j = frame.targets.length; j > 0; j--) {
-                    let target = frame.targets.shift();
-                    if (this.animator.animations[i].x + target.xOffset >= 0 &&
-                        this.animator.animations[i].x + target.xOffset < this.width &&
-                        this.animator.animations[i].y + target.yOffset >= 0 &&
-                        this.animator.animations[i].y + target.yOffset < this.height) {
-                        this._context.globalAlpha = target.tile.alpha;
-                        this._context.drawImage(this.tileset.image, this.tileset.tileWidth * target.tile.x, this.tileset.tileHeight * target.tile.y, this.tileset.tileWidth, this.tileset.tileHeight, this.tileset.tileWidth * (this.animator.animations[i].x + target.xOffset), this.tileset.tileHeight * (this.animator.animations[i].y + target.yOffset), this.tileset.tileWidth, this.tileset.tileHeight);
-                    }
-                }
-            }
-            else {
-                this.animator.animations.splice(i, 1);
-            }
-        }
-    }
-}
-/**
- * Class representing a target.
- */
-class Target {
-    /**
-     * Creates a target.
-     * @param  {number} xOffset - The x offset.
-     * @param  {number} yOffset - The y offset.
-     * @param  {Tile} tile - The tile.
-     * @return {Target}
-     */
-    constructor(xOffset, yOffset, tile) {
-        this._xOffset = xOffset;
-        this._yOffset = yOffset;
-        this._tile = tile;
-    }
-    get xOffset() {
-        return this._xOffset;
-    }
-    get yOffset() {
-        return this._yOffset;
-    }
-    get tile() {
-        return this._tile;
-    }
-}
-/**
- * Class representing a tile.
- */
-class Tile {
-    /**
-     * Creates a tile.
-     * @param {number} x - The x;
-     * @param {number} y - The y;
-     * @param  {number} alpha - The alpha.
-     * @return {Tile}
-     */
-    constructor(x, y, alpha) {
-        this._x = x;
-        this._y = y;
-        this._alpha = alpha;
-    }
-    get x() {
-        return this._x;
-    }
-    get y() {
-        return this._y;
-    }
-    get alpha() {
-        return this._alpha;
-    }
-}
-/**
- * Class representing a tileset.
- */
-class Tileset {
-    /**
-     * Creates a tileset.
-     * @param  {string} source - The source.
-     * @param  {number} tileWidth - The tile width.
-     * @param  {number} tileHeight - The tile height.
-     * @return {Tileset}
-     */
-    constructor(source, tileWidth, tileHeight) {
-        this._tileWidth = tileWidth;
-        this._tileHeight = tileHeight;
-        this._image = new Image();
-        this._image.src = source;
-    }
-    get tileWidth() {
-        return this._tileWidth;
-    }
-    get tileHeight() {
-        return this._tileHeight;
-    }
-    get image() {
-        return this._image;
-    }
-}
-/**
- * Enum representing an attack roll result.
- */
-var AttackRollResultEnum;
-(function (AttackRollResultEnum) {
-    AttackRollResultEnum[AttackRollResultEnum["CRITICAL"] = 0] = "CRITICAL";
-    AttackRollResultEnum[AttackRollResultEnum["HIT"] = 1] = "HIT";
-    AttackRollResultEnum[AttackRollResultEnum["MISS"] = 2] = "MISS";
-})(AttackRollResultEnum || (AttackRollResultEnum = {}));
-/**
- * Enum representing a class.
- */
-var ClassEnum;
-(function (ClassEnum) {
-    ClassEnum[ClassEnum["CLERIC"] = 0] = "CLERIC";
-    ClassEnum[ClassEnum["FIGHTER"] = 1] = "FIGHTER";
-    ClassEnum[ClassEnum["ROGUE"] = 2] = "ROGUE";
-    ClassEnum[ClassEnum["WIZARD"] = 3] = "WIZARD";
-})(ClassEnum || (ClassEnum = {}));
-/**
- * Enum representing a race.
- */
-var RaceEnum;
-(function (RaceEnum) {
-    RaceEnum[RaceEnum["DWARF_HILL"] = 0] = "DWARF_HILL";
-    RaceEnum[RaceEnum["DWARF_MOUNTAIN"] = 1] = "DWARF_MOUNTAIN";
-    RaceEnum[RaceEnum["ELF_HIGH"] = 2] = "ELF_HIGH";
-    RaceEnum[RaceEnum["ELF_WOOD"] = 3] = "ELF_WOOD";
-    RaceEnum[RaceEnum["HALFLING_LIGHTFOOT"] = 4] = "HALFLING_LIGHTFOOT";
-    RaceEnum[RaceEnum["HALFLING_STOUT"] = 5] = "HALFLING_STOUT";
-    RaceEnum[RaceEnum["HUMAN"] = 6] = "HUMAN";
-})(RaceEnum || (RaceEnum = {}));
-/// <reference path="../Class/Character.ts"/>
+/// <reference path="./Class/Character.ts"/>
 /// <reference path="../Engine/Engine.ts"/>
+/// <reference path="../Engine/Animator.ts"/>
 /// <reference path="../Engine/Tile.ts"/>
 /// <reference path="../Engine/Tileset.ts"/>
-/// <reference path="../Enum/AbilityEnum.ts"/>
-/// <reference path="../Enum/AttackRollResultEnum.ts"/>
-/// <reference path="../Enum/ClassEnum.ts"/>
-/// <reference path="../Enum/RaceEnum.ts"/>
-/// <reference path="../Enum/SkillEnum.ts"/>
-/// <reference path="../Converter.ts"/>
-/// <reference path="../Die.ts"/>
-/// <reference path="../Logger.ts"/>
-/// <reference path="../Ruleset.ts"/>
+/// <reference path="./Enum/AbilityEnum.ts"/>
+/// <reference path="./Enum/AttackRollResultEnum.ts"/>
+/// <reference path="./Enum/ClassEnum.ts"/>
+/// <reference path="./Enum/RaceEnum.ts"/>
+/// <reference path="./Enum/SkillEnum.ts"/>
+/// <reference path="./Converter.ts"/>
+/// <reference path="./Data.ts"/>
+/// <reference path="./Class/Die.ts"/>
+/// <reference path="./Logger.ts"/>
+/// <reference path="./Ruleset.ts"/>
 /**
  * 16:9
  * 1280x720
  */
-let tileset = new Tileset("./src/Engine/Sprite/tileset.png", 16, 16);
-let engine = new Engine("game", 80 * tileset.tileWidth, 45 * tileset.tileHeight);
-let uiLayer = new Layer("ui", 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 80 * tileset.tileWidth, 45 * tileset.tileHeight, false, tileset);
-let mapLayer = new Layer("map", 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 60 * tileset.tileHeight, 43 * tileset.tileHeight, true, tileset);
-let miniMapLayer = new Layer("minimap", 62 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 17 * tileset.tileHeight, 17 * tileset.tileHeight, true, tileset);
+let tileset = new Engine.Tileset("./src/Engine/Sprite/tileset.png", 16, 16);
+let engine = new Engine.Engine("game", 80 * tileset.tileWidth, 45 * tileset.tileHeight);
+let uiLayer = new Engine.Layer("ui", 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 80 * tileset.tileWidth, 45 * tileset.tileHeight, false, tileset);
+let mapLayer = new Engine.Layer("map", 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 60 * tileset.tileHeight, 43 * tileset.tileHeight, true, tileset);
+let miniMapLayer = new Engine.Layer("minimap", 62 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 17 * tileset.tileHeight, 17 * tileset.tileHeight, true, tileset);
 // ui layer
 for (let i = 1; i < uiLayer.widthInTile - 1; i++) {
-    uiLayer.tiles[i][0] = new Tile(4, 12, 1);
-    uiLayer.tiles[i][uiLayer.heightInTile - 1] = new Tile(4, 12, 1);
+    uiLayer.tiles[i][0] = new Engine.Tile(4, 12, 1);
+    uiLayer.tiles[i][uiLayer.heightInTile - 1] = new Engine.Tile(4, 12, 1);
 }
 for (let i = 62; i < uiLayer.widthInTile - 1; i++) {
-    uiLayer.tiles[i][18] = new Tile(4, 12, 1);
+    uiLayer.tiles[i][18] = new Engine.Tile(4, 12, 1);
 }
 for (let i = 1; i < uiLayer.heightInTile - 1; i++) {
-    uiLayer.tiles[0][i] = new Tile(3, 11, 1);
-    uiLayer.tiles[61][i] = new Tile(3, 11, 1);
-    uiLayer.tiles[uiLayer.widthInTile - 1][i] = new Tile(3, 11, 1);
+    uiLayer.tiles[0][i] = new Engine.Tile(3, 11, 1);
+    uiLayer.tiles[61][i] = new Engine.Tile(3, 11, 1);
+    uiLayer.tiles[uiLayer.widthInTile - 1][i] = new Engine.Tile(3, 11, 1);
 }
-uiLayer.tiles[0][0] = new Tile(10, 13, 1);
-uiLayer.tiles[uiLayer.widthInTile - 1][0] = new Tile(15, 11, 1);
-uiLayer.tiles[0][uiLayer.heightInTile - 1] = new Tile(0, 12, 1);
-uiLayer.tiles[uiLayer.widthInTile - 1][uiLayer.heightInTile - 1] = new Tile(9, 13, 1);
-uiLayer.tiles[61][0] = new Tile(2, 12, 1);
-uiLayer.tiles[61][uiLayer.heightInTile - 1] = new Tile(1, 12, 1);
-uiLayer.tiles[61][18] = new Tile(3, 12, 1);
-uiLayer.tiles[uiLayer.widthInTile - 1][18] = new Tile(4, 11, 1);
+uiLayer.tiles[0][0] = new Engine.Tile(10, 13, 1);
+uiLayer.tiles[uiLayer.widthInTile - 1][0] = new Engine.Tile(15, 11, 1);
+uiLayer.tiles[0][uiLayer.heightInTile - 1] = new Engine.Tile(0, 12, 1);
+uiLayer.tiles[uiLayer.widthInTile - 1][uiLayer.heightInTile - 1] = new Engine.Tile(9, 13, 1);
+uiLayer.tiles[61][0] = new Engine.Tile(2, 12, 1);
+uiLayer.tiles[61][uiLayer.heightInTile - 1] = new Engine.Tile(1, 12, 1);
+uiLayer.tiles[61][18] = new Engine.Tile(3, 12, 1);
+uiLayer.tiles[uiLayer.widthInTile - 1][18] = new Engine.Tile(4, 11, 1);
 // map layer
-// let line: Array<Coordinate> = Engine.line(0, 0, 1, 11);
-// for (let i: number = 0; i < line.length; i++) {
-//     mapLayer.tiles[line[i].x][line[i].y] = new Tile(15, 15, 1);
-// }
-// let circle: Array<Coordinate> = Engine.circle(10, 10, 5, false);
-// for (let i: number = 0; i < circle.length; i++) {
-//     mapLayer.tiles[circle[i].x][circle[i].y] = new Tile(15, 15, 1);
-// }
-// let circleFilled: Array<Coordinate> = Engine.circle(20, 20, 4, true);
-// for (let i: number = 0; i < circleFilled.length; i++) {
-//     mapLayer.tiles[circleFilled[i].x][circleFilled[i].y] = new Tile(15, 15, 1);
-// }
-// let square: Array<Coordinate> = Engine.square(10, 10, 2, false);
-// for (let i: number = 0; i < square.length; i++) {
-//     mapLayer.tiles[square[i].x][square[i].y] = new Tile(15, 15, 1);
-// }
-// let squareFilled: Array<Coordinate> = Engine.square(20, 20, 2, true);
-// for (let i: number = 0; i < squareFilled.length; i++) {
-//     mapLayer.tiles[squareFilled[i].x][squareFilled[i].y] = new Tile(15, 15, 1);
-// }
+let line = Engine.Engine.line(0, 0, 1, 11);
+for (let i = 0; i < line.length; i++) {
+    mapLayer.tiles[line[i].x][line[i].y] = new Engine.Tile(15, 15, 1);
+}
+let circle = Engine.Engine.circle(10, 10, 5, false);
+for (let i = 0; i < circle.length; i++) {
+    mapLayer.tiles[circle[i].x][circle[i].y] = new Engine.Tile(15, 15, 1);
+}
+let circleFilled = Engine.Engine.circle(20, 20, 4, true);
+for (let i = 0; i < circleFilled.length; i++) {
+    mapLayer.tiles[circleFilled[i].x][circleFilled[i].y] = new Engine.Tile(15, 15, 1);
+}
+let square = Engine.Engine.square(10, 10, 2, false);
+for (let i = 0; i < square.length; i++) {
+    mapLayer.tiles[square[i].x][square[i].y] = new Engine.Tile(15, 15, 1);
+}
+let squareFilled = Engine.Engine.square(20, 20, 2, true);
+for (let i = 0; i < squareFilled.length; i++) {
+    mapLayer.tiles[squareFilled[i].x][squareFilled[i].y] = new Engine.Tile(15, 15, 1);
+}
 engine.layers.push(uiLayer);
 engine.layers.push(mapLayer);
 engine.layers.push(miniMapLayer);
 engine.start();
-// setInterval(function (): void {
-//     mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
-// }, 1000);
+setInterval(function () {
+    mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
+    mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
+    mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
+    mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
+    mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
+    mapLayer.animator.addProjectileTest(13, 10, 13, 20, Engine.Animator.VERY_SLOW);
+    mapLayer.animator.addProjectileTest(14, 10, 14, 20, Engine.Animator.SLOW);
+    mapLayer.animator.addProjectileTest(15, 10, 15, 20, Engine.Animator.NORMAL);
+    mapLayer.animator.addProjectileTest(16, 10, 16, 20, Engine.Animator.FAST);
+    mapLayer.animator.addProjectileTest(17, 10, 17, 20, Engine.Animator.VERY_FAST);
+}, 1000);
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
 
@@ -2511,7 +2619,7 @@ engine.start();
 
 -- DISADVANTAGE (d20Roll || d20Roll) => lowest
 
--- RANGE => [20, 40] = 0~5 && 20~40 = DISADVANTAGE
+-- RANGE => [20, 40] = 0-5 && 20-40 = DISADVANTAGE
 
 -- BASE DAMAGE => 1d4 [20, 40]
 */
