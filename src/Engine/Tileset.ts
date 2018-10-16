@@ -13,7 +13,6 @@ namespace Engine {
          * @param  {string} source - The source.
          * @param  {number} tileWidth - The tile width.
          * @param  {number} tileHeight - The tile height.
-         * @return {Tileset}
          */
         public constructor(source: string, tileWidth: number, tileHeight: number) {
             this._tileWidth = tileWidth;

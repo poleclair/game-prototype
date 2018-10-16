@@ -21,7 +21,6 @@ namespace Engine {
          * @param {string} id - The id.
          * @param {number} width - The width.
          * @param {number} height - The width.
-         * @return {Engine}
          */
         public constructor(id: string, width: number, height: number) {
             this._id = id;

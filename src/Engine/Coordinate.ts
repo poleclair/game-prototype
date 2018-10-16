@@ -11,7 +11,6 @@ namespace Engine {
          * Creates a coordinate.
          * @param {number} x - The x;
          * @param {number} y - The y;
-         * @return {Coordinate}
          */
         public constructor(x: number, y: number) {
             this._x = x;

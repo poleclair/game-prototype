@@ -9,7 +9,6 @@ var Engine;
          * @param {number} x - The x;
          * @param {number} y - The y;
          * @param {number} alpha - The alpha.
-         * @return {Tile}
          */
         constructor(x, y, alpha) {
             this._x = x;
@@ -40,7 +39,6 @@ var Engine;
          * @param  {number} xOffset - The x offset.
          * @param  {number} yOffset - The y offset.
          * @param  {Tile} tile - The tile.
-         * @return {Target}
          */
         constructor(xOffset, yOffset, tile) {
             this._xOffset = xOffset;
@@ -69,7 +67,6 @@ var Engine;
         /**
          * Creates a frame.
          * @param {Array<Target>} targets - The targets
-         * @return {Frame}
          */
         constructor(targets) {
             this._targets = targets;
@@ -92,7 +89,6 @@ var Engine;
          * @param {number} x - The x.
          * @param {number} y - The y.
          * @param {Array<Frame>} frames - The frames.
-         * @return {Animation}
          */
         constructor(x, y, frames) {
             this._x = x;
@@ -123,7 +119,6 @@ var Engine;
     class Animator {
         /**
          * Creates an animator.
-         * @return {Animator}
          */
         constructor() {
             this._animations = [];
@@ -252,7 +247,6 @@ var Engine;
     class Control {
         /**
          * Creates a control.
-         * @return {Control}
          */
         constructor() {
             this._x = 0;
@@ -366,7 +360,6 @@ var Engine;
          * Creates a coordinate.
          * @param {number} x - The x;
          * @param {number} y - The y;
-         * @return {Coordinate}
          */
         constructor(x, y) {
             this._x = x;
@@ -392,7 +385,6 @@ var Engine;
          * @param  {string} source - The source.
          * @param  {number} tileWidth - The tile width.
          * @param  {number} tileHeight - The tile height.
-         * @return {Tileset}
          */
         constructor(source, tileWidth, tileHeight) {
             this._tileWidth = tileWidth;
@@ -429,7 +421,6 @@ var Engine;
          * @param {number} height - The height.
          * @param {boolean} refresh - Is auto refresh.
          * @param {Tileset} tileset - The tileset.
-         * @return {Layer}
          */
         constructor(id, x, y, z, width, height, refresh, tileset) {
             this._id = id;
@@ -591,7 +582,6 @@ var Engine;
          * @param {string} id - The id.
          * @param {number} width - The width.
          * @param {number} height - The width.
-         * @return {Engine}
          */
         constructor(id, width, height) {
             this._id = id;

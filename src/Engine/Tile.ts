@@ -13,7 +13,6 @@ namespace Engine {
          * @param {number} x - The x;
          * @param {number} y - The y;
          * @param {number} alpha - The alpha.
-         * @return {Tile}
          */
         public constructor(x: number, y: number, alpha: number) {
             this._x = x;

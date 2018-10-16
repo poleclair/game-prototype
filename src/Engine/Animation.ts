@@ -15,7 +15,6 @@ namespace Engine {
          * @param {number} x - The x.
          * @param {number} y - The y.
          * @param {Array<Frame>} frames - The frames.
-         * @return {Animation}
          */
         public constructor(x: number, y: number, frames: Array<Frame>) {
             this._x = x;

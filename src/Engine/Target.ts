@@ -15,7 +15,6 @@ namespace Engine {
          * @param  {number} xOffset - The x offset.
          * @param  {number} yOffset - The y offset.
          * @param  {Tile} tile - The tile.
-         * @return {Target}
          */
         public constructor(xOffset: number, yOffset: number, tile: Tile) {
             this._xOffset = xOffset;

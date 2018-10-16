@@ -19,7 +19,6 @@ namespace Engine {
 
         /**
          * Creates an animator.
-         * @return {Animator}
          */
         public constructor() {
             this._animations = [];

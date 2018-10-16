@@ -33,7 +33,6 @@ namespace Engine {
          * @param {number} height - The height.
          * @param {boolean} refresh - Is auto refresh.
          * @param {Tileset} tileset - The tileset.
-         * @return {Layer}
          */
         public constructor(id: string, x: number, y: number, z: number, width: number, height: number, refresh: boolean, tileset: Tileset) {
             this._id = id;

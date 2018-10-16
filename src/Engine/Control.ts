@@ -16,7 +16,6 @@ namespace Engine {
 
         /**
          * Creates a control.
-         * @return {Control}
          */
         public constructor() {
             this._x = 0;

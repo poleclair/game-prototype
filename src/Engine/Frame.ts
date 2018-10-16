@@ -11,7 +11,6 @@ namespace Engine {
         /**
          * Creates a frame.
          * @param {Array<Target>} targets - The targets
-         * @return {Frame}
          */
         public constructor(targets: Array<Target>) {
             this._targets = targets;
