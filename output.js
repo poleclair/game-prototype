@@ -414,12 +414,12 @@ var Engine;
         /**
          * Creates a layer.
          * @param {string} id - The id.
-         * @param {number} x - The x.
-         * @param {number} y - The y.
-         * @param {number} z - The z.
-         * @param {number} width - The width.
-         * @param {number} height - The height.
-         * @param {boolean} refresh - Is auto refresh.
+         * @param {number} x - The x position.
+         * @param {number} y - The y position.
+         * @param {number} z - The z position.
+         * @param {number} width - The width in pixel.
+         * @param {number} height - The height in pixel.
+         * @param {boolean} refresh - Is layer refresh on.
          * @param {Tileset} tileset - The tileset.
          */
         constructor(id, x, y, z, width, height, refresh, tileset) {
@@ -469,7 +469,7 @@ var Engine;
         get height() {
             return this._height;
         }
-        get isAutoRefresh() {
+        get refresh() {
             return this._refresh;
         }
         get tileset() {
@@ -503,7 +503,7 @@ var Engine;
          * Starts the layer.
          */
         start() {
-            if (this.isAutoRefresh) {
+            if (this.refresh) {
                 this.pid = requestAnimationFrame(this.update.bind(this));
             }
             else {
@@ -580,8 +580,8 @@ var Engine;
          * Creates an engine.
          * @constructor
          * @param {string} id - The id.
-         * @param {number} width - The width.
-         * @param {number} height - The width.
+         * @param {number} width - The width in pixel.
+         * @param {number} height - The width in pixel.
          */
         constructor(id, width, height) {
             this._id = id;
@@ -2531,73 +2531,31 @@ class Ruleset {
 /// <reference path="./Class/Die.ts"/>
 /// <reference path="./Logger.ts"/>
 /// <reference path="./Ruleset.ts"/>
-/**
- * 16:9
- * 1280x720
- */
-let tileset = new Engine.Tileset("./src/Engine/Sprite/tileset.png", 16, 16);
-let engine = new Engine.Engine("game", 80 * tileset.tileWidth, 45 * tileset.tileHeight);
-let uiLayer = new Engine.Layer("ui", 0 * tileset.tileWidth, 0 * tileset.tileHeight, 1, 80 * tileset.tileWidth, 45 * tileset.tileHeight, false, tileset);
-let mapLayer = new Engine.Layer("map", 1 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 60 * tileset.tileHeight, 43 * tileset.tileHeight, true, tileset);
-let miniMapLayer = new Engine.Layer("minimap", 62 * tileset.tileWidth, 1 * tileset.tileHeight, 2, 17 * tileset.tileHeight, 17 * tileset.tileHeight, true, tileset);
-// ui layer
-for (let i = 1; i < uiLayer.widthInTile - 1; i++) {
-    uiLayer.tiles[i][0] = new Engine.Tile(4, 12, 1);
-    uiLayer.tiles[i][uiLayer.heightInTile - 1] = new Engine.Tile(4, 12, 1);
+// tileset
+let tileset = new Engine.Tileset("./src/Engine/Sprite/tileset.png", 32, 32);
+// engine
+let engine = new Engine.Engine("game", 1024, 768);
+// layer
+let layer = new Engine.Layer("ui", 0, 0, 1, 1024, 768, false, tileset);
+for (let x = 0; x < layer.widthInTile; x++) {
+    for (let y = 0; y < layer.heightInTile; y++) {
+        layer.tiles[x][y] = new Engine.Tile(14, 14, 1);
+    }
 }
-for (let i = 62; i < uiLayer.widthInTile - 1; i++) {
-    uiLayer.tiles[i][18] = new Engine.Tile(4, 12, 1);
-}
-for (let i = 1; i < uiLayer.heightInTile - 1; i++) {
-    uiLayer.tiles[0][i] = new Engine.Tile(3, 11, 1);
-    uiLayer.tiles[61][i] = new Engine.Tile(3, 11, 1);
-    uiLayer.tiles[uiLayer.widthInTile - 1][i] = new Engine.Tile(3, 11, 1);
-}
-uiLayer.tiles[0][0] = new Engine.Tile(10, 13, 1);
-uiLayer.tiles[uiLayer.widthInTile - 1][0] = new Engine.Tile(15, 11, 1);
-uiLayer.tiles[0][uiLayer.heightInTile - 1] = new Engine.Tile(0, 12, 1);
-uiLayer.tiles[uiLayer.widthInTile - 1][uiLayer.heightInTile - 1] = new Engine.Tile(9, 13, 1);
-uiLayer.tiles[61][0] = new Engine.Tile(2, 12, 1);
-uiLayer.tiles[61][uiLayer.heightInTile - 1] = new Engine.Tile(1, 12, 1);
-uiLayer.tiles[61][18] = new Engine.Tile(3, 12, 1);
-uiLayer.tiles[uiLayer.widthInTile - 1][18] = new Engine.Tile(4, 11, 1);
-// map layer
-let line = Engine.Engine.line(0, 0, 1, 11);
-for (let i = 0; i < line.length; i++) {
-    mapLayer.tiles[line[i].x][line[i].y] = new Engine.Tile(15, 15, 1);
-}
-let circle = Engine.Engine.circle(10, 10, 5, false);
-for (let i = 0; i < circle.length; i++) {
-    mapLayer.tiles[circle[i].x][circle[i].y] = new Engine.Tile(15, 15, 1);
-}
-let circleFilled = Engine.Engine.circle(20, 20, 4, true);
-for (let i = 0; i < circleFilled.length; i++) {
-    mapLayer.tiles[circleFilled[i].x][circleFilled[i].y] = new Engine.Tile(15, 15, 1);
-}
-let square = Engine.Engine.square(10, 10, 2, false);
-for (let i = 0; i < square.length; i++) {
-    mapLayer.tiles[square[i].x][square[i].y] = new Engine.Tile(15, 15, 1);
-}
-let squareFilled = Engine.Engine.square(20, 20, 2, true);
-for (let i = 0; i < squareFilled.length; i++) {
-    mapLayer.tiles[squareFilled[i].x][squareFilled[i].y] = new Engine.Tile(15, 15, 1);
-}
-engine.layers.push(uiLayer);
-engine.layers.push(mapLayer);
-engine.layers.push(miniMapLayer);
+engine.layers.push(layer);
 engine.start();
-setInterval(function () {
-    mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
-    mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
-    mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
-    mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
-    mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
-    mapLayer.animator.addProjectileTest(13, 10, 13, 20, Engine.Animator.VERY_SLOW);
-    mapLayer.animator.addProjectileTest(14, 10, 14, 20, Engine.Animator.SLOW);
-    mapLayer.animator.addProjectileTest(15, 10, 15, 20, Engine.Animator.NORMAL);
-    mapLayer.animator.addProjectileTest(16, 10, 16, 20, Engine.Animator.FAST);
-    mapLayer.animator.addProjectileTest(17, 10, 17, 20, Engine.Animator.VERY_FAST);
-}, 1000);
+// setInterval(function (): void {
+//     mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
+//     mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
+//     mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
+//     mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
+//     mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
+//     mapLayer.animator.addProjectileTest(13, 10, 13, 20, Engine.Animator.VERY_SLOW);
+//     mapLayer.animator.addProjectileTest(14, 10, 14, 20, Engine.Animator.SLOW);
+//     mapLayer.animator.addProjectileTest(15, 10, 15, 20, Engine.Animator.NORMAL);
+//     mapLayer.animator.addProjectileTest(16, 10, 16, 20, Engine.Animator.FAST);
+//     mapLayer.animator.addProjectileTest(17, 10, 17, 20, Engine.Animator.VERY_FAST);
+// }, 1000);
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
 

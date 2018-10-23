@@ -26,12 +26,12 @@ namespace Engine {
         /**
          * Creates a layer.
          * @param {string} id - The id.
-         * @param {number} x - The x.
-         * @param {number} y - The y.
-         * @param {number} z - The z.
-         * @param {number} width - The width.
-         * @param {number} height - The height.
-         * @param {boolean} refresh - Is auto refresh.
+         * @param {number} x - The x position.
+         * @param {number} y - The y position.
+         * @param {number} z - The z position.
+         * @param {number} width - The width in pixel.
+         * @param {number} height - The height in pixel.
+         * @param {boolean} refresh - Is layer refresh on.
          * @param {Tileset} tileset - The tileset.
          */
         public constructor(id: string, x: number, y: number, z: number, width: number, height: number, refresh: boolean, tileset: Tileset) {
@@ -93,7 +93,7 @@ namespace Engine {
             return this._height;
         }
 
-        public get isAutoRefresh(): boolean {
+        public get refresh(): boolean {
             return this._refresh;
         }
 
@@ -137,7 +137,7 @@ namespace Engine {
          * Starts the layer.
          */
         public start(): void {
-            if (this.isAutoRefresh) {
+            if (this.refresh) {
                 this.pid = requestAnimationFrame(this.update.bind(this));
             } else {
                 this.pid = requestAnimationFrame(this.tick.bind(this));

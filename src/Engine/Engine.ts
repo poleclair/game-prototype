@@ -19,8 +19,8 @@ namespace Engine {
          * Creates an engine.
          * @constructor
          * @param {string} id - The id.
-         * @param {number} width - The width.
-         * @param {number} height - The width.
+         * @param {number} width - The width in pixel.
+         * @param {number} height - The width in pixel.
          */
         public constructor(id: string, width: number, height: number) {
             this._id = id;
