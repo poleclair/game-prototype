@@ -36,17 +36,30 @@ engine.layers.push(layer);
 
 engine.start();
 
+let line: Engine.Coordinate[] = Engine.Engine.line(1, 1, 5, 3);
+
+line.forEach(coordinate => {
+    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+});
+
+let circle: Engine.Coordinate[] = Engine.Engine.circle(10, 10, 3, true);
+
+circle.forEach(coordinate => {
+    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+});
+
+let rectangle: Engine.Coordinate[] = Engine.Engine.rectangle(1, 10, 4, 15, true);
+
+rectangle.forEach(coordinate => {
+    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+});
+
 // setInterval(function (): void {
-//     mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
-//     mapLayer.animator.addProjectileTest(13, 10, 13, 20, Engine.Animator.VERY_SLOW);
-//     mapLayer.animator.addProjectileTest(14, 10, 14, 20, Engine.Animator.SLOW);
-//     mapLayer.animator.addProjectileTest(15, 10, 15, 20, Engine.Animator.NORMAL);
-//     mapLayer.animator.addProjectileTest(16, 10, 16, 20, Engine.Animator.FAST);
-//     mapLayer.animator.addProjectileTest(17, 10, 17, 20, Engine.Animator.VERY_FAST);
+//     layer.animator.addCircleFadeOut(0, 0, 10, 2);
+//     layer.animator.addCircleFadeOut(32, 0, 10, 2);
+//     layer.animator.addCircleFadeOut(0, 24, 10, 2);
+//     layer.animator.addCircleFadeOut(32, 24, 10, 2);
+//     layer.animator.addCircleFadeOut(16, 12, 10, 2);
 // }, 1000);
 
 /*

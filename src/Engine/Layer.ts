@@ -26,8 +26,8 @@ namespace Engine {
         /**
          * Creates a layer.
          * @param {string} id - The id.
-         * @param {number} x - The x position.
-         * @param {number} y - The y position.
+         * @param {number} x - The top left x position.
+         * @param {number} y - The top left y position.
          * @param {number} z - The z position.
          * @param {number} width - The width in pixel.
          * @param {number} height - The height in pixel.

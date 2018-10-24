@@ -185,58 +185,7 @@ var Engine;
             }
             this._animations.push(animation);
         }
-        /**
-         * Adds a projectile test animation to the queue.
-         * @param {number} x0 - The x0;
-         * @param {number} y0 - The y0;
-         * @param {number} x1 - The x1;
-         * @param {number} y1 - The y1;
-         * @param {number} speed - The speed;
-         */
-        addProjectileTest(x0, y0, x1, y1, speed) {
-            let animation = new Engine.Animation(x0, y0, []);
-            let dx = x1 - x0;
-            let dy = y1 - y0;
-            let nx = Math.abs(dx);
-            let ny = Math.abs(dy);
-            let signX = dx > 0 ? 1 : -1;
-            let signY = dy > 0 ? 1 : -1;
-            let cx = x0;
-            let cy = x0;
-            animation.frames.push(new Engine.Frame([new Engine.Target(cx, cy, new Engine.Tile(15, 15, 1))]));
-            for (let ix = 0, iy = 0, s = 0; ix < nx || iy < ny; s++) {
-                if (s < 0) {
-                    animation.frames.push(new Engine.Frame([new Engine.Target(cx, cy, new Engine.Tile(15, 15, 1))]));
-                }
-                else {
-                    if ((0.5 + ix) / nx === (0.5 + iy) / ny) {
-                        cx += signX;
-                        cy += signY;
-                        ix++;
-                        iy++;
-                    }
-                    else if ((0.5 + ix) / nx < (0.5 + iy) / ny) {
-                        cx += signX;
-                        ix++;
-                    }
-                    else {
-                        cy += signY;
-                        iy++;
-                    }
-                    if (s === speed) {
-                        s = 0;
-                        animation.frames.push(new Engine.Frame([new Engine.Target(cx, cy, new Engine.Tile(15, 15, 1))]));
-                    }
-                }
-            }
-            this._animations.push(animation);
-        }
     }
-    Animator.VERY_SLOW = -2;
-    Animator.SLOW = -1;
-    Animator.NORMAL = 0;
-    Animator.FAST = 1;
-    Animator.VERY_FAST = 2;
     Engine.Animator = Animator;
 })(Engine || (Engine = {}));
 var Engine;
@@ -414,8 +363,8 @@ var Engine;
         /**
          * Creates a layer.
          * @param {string} id - The id.
-         * @param {number} x - The x position.
-         * @param {number} y - The y position.
+         * @param {number} x - The top left x position.
+         * @param {number} y - The top left y position.
          * @param {number} z - The z position.
          * @param {number} width - The width in pixel.
          * @param {number} height - The height in pixel.
@@ -685,10 +634,10 @@ var Engine;
         }
         /**
          * Gets the x and y coordonates of a line.
-         * @param {number} x0 - The x0.
-         * @param {number} y0 - The y0.
-         * @param {number} x1 - The x1.
-         * @param {number} y1 - The y1.
+         * @param {number} x0 - The starting x position.
+         * @param {number} y0 - The starting y position.
+         * @param {number} x1 - The ending x position.
+         * @param {number} y1 - The ending y position.
          * @return {Array<Coordinate>}
          */
         static line(x0, y0, x1, y1) {
@@ -723,8 +672,8 @@ var Engine;
         }
         /**
          * Gets the x and y coordonates of a circle.
-         * @param {number} x0 - The x.
-         * @param {number} y0 - The y.
+         * @param {number} x0 - The center x position.
+         * @param {number} y0 - The center y position.
          * @param {number} radius - The radius.
          * @param {boolean} isFill - Is filled.
          * @return {Array<Coordinate>}
@@ -769,28 +718,31 @@ var Engine;
             return result;
         }
         /**
-         * Gets the x and y coordonates of a square.
-         * @param {number} x0 - The x.
-         * @param {number} y0 - The y.
-         * @param {number} radius - The radius.
+         * Gets the x and y coordonates of a rectangle.
+         * @param {number} x0 - The top left x position.
+         * @param {number} y0 - The top left y position.
+         * @param {number} x1 - The bottom right x position.
+         * @param {number} y1 - The bottom right y position.
          * @param {boolean} isFill - Is filled.
          * @return {Array<Coordinate>}
          */
-        static square(x0, y0, radius, isFill) {
+        static rectangle(x0, y0, x1, y1, isFill) {
             let result = new Array();
-            for (let i = x0 - radius; i <= x0 + radius; i++) {
-                result.push(new Engine_1.Coordinate(i, y0 + radius));
-                result.push(new Engine_1.Coordinate(i, y0 - radius));
-            }
-            for (let i = y0 - radius + 1; i < y0 + radius; i++) {
-                result.push(new Engine_1.Coordinate(x0 + radius, i));
-                result.push(new Engine_1.Coordinate(x0 - radius, i));
-            }
             if (isFill) {
-                for (let i = x0 - radius + 1; i < x0 + radius; i++) {
-                    for (let j = y0 - radius + 1; j < y0 + radius; j++) {
-                        result.push(new Engine_1.Coordinate(i, j));
+                for (let x = x0; x <= x1; x++) {
+                    for (let y = y0; y <= y1; y++) {
+                        result.push(new Engine_1.Coordinate(x, y));
                     }
+                }
+            }
+            else {
+                for (let x = x0; x <= x1; x++) {
+                    result.push(new Engine_1.Coordinate(x, y0));
+                    result.push(new Engine_1.Coordinate(x, y1));
+                }
+                for (let y = y0 + 1; y < y1; y++) {
+                    result.push(new Engine_1.Coordinate(x0, y));
+                    result.push(new Engine_1.Coordinate(x1, y));
                 }
             }
             return result;
@@ -2544,17 +2496,24 @@ for (let x = 0; x < layer.widthInTile; x++) {
 }
 engine.layers.push(layer);
 engine.start();
+let line = Engine.Engine.line(1, 1, 5, 3);
+line.forEach(coordinate => {
+    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+});
+let circle = Engine.Engine.circle(10, 10, 3, true);
+circle.forEach(coordinate => {
+    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+});
+let rectangle = Engine.Engine.rectangle(1, 10, 4, 15, true);
+rectangle.forEach(coordinate => {
+    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+});
 // setInterval(function (): void {
-//     mapLayer.animator.addCircleFadeOut(0, 0, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(43, 0, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(0, 33, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(43, 33, 10, 2);
-//     mapLayer.animator.addCircleFadeOut(21, 16, 10, 2);
-//     mapLayer.animator.addProjectileTest(13, 10, 13, 20, Engine.Animator.VERY_SLOW);
-//     mapLayer.animator.addProjectileTest(14, 10, 14, 20, Engine.Animator.SLOW);
-//     mapLayer.animator.addProjectileTest(15, 10, 15, 20, Engine.Animator.NORMAL);
-//     mapLayer.animator.addProjectileTest(16, 10, 16, 20, Engine.Animator.FAST);
-//     mapLayer.animator.addProjectileTest(17, 10, 17, 20, Engine.Animator.VERY_FAST);
+//     layer.animator.addCircleFadeOut(0, 0, 10, 2);
+//     layer.animator.addCircleFadeOut(32, 0, 10, 2);
+//     layer.animator.addCircleFadeOut(0, 24, 10, 2);
+//     layer.animator.addCircleFadeOut(32, 24, 10, 2);
+//     layer.animator.addCircleFadeOut(16, 12, 10, 2);
 // }, 1000);
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)

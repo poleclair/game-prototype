@@ -150,10 +150,10 @@ namespace Engine {
 
         /**
          * Gets the x and y coordonates of a line.
-         * @param {number} x0 - The x0.
-         * @param {number} y0 - The y0.
-         * @param {number} x1 - The x1.
-         * @param {number} y1 - The y1.
+         * @param {number} x0 - The starting x position.
+         * @param {number} y0 - The starting y position.
+         * @param {number} x1 - The ending x position.
+         * @param {number} y1 - The ending y position.
          * @return {Array<Coordinate>}
          */
         public static line(x0: number, y0: number, x1: number, y1: number): Array<Coordinate> {
@@ -193,8 +193,8 @@ namespace Engine {
 
         /**
          * Gets the x and y coordonates of a circle.
-         * @param {number} x0 - The x.
-         * @param {number} y0 - The y.
+         * @param {number} x0 - The center x position.
+         * @param {number} y0 - The center y position.
          * @param {number} radius - The radius.
          * @param {boolean} isFill - Is filled.
          * @return {Array<Coordinate>}
@@ -246,31 +246,32 @@ namespace Engine {
         }
 
         /**
-         * Gets the x and y coordonates of a square.
-         * @param {number} x0 - The x.
-         * @param {number} y0 - The y.
-         * @param {number} radius - The radius.
+         * Gets the x and y coordonates of a rectangle.
+         * @param {number} x0 - The top left x position.
+         * @param {number} y0 - The top left y position.
+         * @param {number} x1 - The bottom right x position.
+         * @param {number} y1 - The bottom right y position.
          * @param {boolean} isFill - Is filled.
          * @return {Array<Coordinate>}
          */
-        public static square(x0: number, y0: number, radius: number, isFill: boolean): Array<Coordinate> {
+        public static rectangle(x0: number, y0: number, x1: number, y1: number, isFill: boolean): Array<Coordinate> {
             let result: Array<Coordinate> = new Array<Coordinate>();
 
-            for (let i: number = x0 - radius; i <= x0 + radius; i++) {
-                result.push(new Coordinate(i, y0 + radius));
-                result.push(new Coordinate(i, y0 - radius));
-            }
-
-            for (let i: number = y0 - radius + 1; i < y0 + radius; i++) {
-                result.push(new Coordinate(x0 + radius, i));
-                result.push(new Coordinate(x0 - radius, i));
-            }
-
             if (isFill) {
-                for (let i: number = x0 - radius + 1; i < x0 + radius; i++) {
-                    for (let j: number = y0 - radius + 1; j < y0 + radius; j++) {
-                        result.push(new Coordinate(i, j));
+                for (let x: number = x0; x <= x1; x++) {
+                    for (let y: number = y0; y <= y1; y++) {
+                        result.push(new Coordinate(x, y));
                     }
+                }
+            } else {
+                for (let x: number = x0; x <= x1; x++) {
+                    result.push(new Coordinate(x, y0));
+                    result.push(new Coordinate(x, y1));
+                }
+
+                for (let y: number = y0 + 1; y < y1; y++) {
+                    result.push(new Coordinate(x0, y));
+                    result.push(new Coordinate(x1, y));
                 }
             }
 
