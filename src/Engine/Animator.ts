@@ -34,13 +34,13 @@ namespace Engine {
             let alpha: number = 1 / length;
 
             for (let i: number = 0; i < length; i++) {
-                let frame: Frame = new Frame([new Target(0, 0, new Tile(15, 15, 1 - (alpha * i)))]);
+                let frame: Frame = new Frame([new Target(0, 0, new Tile(3, 3, 1 - (alpha * i)))]);
 
                 for (let j: number = 1; j < size; j++) {
-                    frame.targets.push(new Target(0, 0 + j, new Tile(15, 15, 1 - (alpha * i))));
-                    frame.targets.push(new Target(0, 0 - j, new Tile(15, 15, 1 - (alpha * i))));
-                    frame.targets.push(new Target(0 + j, 0, new Tile(15, 15, 1 - (alpha * i))));
-                    frame.targets.push(new Target(0 - j, 0, new Tile(15, 15, 1 - (alpha * i))));
+                    frame.targets.push(new Target(0, 0 + j, new Tile(3, 3, 1 - (alpha * i))));
+                    frame.targets.push(new Target(0, 0 - j, new Tile(3, 3, 1 - (alpha * i))));
+                    frame.targets.push(new Target(0 + j, 0, new Tile(3, 3, 1 - (alpha * i))));
+                    frame.targets.push(new Target(0 - j, 0, new Tile(3, 3, 1 - (alpha * i))));
                 }
 
                 animation.frames.push(frame);

@@ -137,12 +137,12 @@ var Engine;
             let animation = new Engine.Animation(x, y, []);
             let alpha = 1 / length;
             for (let i = 0; i < length; i++) {
-                let frame = new Engine.Frame([new Engine.Target(0, 0, new Engine.Tile(15, 15, 1 - (alpha * i)))]);
+                let frame = new Engine.Frame([new Engine.Target(0, 0, new Engine.Tile(3, 3, 1 - (alpha * i)))]);
                 for (let j = 1; j < size; j++) {
-                    frame.targets.push(new Engine.Target(0, 0 + j, new Engine.Tile(15, 15, 1 - (alpha * i))));
-                    frame.targets.push(new Engine.Target(0, 0 - j, new Engine.Tile(15, 15, 1 - (alpha * i))));
-                    frame.targets.push(new Engine.Target(0 + j, 0, new Engine.Tile(15, 15, 1 - (alpha * i))));
-                    frame.targets.push(new Engine.Target(0 - j, 0, new Engine.Tile(15, 15, 1 - (alpha * i))));
+                    frame.targets.push(new Engine.Target(0, 0 + j, new Engine.Tile(3, 3, 1 - (alpha * i))));
+                    frame.targets.push(new Engine.Target(0, 0 - j, new Engine.Tile(3, 3, 1 - (alpha * i))));
+                    frame.targets.push(new Engine.Target(0 + j, 0, new Engine.Tile(3, 3, 1 - (alpha * i))));
+                    frame.targets.push(new Engine.Target(0 - j, 0, new Engine.Tile(3, 3, 1 - (alpha * i))));
                 }
                 animation.frames.push(frame);
             }
@@ -2487,38 +2487,40 @@ class Ruleset {
 /// <reference path="./Class/Die.ts"/>
 /// <reference path="./Logger.ts"/>
 /// <reference path="./Ruleset.ts"/>
-// tileset
-let tileset = new Engine.Tileset("./src/Engine/Sprite/tileset.png", 32, 32);
 // engine
 let engine = new Engine.Engine("game", 1024, 768);
+// tileset
+let tileset = new Engine.Tileset("./src/Engine/Sprite/tileset.png", 32, 32);
 // layer
-let layer = new Engine.Layer("ui", 0, 0, 1, 1024, 768, false, tileset);
-for (let x = 0; x < layer.widthInTile; x++) {
-    for (let y = 0; y < layer.heightInTile; y++) {
-        layer.tiles[x][y] = new Engine.Tile(14, 14, 1);
+let layer1 = new Engine.Layer("1", 0, 0, 1, 1024, 768, true, tileset);
+let layer2 = new Engine.Layer("2", 0, 0, 2, 1024, 768, true, tileset);
+for (let x = 0; x < layer1.widthInTile; x++) {
+    for (let y = 0; y < layer1.heightInTile; y++) {
+        layer1.tiles[x][y] = new Engine.Tile(14, 14, 1);
     }
 }
-engine.layers.push(layer);
+engine.layers.push(layer1);
+engine.layers.push(layer2);
 engine.start();
 let line = Engine.Engine.line(1, 1, 5, 3);
 line.forEach(coordinate => {
-    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+    layer2.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
 });
 let circle = Engine.Engine.circle(10, 10, 3, true);
 circle.forEach(coordinate => {
-    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+    layer2.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
 });
 let rectangle = Engine.Engine.rectangle(1, 10, 4, 15, true);
 rectangle.forEach(coordinate => {
-    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+    layer2.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
 });
-// setInterval(function (): void {
-//     layer.animator.addCircleFadeOut(0, 0, 10, 2);
-//     layer.animator.addCircleFadeOut(32, 0, 10, 2);
-//     layer.animator.addCircleFadeOut(0, 24, 10, 2);
-//     layer.animator.addCircleFadeOut(32, 24, 10, 2);
-//     layer.animator.addCircleFadeOut(16, 12, 10, 2);
-// }, 1000);
+setInterval(function () {
+    layer2.animator.addCircleFadeOut(15, 15, 10, 2);
+    //     layer.animator.addCircleFadeOut(32, 0, 10, 2);
+    //     layer.animator.addCircleFadeOut(0, 24, 10, 2);
+    //     layer.animator.addCircleFadeOut(32, 24, 10, 2);
+    //     layer.animator.addCircleFadeOut(16, 12, 10, 2);
+}, 1000);
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
 

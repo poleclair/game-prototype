@@ -17,50 +17,52 @@
 /// <reference path="./Logger.ts"/>
 /// <reference path="./Ruleset.ts"/>
 
-// tileset
-let tileset: Engine.Tileset = new Engine.Tileset("./src/Engine/Sprite/tileset.png", 32, 32);
-
 // engine
 let engine: Engine.Engine = new Engine.Engine("game", 1024, 768);
 
-// layer
-let layer: Engine.Layer = new Engine.Layer("ui", 0, 0, 1, 1024, 768, false, tileset);
+// tileset
+let tileset: Engine.Tileset = new Engine.Tileset("./src/Engine/Sprite/tileset.png", 32, 32);
 
-for (let x: number = 0; x < layer.widthInTile; x++) {
-    for (let y: number = 0; y < layer.heightInTile; y++) {
-        layer.tiles[x][y] = new Engine.Tile(14, 14, 1);
+// layer
+let layer1: Engine.Layer = new Engine.Layer("1", 0, 0, 1, 1024, 768, true, tileset);
+let layer2: Engine.Layer = new Engine.Layer("2", 0, 0, 2, 1024, 768, true, tileset);
+
+for (let x: number = 0; x < layer1.widthInTile; x++) {
+    for (let y: number = 0; y < layer1.heightInTile; y++) {
+        layer1.tiles[x][y] = new Engine.Tile(14, 14, 1);
     }
 }
 
-engine.layers.push(layer);
+engine.layers.push(layer1);
+engine.layers.push(layer2);
 
 engine.start();
 
 let line: Engine.Coordinate[] = Engine.Engine.line(1, 1, 5, 3);
 
 line.forEach(coordinate => {
-    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+    layer2.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
 });
 
 let circle: Engine.Coordinate[] = Engine.Engine.circle(10, 10, 3, true);
 
 circle.forEach(coordinate => {
-    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+    layer2.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
 });
 
 let rectangle: Engine.Coordinate[] = Engine.Engine.rectangle(1, 10, 4, 15, true);
 
 rectangle.forEach(coordinate => {
-    layer.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
+    layer2.tiles[coordinate.x][coordinate.y] = new Engine.Tile(13, 13, 1);
 });
 
-// setInterval(function (): void {
-//     layer.animator.addCircleFadeOut(0, 0, 10, 2);
-//     layer.animator.addCircleFadeOut(32, 0, 10, 2);
-//     layer.animator.addCircleFadeOut(0, 24, 10, 2);
-//     layer.animator.addCircleFadeOut(32, 24, 10, 2);
-//     layer.animator.addCircleFadeOut(16, 12, 10, 2);
-// }, 1000);
+setInterval(function (): void {
+    layer2.animator.addCircleFadeOut(15, 15, 10, 2);
+    //     layer.animator.addCircleFadeOut(32, 0, 10, 2);
+    //     layer.animator.addCircleFadeOut(0, 24, 10, 2);
+    //     layer.animator.addCircleFadeOut(32, 24, 10, 2);
+    //     layer.animator.addCircleFadeOut(16, 12, 10, 2);
+}, 1000);
 
 /*
 -- CRITICAL (d20Roll == 20) => (weaponDamageRoll + weaponDamageRoll + abilityModifier)
