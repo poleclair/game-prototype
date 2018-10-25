@@ -12,14 +12,19 @@ class Logger {
      * @param {Array<number>} damages - The damages.
      * @param {DamageTypeEnum} damageTypeId - The damage type id.
      */
-    static AttackDamage(actorName: string, attackRollResultId: AttackRollResultEnum, d20Roll: number, abilityModifierScore: number, armorClass: number, damages: Array<number>, damageTypeId: DamageTypeEnum) {
+    static AttackDamage(actorName: string, attackRollResultId: AttackRollResultEnum, d20Roll: number,
+        abilityModifierScore: number, armorClass: number, damages: Array<number>, damageTypeId: DamageTypeEnum): void {
         switch (attackRollResultId) {
             case AttackRollResultEnum.CRITICAL:
             case AttackRollResultEnum.HIT:
-                console.log(actorName + " " + Converter.AttackRollResultEnumToString(attackRollResultId) + " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "] for " + damages.reduce((a, b) => a + b, 0) + " " + this.DamagesToString(damages) + " " + Converter.DamageTypeEnumToString(damageTypeId) + " damage");
+                console.log(actorName + " " + Converter.AttackRollResultEnumToString(attackRollResultId) +
+                    " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "] for " +
+                    damages.reduce((a, b) => a + b, 0) + " " + this.DamagesToString(damages) + " " +
+                    Converter.DamageTypeEnumToString(damageTypeId) + " damage");
                 break;
             case AttackRollResultEnum.MISS:
-                console.log(actorName + " " + Converter.AttackRollResultEnumToString(attackRollResultId) + " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "]");
+                console.log(actorName + " " + Converter.AttackRollResultEnumToString(attackRollResultId) +
+                    " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "]");
                 break;
         }
     }
@@ -30,7 +35,7 @@ class Logger {
      * @param {number} currentHitPoint - The current hit point.
      * @param {number} maximumHitPoint - The maximum hit point.
      */
-    static HitPoints(actorName: string, currentHitPoint: number, maximumHitPoint: number) {
+    static HitPoints(actorName: string, currentHitPoint: number, maximumHitPoint: number): void {
         console.log(actorName + " Hit Points: " + currentHitPoint + "/" + maximumHitPoint);
     }
 
@@ -38,10 +43,10 @@ class Logger {
      * Gets the string value of damages.
      * @param {Array<number>} damages - The damages.
      */
-    static DamagesToString(damages: Array<number>) {
-        let result = "[";
+    static DamagesToString(damages: Array<number>): string {
+        let result: string = "[";
 
-        for (let i = 0; i < damages.length; i++) {
+        for (let i: number = 0; i < damages.length; i++) {
             if (i + 1 < damages.length) {
                 result += "Roll:" + damages[i] + " + ";
             } else {

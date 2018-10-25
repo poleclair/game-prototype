@@ -1938,10 +1938,14 @@ class Logger {
         switch (attackRollResultId) {
             case AttackRollResultEnum.CRITICAL:
             case AttackRollResultEnum.HIT:
-                console.log(actorName + " " + Converter.AttackRollResultEnumToString(attackRollResultId) + " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "] for " + damages.reduce((a, b) => a + b, 0) + " " + this.DamagesToString(damages) + " " + Converter.DamageTypeEnumToString(damageTypeId) + " damage");
+                console.log(actorName + " " + Converter.AttackRollResultEnumToString(attackRollResultId) +
+                    " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "] for " +
+                    damages.reduce((a, b) => a + b, 0) + " " + this.DamagesToString(damages) + " " +
+                    Converter.DamageTypeEnumToString(damageTypeId) + " damage");
                 break;
             case AttackRollResultEnum.MISS:
-                console.log(actorName + " " + Converter.AttackRollResultEnumToString(attackRollResultId) + " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "]");
+                console.log(actorName + " " + Converter.AttackRollResultEnumToString(attackRollResultId) +
+                    " [Roll:" + d20Roll + " + Mod:" + abilityModifierScore + " vs AC:" + armorClass + "]");
                 break;
         }
     }
